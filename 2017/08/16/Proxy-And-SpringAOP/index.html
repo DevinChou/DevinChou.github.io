@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Proxy And Spring AOP | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="1. java的代理类型1.1 静态代理1.2 代理模式1.3 jdk动态代理1.4 cglib动态代理2. AOP2.1 AOP介绍2.1.1 常用术语2.1.2 常见的通知类型2.2 Spring的AOP2.2.1 基于代理的经典Spring AOP2.2.2 纯POJO切面2.2.3 @AspectJ注解驱动的切面2.2.4 注入式AspectJ切面3.实现自己的AOP框架
+1.1 静态代理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Proxy And Spring AOP | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/08/16/Proxy-And-SpringAOP/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="1. java的代理类型1.1 静态代理1.2 代理模式1.3 jdk动态代理1.4 cglib动态代理2. AOP2.1 AOP介绍2.1.1 常用术语2.1.2 常见的通知类型2.2 Spring的AOP2.2.1 基于代理的经典Spring AOP2.2.2 纯POJO切面2.2.3 @AspectJ注解驱动的切面2.2.4 注入式AspectJ切面3.实现自己的AOP框架
+1.1 静态代理">
+<meta property="og:updated_time" content="2017-08-16T17:49:30.552Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Proxy And Spring AOP | Rousseau Chou's Blog">
+<meta name="twitter:description" content="1. java的代理类型1.1 静态代理1.2 代理模式1.3 jdk动态代理1.4 cglib动态代理2. AOP2.1 AOP介绍2.1.1 常用术语2.1.2 常见的通知类型2.2 Spring的AOP2.2.1 基于代理的经典Spring AOP2.2.2 纯POJO切面2.2.3 @AspectJ注解驱动的切面2.2.4 注入式AspectJ切面3.实现自己的AOP框架
+1.1 静态代理">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Proxy And Spring AOP</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-08-16" class="post-meta__date date">2017-08-16</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h2 id="1-java的代理类型"><a href="#1-java的代理类型" class="headerlink" title="1. java的代理类型"></a>1. java的代理类型</h2><h3 id="1-1-静态代理"><a href="#1-1-静态代理" class="headerlink" title="1.1 静态代理"></a>1.1 静态代理</h3><h3 id="1-2-代理模式"><a href="#1-2-代理模式" class="headerlink" title="1.2 代理模式"></a>1.2 代理模式</h3><h3 id="1-3-jdk动态代理"><a href="#1-3-jdk动态代理" class="headerlink" title="1.3 jdk动态代理"></a>1.3 jdk动态代理</h3><h3 id="1-4-cglib动态代理"><a href="#1-4-cglib动态代理" class="headerlink" title="1.4 cglib动态代理"></a>1.4 cglib动态代理</h3><h2 id="2-AOP"><a href="#2-AOP" class="headerlink" title="2. AOP"></a>2. AOP</h2><h3 id="2-1-AOP介绍"><a href="#2-1-AOP介绍" class="headerlink" title="2.1 AOP介绍"></a>2.1 AOP介绍</h3><h4 id="2-1-1-常用术语"><a href="#2-1-1-常用术语" class="headerlink" title="2.1.1 常用术语"></a>2.1.1 常用术语</h4><h4 id="2-1-2-常见的通知类型"><a href="#2-1-2-常见的通知类型" class="headerlink" title="2.1.2 常见的通知类型"></a>2.1.2 常见的通知类型</h4><h3 id="2-2-Spring的AOP"><a href="#2-2-Spring的AOP" class="headerlink" title="2.2 Spring的AOP"></a>2.2 Spring的AOP</h3><h4 id="2-2-1-基于代理的经典Spring-AOP"><a href="#2-2-1-基于代理的经典Spring-AOP" class="headerlink" title="2.2.1 基于代理的经典Spring AOP"></a>2.2.1 基于代理的经典Spring AOP</h4><h4 id="2-2-2-纯POJO切面"><a href="#2-2-2-纯POJO切面" class="headerlink" title="2.2.2 纯POJO切面"></a>2.2.2 纯POJO切面</h4><h4 id="2-2-3-AspectJ注解驱动的切面"><a href="#2-2-3-AspectJ注解驱动的切面" class="headerlink" title="2.2.3 @AspectJ注解驱动的切面"></a>2.2.3 @AspectJ注解驱动的切面</h4><h4 id="2-2-4-注入式AspectJ切面"><a href="#2-2-4-注入式AspectJ切面" class="headerlink" title="2.2.4 注入式AspectJ切面"></a>2.2.4 注入式AspectJ切面</h4><h2 id="3-实现自己的AOP框架"><a href="#3-实现自己的AOP框架" class="headerlink" title="3.实现自己的AOP框架"></a>3.实现自己的AOP框架</h2><hr>
+<h3 id="1-1-静态代理-1"><a href="#1-1-静态代理-1" class="headerlink" title="1.1 静态代理"></a>1.1 静态代理</h3><p>定义一个Hello的接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface Hello &#123;</div><div class="line">    void say(String name);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>实现这个接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class HelloImpl implements Hello &#123;</div><div class="line">    </div><div class="line">    public void say(String name) &#123;</div><div class="line">        System.out.println(&quot;hello&quot; + name);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果这个时候想在hello前后处理一些与say无关的逻辑<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public class HelloImpl implements Hello &#123;</div><div class="line">    </div><div class="line">    public void say(String name) &#123;</div><div class="line">        before();</div><div class="line">        System.out.println(&quot;hello&quot; + name);</div><div class="line">        after();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void before() &#123;&#125;</div><div class="line">    </div><div class="line">    private void after() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>缺点：代码死板不灵活，相同的逻辑在每个需要的类都重复</p>
+<h3 id="1-2-代理模式-1"><a href="#1-2-代理模式-1" class="headerlink" title="1.2 代理模式"></a>1.2 代理模式</h3><p>为HelloImpl写一个代理类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">public class HelloProxy implements Hello &#123;</div><div class="line">    </div><div class="line">    private HelloImpl helloImpl;</div><div class="line">    </div><div class="line">    public HeelloProxy(HelloImpl helloImpl) &#123;</div><div class="line">        this.helloImpl = helloImpl;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public void say(String name) &#123;</div><div class="line">        before();</div><div class="line">        helloImpl.say(name);</div><div class="line">        after();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void before() &#123;&#125;</div><div class="line">    </div><div class="line">    private void after() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>缺点:仍然要为每个接口写一个代理类</p>
+<h3 id="1-3-JDK动态代理"><a href="#1-3-JDK动态代理" class="headerlink" title="1.3 JDK动态代理"></a>1.3 JDK动态代理</h3><p>使用InvocationHandler创建一个动态代理类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">public class DynamicProxy implements InvationHandler &#123;</div><div class="line">    </div><div class="line">    private Object target;</div><div class="line">    </div><div class="line">    public DynamicProxy(Object target) &#123;</div><div class="line">        this.target = target;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    /**</div><div class="line">    * 使用一个泛型方法来简化调用</div><div class="line">    **/</div><div class="line">    public &lt;T&gt; T getProxy() &#123;</div><div class="line">        return (T) Proxy.newProxyInstance(</div><div class="line">            target.getClass().getClassLoader(),</div><div class="line">            target.getClass().getInterface(),</div><div class="line">            this</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public Object invoke(Object proxy, Method method, Object[] args)</div><div class="line">        throws Throwable &#123;</div><div class="line">        before();</div><div class="line">        Object res = method.invoke(target, args);</div><div class="line">        after();</div><div class="line">        return res;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void before() &#123;&#125;</div><div class="line">    </div><div class="line">    private void after() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>调用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    Hello hello = new DynamicProxy(new HelloImpl()).getProxy();</div><div class="line">    hello.say(&quot;zhouhangqi&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>缺点:jdk方法设计的局限性，只能代理接口</p>
+<h3 id="1-4-CGLib动态代理"><a href="#1-4-CGLib动态代理" class="headerlink" title="1.4 CGLib动态代理"></a>1.4 CGLib动态代理</h3><p>CGLib是一个高性能，功能强大的代码生成包，可以为没有实现接口的类生成代理类，其底层使用字节码处理框架ASM，和lombok(我自己很喜欢的一个小工具)类似，在编译或运行时修改class文件甚至创建新的class文件。<br>创建一个CGLib代理类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">public class CGLibProxy implments MethodInterceptor &#123;</div><div class="line">    </div><div class="line">    private static CGLibProxy singletonProxy = new CGLibProxy();</div><div class="line">    </div><div class="line">    private CGLibProxy() &#123;&#125;</div><div class="line">    </div><div class="line">    public static &lt;T&gt; T getProxy(Classs&lt;T&gt; cls) &#123;</div><div class="line">        return (T) Enhancer.create(cls, singletonProxy);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    public Object intercept(Object target, Method method, Object[] args,</div><div class="line">        MethodProxy proxy) throws Throwable &#123;</div><div class="line">        before();</div><div class="line">        Object res = proxy.invokeSuper(target, args);</div><div class="line">        after();</div><div class="line">        return res;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    private void before() &#123;&#125;</div><div class="line">    </div><div class="line">    private void after() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>调用这个类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">public static void main(String[] args) &#123;</div><div class="line">    Hello hello = CGLibProxy.getProxy(HelloImpl.class);</div><div class="line">    hello.say(&quot;zhouhangqi&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>这只是CGLib的一个小demo，他的功能极其强大，例如可以使用CallBackFilter创建为每个方法都执行不同代理(CallBack,MethodInterceptor实现的接口)的一个代理类，更多的功能大家可以网上查阅相关资源。</p>
+<h4 id="通过JDK的动态代理和CGLib我们可以为每个类都创建代理对象，这是AOP实现的基础。"><a href="#通过JDK的动态代理和CGLib我们可以为每个类都创建代理对象，这是AOP实现的基础。" class="headerlink" title="通过JDK的动态代理和CGLib我们可以为每个类都创建代理对象，这是AOP实现的基础。"></a>通过JDK的动态代理和CGLib我们可以为每个类都创建代理对象，这是AOP实现的基础。</h4><hr>
+<h3 id="2-1-AOP介绍-1"><a href="#2-1-AOP介绍-1" class="headerlink" title="2.1 AOP介绍"></a>2.1 AOP介绍</h3><h4 id="AOP是Aspect-Oriented-Programming的缩写，国内译为”面向切面编程”，听起来很高大上，其实就是帮助我们将我们关注的业务逻辑代码和必需却繁琐的非业务逻辑代码分离，比如数据库连接，事务处理，日志记录，异常处理等等。"><a href="#AOP是Aspect-Oriented-Programming的缩写，国内译为”面向切面编程”，听起来很高大上，其实就是帮助我们将我们关注的业务逻辑代码和必需却繁琐的非业务逻辑代码分离，比如数据库连接，事务处理，日志记录，异常处理等等。" class="headerlink" title="AOP是Aspect Oriented Programming的缩写，国内译为”面向切面编程”，听起来很高大上，其实就是帮助我们将我们关注的业务逻辑代码和必需却繁琐的非业务逻辑代码分离，比如数据库连接，事务处理，日志记录，异常处理等等。"></a>AOP是Aspect Oriented Programming的缩写，国内译为”面向切面编程”，听起来很高大上，其实就是帮助我们将我们关注的业务逻辑代码和必需却繁琐的非业务逻辑代码分离，比如数据库连接，事务处理，日志记录，异常处理等等。</h4><h4 id="2-1-1-常用术语-1"><a href="#2-1-1-常用术语-1" class="headerlink" title="2.1.1 常用术语"></a>2.1.1 常用术语</h4><ol>
+<li>连接点(Joinpoint)：程序执行的某个特定位置：如类开始初始化前、类初始化后、类某个方法调用前、调用后、方法抛出异常后。例如执行helloImpl.say()就是一个连接点。</li>
+<li>切点(Pointcut)：切点告诉我们何时织入通知，它是匹配通知的一个条件，一个切点可以对应多个连接点，比如.*Impl.say()就是一个切点，其对应所有最后名称是Impl的类的say()连接点。</li>
+<li>通知(Advice)： Advice国内一般翻译为通知，其实翻译为增强更加合理，顾名思义就是增强一段代码，例如在helloImpl.say()之前执行before()和after()。</li>
+<li><p>切面(Aspect)：由通知和切点组成，通知和切点定义了切面的全部内容，它是什么，在何时何处如何完成其功能。<br>5.织入(Weaving)：织入是把切面应用到目标对象并创建代理对象的过程。AOP有三种织入的方式：<br>1.编译期织入，这要求使用特殊的Java编译器。<br>2.类装载期织入，这要求使用特殊的类装载器。<br>3.动态代理织入，在运行期为目标类添加增强生成子类的方式。<br><strong>Spring采用动态代理织入，而AspectJ采用编译期织入和类装载期织入。</strong></p>
+</li>
+<li><p>引入(Introduction)：引介是一种特殊的增强，它为类添加一些属性和方法，例如我们要在不实现Goodbye接口的情况下让helloImpl类增加一个goodbye()方法，就需要使用引入。</p>
+</li>
+</ol>
+<h4 id="2-1-2-通知的常见类型"><a href="#2-1-2-通知的常见类型" class="headerlink" title="2.1.2 通知的常见类型"></a>2.1.2 通知的常见类型</h4><ol>
+<li>前置通知(Before advice)：在连接点前面执行，前置通知不会影响连接点的执行，除非此处抛出异常。 </li>
+<li>正常返回通知(After returning advice)：在连接点正常执行完成后执行，如果连接点抛出异常，则不会执行。 </li>
+<li>异常返回通知(After throwing advice)：在连接点抛出异常后执行。 </li>
+<li>返回通知(After  advice)：在连接点执行完成后执行，不管是正常执行完成，还是抛出异常，都会执行返回通知中的内容。 </li>
+<li>环绕通知(Around advice)：环绕通知围绕在连接点前后，比如一个方法调用的前后。这是最强大的通知类型，能在方法调用前后自定义一些操作。环绕通知还需要负责决定是继续处理join point(调用ProceedingJoinPoint的proceed方法)还是中断执行。</li>
+</ol>
+<h3 id="2-2-Spring的AOP-1"><a href="#2-2-Spring的AOP-1" class="headerlink" title="2.2 Spring的AOP"></a>2.2 Spring的AOP</h3><p>Spring提供了4种类型的AOP支持。</p>
+<ol>
+<li>基于代理的经典Spring AOP</li>
+<li>纯POJO切面</li>
+<li>@AspectJ注解驱动的切面</li>
+<li>注入式AspectJ切面<br>前三种都是Spring AOP实现的变体，Spring AOP构建在动态代理的基础之上，因此，Spring对AOP的支持局限于方法拦截。</li>
+</ol>
+<h4 id="2-2-1-经典Spring-AOP"><a href="#2-2-1-经典Spring-AOP" class="headerlink" title="2.2.1 经典Spring AOP"></a>2.2.1 经典Spring AOP</h4><p>声明一个前置通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class HelloBeforeAdvice implements MethodBeforeAdvice &#123;</div><div class="line">	public void before(Method method, Object[] args, Object target) throws Throwable &#123;</div><div class="line">		System.out.println(&quot;before&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>声明一个后置通知<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class HelloAfterAdvice implements AfterReturningAdvice &#123;</div><div class="line">	public void afterReturning(Object result, Method method, Object[] args, Object target) throws Throwable &#123;</div><div class="line">		System.out.println(&quot;after&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>调用代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public class Demo &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		ProxyFactory proxyFactory = new ProxyFactory(); // 创建代理工厂</div><div class="line">		proxyFactory.setTarget(new HelloImpl); // 设置目标代理类</div><div class="line">		proxyFactory.addAdvice(new HelloBeforeAdvice()); // 添加通知</div><div class="line">		proxyFactory.addAdvice(new HelloAfterAdvice());</div><div class="line">		</div><div class="line">		Hello hello = (Hello) proxyFactory.getProxy(); // 获取代理</div><div class="line">		hello.say(&quot;zhouhangqi&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果我们想声明一个环绕通知，可以声明一个类同时实现MethodBeforeAdvice和AfterReturningAdvice接口，也可以直接实现MethodInterceptor接口。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class HelloAroundAdvice implements MethodInterceptor &#123;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public Object invoke(MethodInvocation invocation) throws Throwable &#123;</div><div class="line">		before();</div><div class="line">		Object result = invocation.proceed();</div><div class="line">		after();</div><div class="line">		return result;</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	private void before() &#123;&#125;</div><div class="line">    </div><div class="line">    private void after() &#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p> 注意，这个MethodInterceptor与前面提到的CGLib的MethodInterceptor并非同一个类，而且这个类也并非属于Spring的jar包,它的类路径是org.aopalliance.intercept.MethodInterceptor)，由AOP联盟(该联盟规范了一套用于规范AOP实现的底层API，通过这些统一的底层API，可以使得各个AOP实现及工具产品之间实现相互移植)提供,Spring直接使用了它。这个类在我们的项目中也有使用，大家可以看下CacheAdvice这个类。<br>xml配置代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;helloProxy&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;</div><div class="line">	&lt;property name=&quot;target&quot; ref=&quot;helloImpl&quot; /&gt; &lt;!-- 目标代理类 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;interfaces&quot; value=&quot;demo.Hello&quot; /&gt; &lt;!-- 代理实现的接口 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;interceptorNames&quot; value=&quot;helloAroundAdvice&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p>抛出通知实现接口ThrowsAdvice,不予赘叙。引入通知比较特殊，需要继承类DelegatingIntroductionInterceptor<br> 声明一个GoodBye接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">public interface Goodbye &#123;</div><div class="line">	void goodbye(String name);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>声明一个引入通知，继承类DelegatingIntroductionInterceptor和实现我们需要的接口<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public HelloIntrodcutionAdvice extends DelegatingIntroductionInterceptor implements Goodbye &#123;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public Object invoke(MethodInvocation invocation) throws Throwable &#123;</div><div class="line">		return super.invoke(invocation);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	@Override</div><div class="line">	public void goodbye(String name) &#123;</div><div class="line">		System.out.println(&quot;Goodbye&quot; + name);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>xml配置代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;helloProxy&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;</div><div class="line">	&lt;property name=&quot;target&quot; ref=&quot;helloImpl&quot; /&gt; &lt;!-- 目标代理类 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;interfaces&quot; value=&quot;demo.Goodbye /&gt; &lt;!-- 代理实现的接口 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;interceptorNames&quot; value=&quot;helloIntroductionAdvice&quot;/&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;proxyTargetClass&quot; value=&quot;true&quot; /&gt; &lt;!-- 代理类(默认为fasle,代理接口) --&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p><strong>注意proxyTargetClass，为true时代理类，使用CGLib代理，为false时代理类，使用JDK动态代理。</strong><br>调用代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public class Demo &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		ApplicationContext context = new ClassPathXmlApplicationContext(&quot;application.xml&quot;);</div><div class="line">		HelloImpl helloImpl = (HelloImpl) context.getBean(&quot;helloProxy&quot;);</div><div class="line">		helloImpl.say(&quot;zhouhangqi&quot;);</div><div class="line">		Goodbye goodbye = (Goodbye) helloImpl;</div><div class="line">		goodbye.goodbye(&quot;Devin&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面谈到的AOP其实更像是拦截器框架，这个拦截器非常的武断，它拦截到一个类，就会拦截到类里所以的方法，我们只看到它实现了Advice的概念，却没有看到Pointcut的概念，如果我们需要使用Pointcut来实现切面:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 配置一个切面 --&gt;</div><div class="line">&lt;bean id=&quot;helloAdvisor&quot; class=&quot;org.springframework.aop.support.RegexMethodPointcutAdvisor&quot;&gt;</div><div class="line">	&lt;property name=&quot;advice&quot; ref=&quot;helloAroundAdvice&quot; /&gt; &lt;!-- 通知 --&gt;</div><div class="line">	&lt;property name=&quot;pattern&quot; value=&quot;demo.HelloImpl.say.*&quot; /&gt; &lt;!-- 切点 --&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line">&lt;!-- 配置代理 --&gt;</div><div class="line">&lt;bean id=&quot;helloProxy&quot; class=&quot;org.springframework.aop.framework.ProxyFactoryBean&quot;&gt;</div><div class="line">	&lt;property name=&quot;target&quot; ref=&quot;helloImpl&quot; /&gt; &lt;!-- 目标代理类 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;interceptorNames&quot; value=&quot;helloAdvisor&quot;/&gt; &lt;!-- 切面 --&gt;</div><div class="line">	</div><div class="line">	&lt;property name=&quot;proxyTargetClass&quot; value=&quot;true&quot; /&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p> 现在，只有Hello接口中say开头的方法会被增强。<br>如果我们需要自动代理<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;!-- 配置一个切面 --&gt;</div><div class="line">&lt;bean id=&quot;helloAdvisor&quot; class=&quot;org.springframework.aop.support.RegexMethodPointcutAdvisor&quot;&gt;</div><div class="line">	&lt;property name=&quot;advice&quot; ref=&quot;helloAroundAdvice&quot; /&gt; &lt;!-- 通知 --&gt;</div><div class="line">	&lt;property name=&quot;pattern&quot; value=&quot;demo.HelloImpl.say.*&quot; /&gt; &lt;!-- 切点 --&gt;</div><div class="line">&lt;/bean&gt;</div><div class="line">&lt;bean class=&quot;org.springframework.aop.framework.autoproxy.DefaultAdvisorProxyCreator&quot;&gt;</div><div class="line">	&lt;property name=&quot;optimize&quot; value=&quot;true&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p>这里无需再配置代理，因为代理会由DefaultAdvisorProxyCreator自动生成。如果不需要匹配特定的方法，可以用BeanNameAutoProxyCreator。<br>除了RegexMethodPointcutAdvisor还可以使用其他类来配置切面:</p>
+<ol>
+<li>DefaultPointcutAdvisor————默认切面(可扩展它来自定义切面)</li>
+<li>NameMatchPointcutAdvisor————根据方法名称匹配切面</li>
+<li>StaticMethodPointcutAdvisor————匹配静态方法的切面   </li>
+</ol>
+<p>optimize指定是否为代理生成策略进行优化，也就是所如果类有接口，则使用JDK动态代理，如果类没有接口，则使用CGLIb代理。虽然CGLib可以代理任何类，但是在代理接口上它的性能并不如JDK动态代理。</p>
+<h4 id="2-2-2-纯POJO切面-1"><a href="#2-2-2-纯POJO切面-1" class="headerlink" title="2.2.2 纯POJO切面"></a>2.2.2 纯POJO切面</h4><p>很显然，虽然Spring的作者Rod Johnson做出了大量的努力，仍然无法避免经典的Spring AOP下大量而复杂的切面配置，无奈之下Rod Johnson只能集成AspectJ来使自己解脱。<br>AspectJ是一个面向切面的框架，它扩展了Java语言。AspectJ定义了AOP语法，所以它有一个专门的编译器用来生成遵守Java字节编码规范的Class文件。集成AspectJ与直接使用AspectJ不同，我们不需要定义AspectJ类，只需要使用AspectJ的表达式。  </p>
+<h5 id="AspectJ表达式"><a href="#AspectJ表达式" class="headerlink" title="AspectJ表达式"></a>AspectJ表达式</h5><ol>
+<li>execution()     满足某一匹配模式的的所有目标类方法连接点</li>
+<li>@annotation() 标注了特定注解的目标方法连接点上</li>
+<li>args() 定位于入参为特定类型的的方法</li>
+<li>@args() 定位于被特定注解的类作为方法入参的连接点</li>
+<li>within()    定位于特定作用于下的所有连接点</li>
+<li>target() 定位于指定类及其子类</li>
+<li>@within() 定位与标注了特定注解的类及其实现类</li>
+<li>@target()  定位于标注了特定注解的目标类里所有方法</li>
+</ol>
+<p>我们可以分析下execution(<em> aop.demo.HelloImpl.</em>(..))<br>第一个”<em>“ 表示方法的返回值可以为任意值；第二个”</em>“ 表示匹配该类中的所有方法；(..)表示方法的参数是任意值，因此这个表达式匹配HelloImpl下来的所有方法。<br>现在我们声明一个POJO<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public clss HelloHelper &#123;</div><div class="line">	public void before() &#123;</div><div class="line">		System.out.println(&quot;before&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void after() &#123;</div><div class="line">		System.out.println(&quot;after&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后在xml使用<aop:config>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;aop:config&gt;</div><div class="line">    &lt;aop:pointcut id=&quot;pointcut&quot; expression=&quot;execution(* aop.demo.HelloImpl.*(..))&quot;/&gt;</div><div class="line">        &lt;aop:aspect ref=&quot;performHelper&quot;&gt;</div><div class="line">            &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">            &lt;aop:after method=&quot;after&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">    &lt;/aop:aspect&gt;</div><div class="line"> &lt;/aop:config&gt;</div></pre></td></tr></table></figure></aop:config></p>
+<p><aop:config>的通知配置：</aop:config></p>
+<ol>
+<li><aop:around>————环绕通知</aop:around></li>
+<li><aop:before`>————前置通知</aop:before`></li>
+<li><aop:after>————后置通知</aop:after></li>
+<li><aop:after-throwing>————抛出通知</aop:after-throwing></li>
+<li><aop:declare-parents>————引入通知</aop:declare-parents></li>
+</ol>
+<p>我们可以看下我们项目中的事务配置和CacheAdvice，就是使用这种AOP形式。比起经典的Spring AOP这种方式可读性更佳，配置的繁琐性更低，可以简便地将对象转换成切面。但是，如果我们不想使用xml配置呢?</p>
+<h4 id="2-2-3-AspectJ注解驱动的切面-1"><a href="#2-2-3-AspectJ注解驱动的切面-1" class="headerlink" title="2.2.3 @AspectJ注解驱动的切面"></a>2.2.3 @AspectJ注解驱动的切面</h4><p>基于java配置往往比基于xml配置更好,AspectJ5.0后,AspectJ给我们提供了一系列注解帮助我们更方便的创建切面，如下:</p>
+<ol>
+<li>@Around————环绕通知</li>
+<li>@Before————前置通知</li>
+<li>@After————后置通知</li>
+<li>@AfterThrowing————抛出通知</li>
+<li>@DeclareParents————引入通知</li>
+</ol>
+<p>我们需要声明一个注解了@Aspect的类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@Aspect</div><div class="line">@Component</div><div class="line">public class HelloAspect &#123;</div><div class="line">	</div><div class="line">	@Pointcut(&quot;execution(* aop.demo.HelloImpl.*(..))&quot;)</div><div class="line">	public void say() &#123;&#125;</div><div class="line">	</div><div class="line">	@Before(&quot;say()&quot;)</div><div class="line">	public void before() &#123;&#125;</div><div class="line">	</div><div class="line">	@Around(&quot;say()&quot;)</div><div class="line">	public Object` around(ProceedingJoinPoint jp) &#123;</div><div class="line">		/**</div><div class="line">		* do something</div><div class="line">		**/</div><div class="line">		Object res = jp.proceed();</div><div class="line">		/**</div><div class="line">		* do something</div><div class="line">		**/</div><div class="line">		return res;</div><div class="line">	&#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>现在只需要在xml配置一行就足以<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;aop:aspect-autoproxy /&gt;</div></pre></td></tr></table></figure></p>
+<p>这个元素会在Spring上下文创建一个AnnotaionAwareAspectJAutoProxyCreator，根据@Pointcut注解定义的切点来自动代理相匹配的Bean，也就是说，它会完成与DefaultAdvisorAutoProxyCreator同样的工作。<br>如果我们想使用引入通知，也就是@DeclareParents。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Aspect</div><div class="line">@Component</div><div class="line">public class HelloAspect &#123;</div><div class="line">	</div><div class="line">	@DeclareParents(value=&quot;aop.demo.HelloImpl&quot;, defaultImpl=Goodbye.class)</div><div class="line">	private Goodbye goodbye;</div></pre></td></tr></table></figure></p>
+<p>然后我们只需要实现一个引入接口的默认实现<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">public class GoodbyeImpl implements Goodbye &#123;</div><div class="line">	@Override</div><div class="line">	public void goodbye(String name) &#123;</div><div class="line">		System.out.println(&quot;Goodbye&quot; + name);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>那么这个实现就会在运行时自动增强到HelloImpl类中</p>
+<h4 id="2-2-4-注入式AspectJ切面-1"><a href="#2-2-4-注入式AspectJ切面-1" class="headerlink" title="2.2.4 注入式AspectJ切面"></a>2.2.4 注入式AspectJ切面</h4><p>上面三种基于动态代理的AOP足以满足我们日常99%的开发需求，但是与AspectJ相比，Spring AOP仍然是一个功能比较弱的AOP解决方案。AspectJ提供了Spring AOP所不能支持的许多类型的切点。例如，当我们需要在创建对象时应用通知，构造器切点就非常方便，但这是Spring基于代理的AOP无法做到的。AspectJ切面与Spring互相独立，但是很多时候AspectJ很可能依赖其他类来完成自己的工作，此时我们可以借助Spring的依赖注入把bena装配进Aspectj切面中。<br>声明一个Aspect类<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public aspect HelloAspect &#123;</div><div class="line">	// 这里直接使用.*(..)也不会匹配HelloImpl的构造方法</div><div class="line">	pointcut say() : execution(&quot;* aop.demo.HelloImpl.*(..))&quot;);</div><div class="line">	</div><div class="line">	afterReturning : say() &#123;</div><div class="line">		System.out.println(&quot;today&apos;s temperature is &quot; + tempGenerator.getTemp() + &quot;%&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	private TempGenerator tempGenerator;</div><div class="line">	</div><div class="line">	public void setTempGenerator(TempGenerator tempGenerator) &#123;</div><div class="line">		this.tempGenerator = tempGenerator;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>HelloAspect的主要作用是在说完hello之后，告诉我们今天的气温，他需要被注入一个TempGenerator类，这个类的getTemp()方法能返回今天的温度。<br>现在我们可以配置一下xml,将bean注入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;bean class=&quot;aop.demo.HelloAspect&quot; factory-method=&quot;aspectOf&quot;&gt;</div><div class="line">	&lt;property name=&quot;tempGenerator&quot; ref=&quot;tempGenerator&quot;/&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure></p>
+<p>很大程度上，<bean>的声明与我们在前面所看到的<bean>配置没有什么区别，但是最大的不同在于使用了factory-method属性。通常情况下，Spring bean由Spring容器负责初始化，但是AspectJ切面是由Aspect在运行时创建的，因此我们不能简单地将HelloAspect声明为一个bean,无论是用@Component还是xml配置。我们需要一种方式获取HelloAspect实例的句柄，从而注入TempGenerator，而aspectOf方法会返回切面的一个单例。</bean></bean></p>
+<hr>
+<h2 id="3-实现自己的AOP框架-1"><a href="#3-实现自己的AOP框架-1" class="headerlink" title="3.实现自己的AOP框架"></a>3.实现自己的AOP框架</h2><h3 id="还在开发"><a href="#还在开发" class="headerlink" title="还在开发"></a>还在开发</h3>
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
