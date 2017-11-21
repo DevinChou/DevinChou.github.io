@@ -24,7 +24,7 @@
 <meta property="og:site_name" content="Rousseau Chou's Blog">
 <meta property="og:description" content="1. java的代理类型1.1 静态代理1.2 代理模式1.3 jdk动态代理1.4 cglib动态代理2. AOP2.1 AOP介绍2.1.1 常用术语2.1.2 常见的通知类型2.2 Spring的AOP2.2.1 基于代理的经典Spring AOP2.2.2 纯POJO切面2.2.3 @AspectJ注解驱动的切面2.2.4 注入式AspectJ切面3.实现自己的AOP框架
 1.1 静态代理">
-<meta property="og:updated_time" content="2017-08-16T17:49:30.552Z">
+<meta property="og:updated_time" content="2017-11-21T10:21:09.446Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Proxy And Spring AOP | Rousseau Chou's Blog">
 <meta name="twitter:description" content="1. java的代理类型1.1 静态代理1.2 代理模式1.3 jdk动态代理1.4 cglib动态代理2. AOP2.1 AOP介绍2.1.1 常用术语2.1.2 常见的通知类型2.2 Spring的AOP2.2.1 基于代理的经典Spring AOP2.2.2 纯POJO切面2.2.3 @AspectJ注解驱动的切面2.2.4 注入式AspectJ切面3.实现自己的AOP框架
@@ -256,14 +256,14 @@ classes that you can use:
 <li>@target()  定位于标注了特定注解的目标类里所有方法</li>
 </ol>
 <p>我们可以分析下execution(<em> aop.demo.HelloImpl.</em>(..))<br>第一个”<em>“ 表示方法的返回值可以为任意值；第二个”</em>“ 表示匹配该类中的所有方法；(..)表示方法的参数是任意值，因此这个表达式匹配HelloImpl下来的所有方法。<br>现在我们声明一个POJO<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public clss HelloHelper &#123;</div><div class="line">	public void before() &#123;</div><div class="line">		System.out.println(&quot;before&quot;);</div><div class="line">	&#125;</div><div class="line">	</div><div class="line">	public void after() &#123;</div><div class="line">		System.out.println(&quot;after&quot;);</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>然后在xml使用<aop:config>配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;aop:config&gt;</div><div class="line">    &lt;aop:pointcut id=&quot;pointcut&quot; expression=&quot;execution(* aop.demo.HelloImpl.*(..))&quot;/&gt;</div><div class="line">        &lt;aop:aspect ref=&quot;performHelper&quot;&gt;</div><div class="line">            &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">            &lt;aop:after method=&quot;after&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">    &lt;/aop:aspect&gt;</div><div class="line"> &lt;/aop:config&gt;</div></pre></td></tr></table></figure></aop:config></p>
-<p><aop:config>的通知配置：</aop:config></p>
+<p>然后在xml使用&lt;aop:config&gt;配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt;aop:config&gt;</div><div class="line">    &lt;aop:pointcut id=&quot;pointcut&quot; expression=&quot;execution(* aop.demo.HelloImpl.*(..))&quot;/&gt;</div><div class="line">        &lt;aop:aspect ref=&quot;performHelper&quot;&gt;</div><div class="line">            &lt;aop:before method=&quot;before&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">            &lt;aop:after method=&quot;after&quot; pointcut-ref=&quot;pointcut&quot;/&gt;</div><div class="line">    &lt;/aop:aspect&gt;</div><div class="line"> &lt;/aop:config&gt;</div></pre></td></tr></table></figure></p>
+<p>&lt;aop:config&gt;的通知配置：</p>
 <ol>
-<li><aop:around>————环绕通知</aop:around></li>
-<li><aop:before`>————前置通知</aop:before`></li>
-<li><aop:after>————后置通知</aop:after></li>
-<li><aop:after-throwing>————抛出通知</aop:after-throwing></li>
-<li><aop:declare-parents>————引入通知</aop:declare-parents></li>
+<li>&lt;aop:around&gt;————环绕通知</li>
+<li>&lt;aop:before&gt;————前置通知</li>
+<li>&lt;aop:after&gt;————后置通知</li>
+<li>&lt;aop:after-throwing&gt;————抛出通知</li>
+<li>&lt;aop:declare-parents&gt;————引入通知</li>
 </ol>
 <p>我们可以看下我们项目中的事务配置和CacheAdvice，就是使用这种AOP形式。比起经典的Spring AOP这种方式可读性更佳，配置的繁琐性更低，可以简便地将对象转换成切面。但是，如果我们不想使用xml配置呢?</p>
 <h4 id="2-2-3-AspectJ注解驱动的切面-1"><a href="#2-2-3-AspectJ注解驱动的切面-1" class="headerlink" title="2.2.3 @AspectJ注解驱动的切面"></a>2.2.3 @AspectJ注解驱动的切面</h4><p>基于java配置往往比基于xml配置更好,AspectJ5.0后,AspectJ给我们提供了一系列注解帮助我们更方便的创建切面，如下:</p>
