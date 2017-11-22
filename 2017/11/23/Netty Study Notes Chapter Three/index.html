@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Netty Study Notes Chapter Three | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="3 Channel���������3.1 Channel������I/O������bind(),connect(),read()��write()����Щ�����������紫�����ԭʼ��֧�֣����ڻ���java����������ģ�ͣ�������Ĺ���Ӧ����Socket,Netty��Channel�ӿ��ṩ��API���Դ�����ֱ��ʹ��Socket�ĸ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty Study Notes Chapter Three | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="3 Channel���������3.1 Channel������I/O������bind(),connect(),read()��write()����Щ�����������紫�����ԭʼ��֧�֣����ڻ���java����������ģ�ͣ�������Ĺ���Ӧ����Socket,Netty��Channel�ӿ��ṩ��API���Դ�����ֱ��ʹ��Socket�ĸ">
+<meta property="og:image" content="http://img.blog.csdn.net/20140715164221182?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYWJjX2tleQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20160408112722242?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://img.blog.csdn.net/20160408113348039?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/channelInboundHandlerAdapter.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/ChannelDuplexHandler.png">
+<meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/ByteToMessageDecoder.png">
+<meta property="og:updated_time" content="2017-11-22T18:36:44.944Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty Study Notes Chapter Three | Rousseau Chou's Blog">
+<meta name="twitter:description" content="3 Channel���������3.1 Channel������I/O������bind(),connect(),read()��write()����Щ�����������紫�����ԭʼ��֧�֣����ڻ���java����������ģ�ͣ�������Ĺ���Ӧ����Socket,Netty��Channel�ӿ��ṩ��API���Դ�����ֱ��ʹ��Socket�ĸ">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20140715164221182?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYWJjX2tleQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Netty Study Notes Chapter Three</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-11-23" class="post-meta__date date">2017-11-23</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="3-Channel���������"><a href="#3-Channel���������" class="headerlink" title="3 Channel���������"></a>3 Channel���������</h3><h4 id="3-1-Channel"><a href="#3-1-Channel" class="headerlink" title="3.1 Channel"></a>3.1 Channel</h4><p>������I/O������bind(),connect(),read()��write()����Щ�����������紫�����ԭʼ��֧�֣����ڻ���java����������ģ�ͣ�������Ĺ���Ӧ����Socket,Netty��Channel�ӿ��ṩ��API���Դ�����ֱ��ʹ��Socket�ĸ����ԡ�  </p>
+<p>Channel�����νṹ��<br><img src="http://img.blog.csdn.net/20140715164221182?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYWJjX2tleQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="image"></p>
+<p>Channel�ṩ�˺ܶ෽���������б�  </p>
+<ul>
+<li>eventLoop()�����ط����Channel��EventLoop  </li>
+<li>pipeline()�����ط����Channel��ChannelPipeline  </li>
+<li>isActive()������Channel�Ƿ񼤻�Ѽ���˵����Զ�����ӶԵ�  </li>
+<li>localAddress()�������Ѱ󶨵ı���SocketAddress  </li>
+<li>remoteAddress()�������Ѱ󶨵�Զ��SocketAddress  </li>
+<li>write()��д���ݵ�Զ�̿ͻ��ˣ�����ͨ��ChannelPipeline�����ȥ  </li>
+</ul>
+<p>++Channel���̰߳�ȫ(thread-safe)�ģ������Ա������ͬ���̰߳�ȫ�Ĳ������ڶ��̻߳����£����еķ������ǰ�ȫ�ġ�����ΪChannel�ǰ�ȫ��++</p>
+<h4 id="3-2-ChannelHandler��ChannelPipeline"><a href="#3-2-ChannelHandler��ChannelPipeline" class="headerlink" title="3.2 ChannelHandler��ChannelPipeline"></a>3.2 ChannelHandler��ChannelPipeline</h4><p>��һ��Ӧ�ó��򿪷��ߵĽǶ��Ͽ���������Ҫ��Netty�������ChannelHandler�ˣ���Ϊ����Ϊһ�������������������������������ݵ�ҵ���߼���<br>ChannelInboundHandler������վ���ݣ�ChannelOutboundHandler�����վ���ݡ�<br><img src="http://img.blog.csdn.net/20160408112722242?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>ChannelPipeline�ṩ��ChannelHandler������������һ��channel������ʱ�����ᱻ�Զ����ŵ���������ChannelPipeline��ȥ��ChannelHandler��װ�ص�ChannelPipeline����ѭ���¼���ԭ��<br>1��һ��ChannelInitializer��ע�ᵽServerBootStraping��<br>2����ChannelInitializer��initChannel���������õ�ʱ��ChannelInitializer��װ���Զ����һЩChannelHandler���ܵ���<br>3��ChannelInitializer�����Լ���ChannelPipeline���Ƴ�<br>ChannelHandler��ִ��˳�������Ǳ���ӵ�˳�������<br><img src="http://img.blog.csdn.net/20160408113348039?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>��һ��ChannelHandler�����뵽ChannelPipeline�е�ʱ������������һ����Ӧ��ChannelHandlerContext,���������ChannelHandler��ChannelPipeline֮��İ󶨹�ϵ������ChannelHandlerContext����������ֱ�ӻ�ȡ���ײ��Channel���Ǵ���������������Ϊд���������</p>
+<p>��Netty�У������ַ�ʽȥ������Ϣ����һ�������ֱ�ӽ�����д��Channel,�ڶ����㽫����д����channelHandler������ChannelHandlerContext�У���һ�ַ�����ʹ��Ϣ��ChannelPipeline��β����ʼ����һ��������ʹ��Ϣ��ChannelPipeline����һ����������ʼ����</p>
+<h5 id="3-2-1-ChannelHandler��һЩ��������"><a href="#3-2-1-ChannelHandler��һЩ��������" class="headerlink" title="3.2.1 ChannelHandler��һЩ��������"></a>3.2.1 ChannelHandler��һЩ��������</h5><p>1��ChannelHandlerAdapter<br>2��ChannelInboundHandlerAdapter<br><img src="/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/channelInboundHandlerAdapter.png" alt="image"><br>3��ChannelOutboundHandler<br>4��ChannelDuplexHandler<br>���һ�������ChannelHandler��Ҫ������վ�¼���Ҫ�����վ�¼����Ƽ��̳д��ࡣ<br><img src="/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/ChannelDuplexHandler.png" alt="image"><br>5��������ByteToMessageDecoder/MessageToMessageDecoder<br>����վ���ֽڽ���Ϊjava���󣬻��߽���վ�Ķ������Ϊ��һ�ֶ���<br><img src="/2017/11/23/Netty Study Notes Chapter Three/Netty Study Notes Chapter One/ByteToMessageDecoder.png" alt="image"><br>6��������MessageToMessageEncoder/MessageToMEssageEncoder<br>����վ��java�������Ϊ�ֽڣ����߽���վ�Ķ������Ϊ��һ�ֶ���<br>7�� SimpleChannelInboudHandler</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

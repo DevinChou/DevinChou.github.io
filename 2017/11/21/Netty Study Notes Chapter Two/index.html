@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Netty Study Notes Chapter Two | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="2 ByteBuf��������ǰ���ᵽ�ģ��������ݵĻ�����λ�����ֽڡ�Java NIO��ByteBuffer�������ֽ����������������ʹ���������ڸ��ӣ���ʱ�򻹷ǳ��鷳��Netty��ByteBuf�����ByteBuffer�����ǿ���ʵ��ͻ����JDK API�����ƣ�Ϊ���翪�����ṩ�˸��õ�API�">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty Study Notes Chapter Two | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/11/21/Netty Study Notes Chapter Two/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="2 ByteBuf��������ǰ���ᵽ�ģ��������ݵĻ�����λ�����ֽڡ�Java NIO��ByteBuffer�������ֽ����������������ʹ���������ڸ��ӣ���ʱ�򻹷ǳ��鷳��Netty��ByteBuf�����ByteBuffer�����ǿ���ʵ��ͻ����JDK API�����ƣ�Ϊ���翪�����ṩ�˸��õ�API�">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/f5-3.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-1.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-2.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-4.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-5.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-15.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-16.jpg">
+<meta property="og:updated_time" content="2017-11-22T18:35:10.298Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty Study Notes Chapter Two | Rousseau Chou's Blog">
+<meta name="twitter:description" content="2 ByteBuf��������ǰ���ᵽ�ģ��������ݵĻ�����λ�����ֽڡ�Java NIO��ByteBuffer�������ֽ����������������ʹ���������ڸ��ӣ���ʱ�򻹷ǳ��鷳��Netty��ByteBuf�����ByteBuffer�����ǿ���ʵ��ͻ����JDK API�����ƣ�Ϊ���翪�����ṩ�˸��õ�API�">
+<meta name="twitter:image" content="http://ifeve.com/wp-content/uploads/2016/06/f5-3.jpg">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Netty Study Notes Chapter Two</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-11-21" class="post-meta__date date">2017-11-21</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="2-ByteBuf"><a href="#2-ByteBuf" class="headerlink" title="2 ByteBuf"></a>2 ByteBuf</h3><p>��������ǰ���ᵽ�ģ��������ݵĻ�����λ�����ֽڡ�Java NIO��ByteBuffer�������ֽ����������������ʹ���������ڸ��ӣ���ʱ�򻹷ǳ��鷳��<br>Netty��ByteBuf�����ByteBuffer�����ǿ���ʵ��ͻ����JDK API�����ƣ�Ϊ���翪�����ṩ�˸��õ�API��<br>������ByteBuf����Ҫ�ŵ㣺</p>
+<ul>
+<li>ͨ�����õĸ��ϻ�����ʵ����͸�����㿽��</li>
+<li>����д���ò�ͬ����������дģʽ�л�����Ҫ����ByteBuffer��flip()����</li>
+<li>֧�ַ�����</li>
+<li>֧�����ü���</li>
+<li>֧�ֶ����</li>
+</ul>
+<h4 id="2-1-ByteBuf�Lu"><a href="#2-1-ByteBuf�Lu" class="headerlink" title="2.1 ByteBuf�Ľṹ"></a>2.1 ByteBuf�Ľṹ</h4><p> <img src="http://ifeve.com/wp-content/uploads/2016/06/f5-3.jpg" alt="image"><br>ByteBuf�������ֲ�ͬ��������һ�����ڶ�����һ������д��0��readIndex֮���ǿɶ����ֽڣ�readIndex��writeIndex֮���ǿɶ��ֽڣ�writeIndex��maxCapacity֮���ǿ�д�ֽڡ�<br>��read��write��صķ�����Ӱ����������֮�򲻻ᡣ  </p>
+<p>ByteBuf���ַ�����<br>�������� | ����<br>—|—<br>readBoolean() | ���ص�ǰreaderIndexλ�õ�booleanֵ, Ȼ��readerIndex��1<br>readByte() | ���ص�ǰreaderIndexλ�õ�byteֵ, Ȼ��readerIndex��1<br>readInt() | ���ص�ǰreaderIndexλ�õ�intֵ, Ȼ��readerIndex��4<br>writeBytes(byteBuf/byte[], int srcIndex, int length)| �ӵ�ǰwriterIndexλ�ÿ�ʼ����ָ����byteBuf����byte[]�������ݵ���ǰByteBuf���������������ṩ��srcIndex��length����ô��srcIndex��ʼ����length�����ֽڡ���ǰByteBuf��writerIndexֵ������д����ֽ���������<br>getBoolean(int) | ����ָ������λ�õ�booleanֵ<br>getByte(int) | ����ָ������λ�õ�byteֵ<br>setBoolean(int, boolean) | ��ָ������λ������booleanֵ<br>setByte(int index, int value) | ��ָ������λ������Byteֵ<br>isReadable() | �������һ�ֽڴ�С�����ݿɶ�������true<br>isWritable() | �������һ�ֽڴ�С�����ݿ�д������true<br>readableBytes() | ���ؿɶ����ֽ���<br>writableBytes() | ���ؿ�д���ֽ���<br>capacity() | ����ByteBuf�����ɵ��ֽ��������ø÷�����ByteBuf��������չ����ֱ������maxCapacity()<br>maxCapacity() | ����ByteBuf�����ɵ�����ֽ���<br>hasArray() | ���ByteBuf��һ���ֽ����飬����true<br>Array() | ���ByteBuf��һ���ֽ����飬���ظ����飻�����׳��쳣<br>UnsupportedOperationException</p>
+<h4 id="2-2-ByteBuf�L�����"><a href="#2-2-ByteBuf�L�����" class="headerlink" title="2.2 ByteBuf�Ļ�����"></a>2.2 ByteBuf�Ļ�����</h4><ol>
+<li>���ڴ��ֽڻ�����(HEAP BUFFERS)<br>��õ�ByteBufģʽ�����ݴ洢��JVM�Ķѿռ䡣���ģʽ����Ϊ�ֽ�����(backing array)<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-1.jpg" alt="image"></li>
+<li>ֱ���ڴ��ֽڻ�����(DIRECT BUFFERS)<br>Direct buffer����һ��ByteBuf��ģʽ����JDK 1.4����NIOʱ��ByteBuffer������JVMͨ��native method�������ڴ档����++Ϊ�˱�����ÿ������I/O�����ĵ���֮ǰ������֮�󣩿���buffer�����ݵ�һ��intermediate buffer�����ߴ�intermediate buffer������buffer����++<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-2.jpg" alt="image"><br>direct buffer��Ҫ��ȱ�������Ƿ�����ͷŵĿ�����heap buffer����</li>
+<li>�����ֽڻ�����(COMPOSITE BUFFERS)<br>������Ҳ�����һ��ģʽ����composite buffer���Ƕ��ByteBufʵ����ͳһ��ͼ(an aggregated view of multiple ByteBufs)�������ģʽ������԰������ӻ���ɾ��ByteBufʵ��������JDK ByteBuffer��ȫû�е�һ�����ԡ�<br>Netty��ByteBuf������CompositeByteBufʵ��������ģʽ���Ѷ��buffer��һ�������ģ��ںϵ�buffer����ʽչ�ֳ�����<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-4.jpg" alt="image"><br>CompositeByteBuf���ܲ������һ���ֽ������ȡ���ݣ���ô��һ��CompositeByteBuf��ȡ���ݾ�����direct bufferģʽ��������ʾ��<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-5.jpg" alt="image"></li>
+</ol>
+<h4 id="2-3-������ByteBuf"><a href="#2-3-������ByteBuf" class="headerlink" title="2.3 ������ByteBuf"></a>2.3 ������ByteBuf</h4><p>һ��������buffer��ByteBuf��������һ���ض��ķ�ʽ���֡�<br>duplicate()<br>slice()<br>slice(int, int)<br>Unpooled.unmodifiableBuffer(��)<br>order(ByteOrder)<br>readSlice(int)<br>ÿ������������һ���µ�ByteBufʵ����������ʵ���Լ���reader��writer�ͱ����������JDK ByteBufferһ�����ڲ��Ĵ洢�Ǻ�ԴByteBuf����ġ���������buffer�Ĵ����������ǲ��󣬵���++Ҳ��ζ�������ı�������buffer�����ݣ���ͬʱҲ�ڸı�Դbufferʵ��(source instance)�����ݣ�����ʹ��ʱҪС��++��<br>�������Ҫ����һ���ִ�buffer�Ŀ�������ô++��copy()����copy(int, int)++����һ��������buffer��ͬ����Щ���÷��ص�ByteBuf��һ�ݶ������������������ݺ������������ݿ�����</p>
+<h4 id="2-4-ByteBuf�k���"><a href="#2-4-ByteBuf�k���" class="headerlink" title="2.4 ByteBuf�ķ���"></a>2.4 ByteBuf�ķ���</h4><h5 id="2-4-1-ByteBufAllocator"><a href="#2-4-1-ByteBufAllocator" class="headerlink" title="2.4.1 ByteBufAllocator"></a>2.4.1 ByteBufAllocator</h5><p>Ϊ�˼��ٷ�����ͷ��ڴ�Ŀ�����Netty�ýӿ�ByteBufAllocatorʵ���˶���أ������������������ᵽ��������ģʽ��ByteBufʵ��������ص�ʹ�ú;���Ӧ���йأ�����Ӱ��ByteBuf API���÷���<br>ByteBufAllocator����:<br>�������� |    ����<br>— | —<br>buffer()�� buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity); | ����heap����direct ByteBuf<br>heapBuffer(); heapBuffer(int initialCapacity); heapBuffer(int initialCapacity, int maxCapacity) | ����heap ByteBuf<br>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity) | ����direct ByteBuf<br>compositeBuffer(); compositeBuffer(int maxNumComponents); compositeDirectBuffer(); compositeDirectBuffer(int maxNumComponents); compositeHeapBuffer(); compositeHeapBuffer(int maxNumComponents); |����CoompositeByteBuf�����Ը���ָ����component��������չheap����direct buffer<br>ioBuffer() |    ����һ������socket I/O������ByteBuf<br>����Դ�һ��Channel��ÿ��Channelʵ������ͬ�����ߴ�ChannelHandler�󶨵�ChannelHandlerContext�л�ȡ<br>ByteBufAllocator��һ�����á�����Ĵ���˵���������ַ�����<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg" alt="image"><br>Netty�ṩ��ByteBufAllocator������ʵ�֣�PoolByteBufAllocator��UnpooledByteBufAllocator��ǰ�߽�ByteBufʵ��������У���������ܣ����ڴ���Ƭ���ٵ���С�����ʵ�ֲ�����һ���ڴ����ĸ�Ч���ԣ���Ϊjemalloc�����Ѿ����ü����ִ�����ϵͳ�����á�������û�а�ByteBuf������У�ÿ�α�����ʱ������һ���µ�ByteBufʵ����<br>NettyĬ��ʹ��PoolByteBufAllocator.</p>
+<h5 id="2-4-2-Unpooled-buffers"><a href="#2-4-2-Unpooled-buffers" class="headerlink" title="2.4.2 Unpooled buffers"></a>2.4.2 Unpooled buffers</h5><p>��Щʱ���㲻�ܻ�ȡ��ByteBufAllocator�����á�����������£�Netty��һ������ΪUnpooled�Ĺ����࣬�ṩ��һЩ��̬�ĸ�������(helper methods)������unpooled ByteBufʵ����<br>Unpooled����:<br>�������� | ����<br>— | —<br>buffer(); buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity) | ����heap ByteBuf<br>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity) | ����direct ByteBuf<br>wrappedBuffer()    | ���� wrapped ByteBuf<br>copiedBuffer()    | ����copied ByteBuf<br>Unpooled����ByteBufҲͬ�������ڲ���Ҫ������Netty����ġ��������������Ŀ����Щ��Ŀ���Դ���������ܵġ�����չ��buffer API�л��档</p>
+<h4 id="2-5-���u���"><a href="#2-5-���u���" class="headerlink" title="2.5 ���ü���"></a>2.5 ���ü���</h4><p>���ü�����һ��ͨ���ͷŲ��ٱ������������õĶ������Դ�����Ż��ڴ�ʹ�ú����ܵļ�����Netty��Netty4�汾ΪByteBu��ByteBufHolderf���������ü��������Ƕ�ʵ����ReferenceCounted�ӿڡ�<br>���ü��������˼�벻���ر��ӣ�����Ҫ����׷��ĳ���ض������Ծ������������һ��ReferenceCountedʵ�ֵ�ʵ��ͨ����1��ʼ������ֻҪ���ü�������0���������ͱ�֤���ᱻ�ͷš�����Ծ�����ü������ٵ�0������ͻᱻ�ͷš�ע�⣬��Ȼ�ͷŵ�ȷ�к�����ݾ���ʵ��������ͬ���������룬һ���Ѿ����ͷŵĶ������ٱ�ʹ�á�<br>���ü����Զ���ص�ʵ�ֺܹؼ���������PoolByteBufAllocator��С���ڴ����Ŀ�����ʾ�����������δ����<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-15.jpg" alt="image"><br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-16.jpg" alt="image"></p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
