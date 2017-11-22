@@ -36,7 +36,7 @@
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg">
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-15.jpg">
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-16.jpg">
-<meta property="og:updated_time" content="2017-11-22T18:51:15.402Z">
+<meta property="og:updated_time" content="2017-11-22T18:52:57.779Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty Study Notes Chapter Two | Rousseau Chou's Blog">
 <meta name="twitter:description" content="2 ByteBuf正如我们前面提到的，网络数据的基础单位总是字节。Java NIO用ByteBuffer做它的字节容器，但是这个类使用起来过于复杂，有时候还非常麻烦。Netty用ByteBuf替代了ByteBuffer，这个强大的实现突破了JDK API的限制，为网络开发者提供了更好的API。这里是ByteBuf的主要优点：
@@ -213,15 +213,147 @@ classes that you can use:
 <li>支持对象池</li>
 </ul>
 <h4 id="2-1-ByteBuf的结构"><a href="#2-1-ByteBuf的结构" class="headerlink" title="2.1 ByteBuf的结构"></a>2.1 ByteBuf的结构</h4><p> <img src="http://ifeve.com/wp-content/uploads/2016/06/f5-3.jpg" alt="image"><br>ByteBuf包含两种不同的索引：一个用于读，另一个用于写。0到readIndex之间是可丢弃字节，readIndex和writeIndex之间是可读字节，writeIndex到maxCapacity之间是可写字节。<br>与read和write相关的方法会影响索引，反之则不会。  </p>
-<p>ByteBuf部分方法：<br>方法名称 | 描述<br>—|—<br>readBoolean() | 返回当前readerIndex位置的boolean值, 然后readerIndex加1<br>readByte() | 返回当前readerIndex位置的byte值, 然后readerIndex加1<br>readInt() | 返回当前readerIndex位置的int值, 然后readerIndex加4<br>writeBytes(byteBuf/byte[], int srcIndex, int length)| 从当前writerIndex位置开始，从指定的byteBuf或者byte[]传送数据到当前ByteBuf。如果输入参数中提供了srcIndex和length，那么从srcIndex开始读出length长的字节。当前ByteBuf的writerIndex值根据已写入的字节数增长。<br>getBoolean(int) | 返回指定索引位置的boolean值<br>getByte(int) | 返回指定索引位置的byte值<br>setBoolean(int, boolean) | 在指定索引位置设置boolean值<br>setByte(int index, int value) | 在指定索引位置设置Byte值<br>isReadable() | 如果至少一字节大小的数据可读，返回true<br>isWritable() | 如果至少一字节大小的数据可写，返回true<br>readableBytes() | 返回可读的字节数<br>writableBytes() | 返回可写的字节数<br>capacity() | 返回ByteBuf可容纳的字节数。调用该方法后，ByteBuf会试着扩展容量直到到达maxCapacity()<br>maxCapacity() | 返回ByteBuf可容纳的最大字节数<br>hasArray() | 如果ByteBuf有一个字节数组，返回true<br>Array() | 如果ByteBuf有一个字节数组，返回该数组；否则，抛出异常UnsupportedOperationException</p>
+<p>ByteBuf部分方法：</p>
+<table>
+<thead>
+<tr>
+<th>方法名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>readBoolean()</td>
+<td>返回当前readerIndex位置的boolean值, 然后readerIndex加1</td>
+</tr>
+<tr>
+<td>readByte()</td>
+<td>返回当前readerIndex位置的byte值, 然后readerIndex加1</td>
+</tr>
+<tr>
+<td>readInt()</td>
+<td>返回当前readerIndex位置的int值, 然后readerIndex加4</td>
+</tr>
+<tr>
+<td>writeBytes(byteBuf/byte[], int srcIndex, int length)</td>
+<td>从当前writerIndex位置开始，从指定的byteBuf或者byte[]传送数据到当前ByteBuf。如果输入参数中提供了srcIndex和length，那么从srcIndex开始读出length长的字节。当前ByteBuf的writerIndex值根据已写入的字节数增长。</td>
+</tr>
+<tr>
+<td>getBoolean(int)</td>
+<td>返回指定索引位置的boolean值</td>
+</tr>
+<tr>
+<td>getByte(int)</td>
+<td>返回指定索引位置的byte值</td>
+</tr>
+<tr>
+<td>setBoolean(int, boolean)</td>
+<td>在指定索引位置设置boolean值</td>
+</tr>
+<tr>
+<td>setByte(int index, int value)</td>
+<td>在指定索引位置设置Byte值</td>
+</tr>
+<tr>
+<td>isReadable()</td>
+<td>如果至少一字节大小的数据可读，返回true</td>
+</tr>
+<tr>
+<td>isWritable()</td>
+<td>如果至少一字节大小的数据可写，返回true</td>
+</tr>
+<tr>
+<td>readableBytes()</td>
+<td>返回可读的字节数</td>
+</tr>
+<tr>
+<td>writableBytes()</td>
+<td>返回可写的字节数</td>
+</tr>
+<tr>
+<td>capacity()</td>
+<td>返回ByteBuf可容纳的字节数。调用该方法后，ByteBuf会试着扩展容量直到到达maxCapacity()</td>
+</tr>
+<tr>
+<td>maxCapacity()</td>
+<td>返回ByteBuf可容纳的最大字节数</td>
+</tr>
+<tr>
+<td>hasArray()</td>
+<td>如果ByteBuf有一个字节数组，返回true</td>
+</tr>
+<tr>
+<td>Array()</td>
+<td>如果ByteBuf有一个字节数组，返回该数组；否则，抛出异常UnsupportedOperationException</td>
+</tr>
+</tbody>
+</table>
 <h4 id="2-2-ByteBuf的缓冲区"><a href="#2-2-ByteBuf的缓冲区" class="headerlink" title="2.2 ByteBuf的缓冲区"></a>2.2 ByteBuf的缓冲区</h4><ol>
 <li>堆内存字节缓冲区(HEAP BUFFERS)<br>最常用的ByteBuf模式把数据存储在JVM的堆空间。这个模式被称为字节数组(backing array)<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-1.jpg" alt="image"></li>
 <li>直接内存字节缓冲区(DIRECT BUFFERS)<br>Direct buffer是另一种ByteBuf的模式。在JDK 1.4引入NIO时，ByteBuffer就允许JVM通过native method来分配内存。这是++为了避免在每个本地I/O操作的调用之前（或者之后）拷贝buffer的内容到一个intermediate buffer（或者从intermediate buffer拷贝到buffer）。++<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-2.jpg" alt="image"><br>direct buffer主要的缺点是它们分配和释放的开销比heap buffer更大。</li>
 <li>复合字节缓冲区(COMPOSITE BUFFERS)<br>第三种也是最后一种模式采用composite buffer，是多个ByteBuf实例的统一视图(an aggregated view of multiple ByteBufs)。用这个模式，你可以按需增加或者删除ByteBuf实例，这是JDK ByteBuffer完全没有的一个特性。<br>Netty用ByteBuf的子类CompositeByteBuf实现了这种模式，把多个buffer以一个单独的，融合的buffer的形式展现出来。<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-4.jpg" alt="image"><br>CompositeByteBuf可能不允许从一个字节数组获取数据，那么从一个CompositeByteBuf获取数据就类似direct buffer模式，如下所示。<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-5.jpg" alt="image"></li>
 </ol>
 <h4 id="2-3-派生的ByteBuf"><a href="#2-3-派生的ByteBuf" class="headerlink" title="2.3 派生的ByteBuf"></a>2.3 派生的ByteBuf</h4><p>一个派生的buffer将ByteBuf的内容以一种特定的方式呈现。<br>duplicate()<br>slice()<br>slice(int, int)<br>Unpooled.unmodifiableBuffer(…)<br>order(ByteOrder)<br>readSlice(int)<br>每个方法都返回一个新的ByteBuf实例，包含该实例自己的reader，writer和标记索引。和JDK ByteBuffer一样，内部的存储是和源ByteBuf共享的。这让派生buffer的创建开销不是不大，但是++也意味着如果你改变了派生buffer的内容，你同时也在改变源buffer实例(source instance)的内容，所以使用时要小心++。<br>如果你需要的是一个现存buffer的拷贝，那么++用copy()或者copy(int, int)++。和一个派生的buffer不同，这些调用返回的ByteBuf有一份独立（包含独立的内容和索引）的数据拷贝。</p>
-<h4 id="2-4-ByteBuf的分配"><a href="#2-4-ByteBuf的分配" class="headerlink" title="2.4 ByteBuf的分配"></a>2.4 ByteBuf的分配</h4><h5 id="2-4-1-ByteBufAllocator"><a href="#2-4-1-ByteBufAllocator" class="headerlink" title="2.4.1 ByteBufAllocator"></a>2.4.1 ByteBufAllocator</h5><p>为了减少分配和释放内存的开销，Netty用接口ByteBufAllocator实现了对象池，可以用来分配我们提到过的所有模式的ByteBuf实例。对象池的使用和具体应用有关，并不影响ByteBuf API的用法。<br>ByteBufAllocator方法:<br>方法名称 |    描述<br>— | —<br>buffer()； buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity); | 返回heap或者direct ByteBuf<br>heapBuffer(); heapBuffer(int initialCapacity); heapBuffer(int initialCapacity, int maxCapacity) | 返回heap ByteBuf<br>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity) | 返回direct ByteBuf<br>compositeBuffer(); compositeBuffer(int maxNumComponents); compositeDirectBuffer(); compositeDirectBuffer(int maxNumComponents); compositeHeapBuffer(); compositeHeapBuffer(int maxNumComponents); |返回CoompositeByteBuf，可以根据指定的component数量来扩展heap或者direct buffer<br>ioBuffer() |    返回一个用于socket I/O操作的ByteBuf<br>你可以从一个Channel（每个Channel实例都不同）或者从ChannelHandler绑定的ChannelHandlerContext中获取<br>ByteBufAllocator的一个引用。下面的代码说明了这两种方法。<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg" alt="image"><br>Netty提供了ByteBufAllocator的两种实现：PoolByteBufAllocator和UnpooledByteBufAllocator。前者将ByteBuf实例放入池中，提高了性能，将内存碎片减少到最小。这个实现采用了一种内存分配的高效策略，称为jemalloc。它已经被好几种现代操作系统所采用。后者则没有把ByteBuf放入池中，每次被调用时，返回一个新的ByteBuf实例。<br>Netty默认使用PoolByteBufAllocator.</p>
-<h5 id="2-4-2-Unpooled-buffers"><a href="#2-4-2-Unpooled-buffers" class="headerlink" title="2.4.2 Unpooled buffers"></a>2.4.2 Unpooled buffers</h5><p>有些时候，你不能获取到ByteBufAllocator的引用。在这种情况下，Netty有一个被称为Unpooled的工具类，提供了一些静态的辅助方法(helper methods)来创建unpooled ByteBuf实例。<br>Unpooled方法:<br>方法名称 | 描述<br>— | —<br>buffer(); buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity) | 返回heap ByteBuf<br>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity) | 返回direct ByteBuf<br>wrappedBuffer()    | 返回 wrapped ByteBuf<br>copiedBuffer()    | 返回copied ByteBuf<br>Unpooled类让ByteBuf也同样适用于不需要其他的Netty组件的、无网络操作的项目，这些项目可以从这个高性能的、可扩展的buffer API中获益。</p>
+<h4 id="2-4-ByteBuf的分配"><a href="#2-4-ByteBuf的分配" class="headerlink" title="2.4 ByteBuf的分配"></a>2.4 ByteBuf的分配</h4><h5 id="2-4-1-ByteBufAllocator"><a href="#2-4-1-ByteBufAllocator" class="headerlink" title="2.4.1 ByteBufAllocator"></a>2.4.1 ByteBufAllocator</h5><p>为了减少分配和释放内存的开销，Netty用接口ByteBufAllocator实现了对象池，可以用来分配我们提到过的所有模式的ByteBuf实例。对象池的使用和具体应用有关，并不影响ByteBuf API的用法。<br>ByteBufAllocator方法:</p>
+<table>
+<thead>
+<tr>
+<th>方法名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>buffer()； buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity);</td>
+<td>返回heap或者direct ByteBuf</td>
+</tr>
+<tr>
+<td>heapBuffer(); heapBuffer(int initialCapacity); heapBuffer(int initialCapacity, int maxCapacity)</td>
+<td>返回heap ByteBuf</td>
+</tr>
+<tr>
+<td>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity)</td>
+<td>返回direct ByteBuf</td>
+</tr>
+<tr>
+<td>compositeBuffer(); compositeBuffer(int maxNumComponents); compositeDirectBuffer(); compositeDirectBuffer(int maxNumComponents); compositeHeapBuffer(); compositeHeapBuffer(int maxNumComponents);</td>
+<td>返回CoompositeByteBuf，可以根据指定的component数量来扩展heap或者direct buffer</td>
+</tr>
+<tr>
+<td>ioBuffer()</td>
+<td>返回一个用于socket I/O操作的ByteBuf</td>
+</tr>
+</tbody>
+</table>
+<p>你可以从一个Channel（每个Channel实例都不同）或者从ChannelHandler绑定的ChannelHandlerContext中获取<br>ByteBufAllocator的一个引用。下面的代码说明了这两种方法。<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg" alt="image"><br>Netty提供了ByteBufAllocator的两种实现：PoolByteBufAllocator和UnpooledByteBufAllocator。前者将ByteBuf实例放入池中，提高了性能，将内存碎片减少到最小。这个实现采用了一种内存分配的高效策略，称为jemalloc。它已经被好几种现代操作系统所采用。后者则没有把ByteBuf放入池中，每次被调用时，返回一个新的ByteBuf实例。<br>Netty默认使用PoolByteBufAllocator.</p>
+<h5 id="2-4-2-Unpooled-buffers"><a href="#2-4-2-Unpooled-buffers" class="headerlink" title="2.4.2 Unpooled buffers"></a>2.4.2 Unpooled buffers</h5><p>有些时候，你不能获取到ByteBufAllocator的引用。在这种情况下，Netty有一个被称为Unpooled的工具类，提供了一些静态的辅助方法(helper methods)来创建unpooled ByteBuf实例。<br>Unpooled方法:</p>
+<table>
+<thead>
+<tr>
+<th>方法名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>buffer(); buffer(int initialCapacity); buffer(int initialCapacity, int maxCapacity)</td>
+<td>返回heap ByteBuf</td>
+</tr>
+<tr>
+<td>directBuffer(); directBuffer(int initialCapacity); directBuffer(int initialCapacity, int maxCapacity)</td>
+<td>返回direct ByteBuf</td>
+</tr>
+<tr>
+<td>wrappedBuffer()</td>
+<td>返回 wrapped ByteBuf</td>
+</tr>
+<tr>
+<td>copiedBuffer()</td>
+<td>返回copied ByteBuf</td>
+</tr>
+</tbody>
+</table>
+<p>Unpooled类让ByteBuf也同样适用于不需要其他的Netty组件的、无网络操作的项目，这些项目可以从这个高性能的、可扩展的buffer API中获益。</p>
 <h4 id="2-5-引用计数"><a href="#2-5-引用计数" class="headerlink" title="2.5 引用计数"></a>2.5 引用计数</h4><p>引用计数是一项通过释放不再被其他对象引用的对象的资源，来优化内存使用和性能的技术。Netty在Netty4版本为ByteBu和ByteBufHolderf引入了引用计数，它们都实现了ReferenceCounted接口。<br>引用计数背后的思想不是特别复杂；它主要参与追踪某个特定对象活跃的引用数量。一个ReferenceCounted实现的实例通常从1开始计数。只要引用计数大于0，这个对象就保证不会被释放。当活跃的引用计数减少到0，对象就会被释放。注意，虽然释放的确切含义根据具体实现有所不同，但最起码，一个已经被释放的对象不能再被使用。<br>引用计数对对象池的实现很关键，比如让PoolByteBufAllocator减小了内存分配的开销。示例在下面两段代码里。<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-15.jpg" alt="image"><br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-16.jpg" alt="image"></p>
 
   </section>
