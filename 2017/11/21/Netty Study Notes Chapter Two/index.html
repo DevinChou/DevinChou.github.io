@@ -7,7 +7,7 @@
     
 
     <title>
-      Netty Study Notes Chapter Two2 | Rousseau Chou&#39;s Blog 
+      Netty Study Notes Chapter Two | Rousseau Chou&#39;s Blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -21,7 +21,7 @@
 通过内置的复合缓冲区实现了透明的零拷贝
 读和写采用不同的索引，读写模式">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty Study Notes Chapter Two2 | Rousseau Chou's Blog">
+<meta property="og:title" content="Netty Study Notes Chapter Two | Rousseau Chou's Blog">
 <meta property="og:url" content="http://yoursite.com/2017/11/21/Netty Study Notes Chapter Two/index.html">
 <meta property="og:site_name" content="Rousseau Chou's Blog">
 <meta property="og:description" content="2 ByteBuf正如我们前面提到的，网络数据的基础单位总是字节。Java NIO用ByteBuffer做它的字节容器，但是这个类使用起来过于复杂，有时候还非常麻烦。Netty用ByteBuf替代了ByteBuffer，这个强大的实现突破了JDK API的限制，为网络开发者提供了更好的API。这里是ByteBuf的主要优点：
@@ -36,9 +36,9 @@
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-14.jpg">
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-15.jpg">
 <meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/06/l5-16.jpg">
-<meta property="og:updated_time" content="2017-11-22T18:47:01.811Z">
+<meta property="og:updated_time" content="2017-11-22T18:51:15.402Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Netty Study Notes Chapter Two2 | Rousseau Chou's Blog">
+<meta name="twitter:title" content="Netty Study Notes Chapter Two | Rousseau Chou's Blog">
 <meta name="twitter:description" content="2 ByteBuf正如我们前面提到的，网络数据的基础单位总是字节。Java NIO用ByteBuffer做它的字节容器，但是这个类使用起来过于复杂，有时候还非常麻烦。Netty用ByteBuf替代了ByteBuffer，这个强大的实现突破了JDK API的限制，为网络开发者提供了更好的API。这里是ByteBuf的主要优点：
 
 通过内置的复合缓冲区实现了透明的零拷贝
@@ -178,7 +178,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">Netty Study Notes Chapter Two2</h1>
+    <h1 class="post-title">Netty Study Notes Chapter Two</h1>
 
     
 
@@ -213,7 +213,7 @@ classes that you can use:
 <li>支持对象池</li>
 </ul>
 <h4 id="2-1-ByteBuf的结构"><a href="#2-1-ByteBuf的结构" class="headerlink" title="2.1 ByteBuf的结构"></a>2.1 ByteBuf的结构</h4><p> <img src="http://ifeve.com/wp-content/uploads/2016/06/f5-3.jpg" alt="image"><br>ByteBuf包含两种不同的索引：一个用于读，另一个用于写。0到readIndex之间是可丢弃字节，readIndex和writeIndex之间是可读字节，writeIndex到maxCapacity之间是可写字节。<br>与read和write相关的方法会影响索引，反之则不会。  </p>
-<p>ByteBuf部分方法：<br>方法名称 | 描述<br>—|—<br>readBoolean() | 返回当前readerIndex位置的boolean值, 然后readerIndex加1<br>readByte() | 返回当前readerIndex位置的byte值, 然后readerIndex加1<br>readInt() | 返回当前readerIndex位置的int值, 然后readerIndex加4<br>writeBytes(byteBuf/byte[], int srcIndex, int length)| 从当前writerIndex位置开始，从指定的byteBuf或者byte[]传送数据到当前ByteBuf。如果输入参数中提供了srcIndex和length，那么从srcIndex开始读出length长的字节。当前ByteBuf的writerIndex值根据已写入的字节数增长。<br>getBoolean(int) | 返回指定索引位置的boolean值<br>getByte(int) | 返回指定索引位置的byte值<br>setBoolean(int, boolean) | 在指定索引位置设置boolean值<br>setByte(int index, int value) | 在指定索引位置设置Byte值<br>isReadable() | 如果至少一字节大小的数据可读，返回true<br>isWritable() | 如果至少一字节大小的数据可写，返回true<br>readableBytes() | 返回可读的字节数<br>writableBytes() | 返回可写的字节数<br>capacity() | 返回ByteBuf可容纳的字节数。调用该方法后，ByteBuf会试着扩展容量直到到达maxCapacity()<br>maxCapacity() | 返回ByteBuf可容纳的最大字节数<br>hasArray() | 如果ByteBuf有一个字节数组，返回true<br>Array() | 如果ByteBuf有一个字节数组，返回该数组；否则，抛出异常<br>UnsupportedOperationException</p>
+<p>ByteBuf部分方法：<br>方法名称 | 描述<br>—|—<br>readBoolean() | 返回当前readerIndex位置的boolean值, 然后readerIndex加1<br>readByte() | 返回当前readerIndex位置的byte值, 然后readerIndex加1<br>readInt() | 返回当前readerIndex位置的int值, 然后readerIndex加4<br>writeBytes(byteBuf/byte[], int srcIndex, int length)| 从当前writerIndex位置开始，从指定的byteBuf或者byte[]传送数据到当前ByteBuf。如果输入参数中提供了srcIndex和length，那么从srcIndex开始读出length长的字节。当前ByteBuf的writerIndex值根据已写入的字节数增长。<br>getBoolean(int) | 返回指定索引位置的boolean值<br>getByte(int) | 返回指定索引位置的byte值<br>setBoolean(int, boolean) | 在指定索引位置设置boolean值<br>setByte(int index, int value) | 在指定索引位置设置Byte值<br>isReadable() | 如果至少一字节大小的数据可读，返回true<br>isWritable() | 如果至少一字节大小的数据可写，返回true<br>readableBytes() | 返回可读的字节数<br>writableBytes() | 返回可写的字节数<br>capacity() | 返回ByteBuf可容纳的字节数。调用该方法后，ByteBuf会试着扩展容量直到到达maxCapacity()<br>maxCapacity() | 返回ByteBuf可容纳的最大字节数<br>hasArray() | 如果ByteBuf有一个字节数组，返回true<br>Array() | 如果ByteBuf有一个字节数组，返回该数组；否则，抛出异常UnsupportedOperationException</p>
 <h4 id="2-2-ByteBuf的缓冲区"><a href="#2-2-ByteBuf的缓冲区" class="headerlink" title="2.2 ByteBuf的缓冲区"></a>2.2 ByteBuf的缓冲区</h4><ol>
 <li>堆内存字节缓冲区(HEAP BUFFERS)<br>最常用的ByteBuf模式把数据存储在JVM的堆空间。这个模式被称为字节数组(backing array)<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-1.jpg" alt="image"></li>
 <li>直接内存字节缓冲区(DIRECT BUFFERS)<br>Direct buffer是另一种ByteBuf的模式。在JDK 1.4引入NIO时，ByteBuffer就允许JVM通过native method来分配内存。这是++为了避免在每个本地I/O操作的调用之前（或者之后）拷贝buffer的内容到一个intermediate buffer（或者从intermediate buffer拷贝到buffer）。++<br><img src="http://ifeve.com/wp-content/uploads/2016/06/l5-2.jpg" alt="image"><br>direct buffer主要的缺点是它们分配和释放的开销比heap buffer更大。</li>
