@@ -27,12 +27,17 @@ Channel提供了很多方法，如下列表：">
 Channel的类层次结构：
 Channel提供了很多方法，如下列表：">
 <meta property="og:image" content="http://img.blog.csdn.net/20140715164221182?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvYWJjX2tleQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/07/f6-1.jpg">
 <meta property="og:image" content="http://img.blog.csdn.net/20160408112722242?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="http://img.blog.csdn.net/20160408113348039?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/channelInboundAdapter.png">
 <meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/ChannelDuplexHandler.png">
 <meta property="og:image" content="http://yoursite.com/2017/11/23/Netty Study Notes Chapter Three/ByteToMessageDecoder.png">
-<meta property="og:updated_time" content="2017-11-22T18:53:55.591Z">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/07/l6-2.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/07/l6-6.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/07/l6-7.jpg">
+<meta property="og:image" content="http://ifeve.com/wp-content/uploads/2016/07/f6-5.jpg">
+<meta property="og:updated_time" content="2017-11-23T16:25:30.317Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty Study Notes Chapter Three | Rousseau Chou's Blog">
 <meta name="twitter:description" content="3 Channel及其相关类3.1 Channel基本的I/O操作（bind(),connect(),read()和write()）这些都依赖于网络传输的最原始的支持，对于基于java构建的网络模型，最基础的构造应该是Socket,Netty的Channel接口提供的API可以大大减少直接使用Socket的复杂性。  
@@ -211,9 +216,150 @@ classes that you can use:
 <li>write()，写数据到远程客户端，数据通过ChannelPipeline传输过去  </li>
 </ul>
 <p>++Channel是线程安全(thread-safe)的，它可以被多个不同的线程安全的操作，在多线程环境下，所有的方法都是安全的。正因为Channel是安全的++</p>
-<h4 id="3-2-ChannelHandler和ChannelPipeline"><a href="#3-2-ChannelHandler和ChannelPipeline" class="headerlink" title="3.2 ChannelHandler和ChannelPipeline"></a>3.2 ChannelHandler和ChannelPipeline</h4><p>从一个应用程序开发者的角度上看，最最重要的Netty组件就是ChannelHandler了，因为它作为一个服务容器用来处理关于输入输出数据的业务逻辑。<br>ChannelInboundHandler处理入站数据，ChannelOutboundHandler处理出站数据。<br><img src="http://img.blog.csdn.net/20160408112722242?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>ChannelPipeline提供了ChannelHandler链的容器，当一个channel创建的时候，它会被自动安排到属于它的ChannelPipeline中去，ChannelHandler被装载到ChannelPipeline中遵循以下几个原则：<br>1）一个ChannelInitializer被注册到ServerBootStraping上<br>2）当ChannelInitializer的initChannel方法被调用的时候，ChannelInitializer会装载自定义的一些ChannelHandler到管道上<br>3）ChannelInitializer将它自己从ChannelPipeline上移除<br>ChannelHandler的执行顺序由它们被添加的顺序决定。<br><img src="http://img.blog.csdn.net/20160408113348039?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>当一个ChannelHandler被加入到ChannelPipeline中的时候，它将被分配一个对应的ChannelHandlerContext,这个代表着ChannelHandler和ChannelPipeline之间的绑定关系，尽管ChannelHandlerContext这个对象可以直接获取到底层的Channel但是大多数情况下它被用为写入输出数据</p>
+<p>Channel生命周期状态</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ChannelUnregistered</td>
+<td>Channel已创建，还未注册到一个EventLoop上</td>
+</tr>
+<tr>
+<td>ChannelRegistered</td>
+<td>Channel已经注册到一个EventLoop上</td>
+</tr>
+<tr>
+<td>ChannelActive</td>
+<td>Channel是活跃状态（连接到某个远端），可以收发数据</td>
+</tr>
+<tr>
+<td>ChannelInactive</td>
+<td>Channel未连接到远端</td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://ifeve.com/wp-content/uploads/2016/07/f6-1.jpg" alt="image"></p>
+<h4 id="3-2-ChannelHandler和ChannelPipeline"><a href="#3-2-ChannelHandler和ChannelPipeline" class="headerlink" title="3.2 ChannelHandler和ChannelPipeline"></a>3.2 ChannelHandler和ChannelPipeline</h4><p>从一个应用程序开发者的角度上看，最最重要的Netty组件就是ChannelHandler了，因为它作为一个服务容器用来处理关于输入输出数据的业务逻辑。<br>ChannelInboundHandler处理入站数据，ChannelOutboundHandler处理出站数据。<br><img src="http://img.blog.csdn.net/20160408112722242?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>ChannelPipeline提供了ChannelHandler链的容器，当一个channel创建的时候，它会被自动安排到属于它的ChannelPipeline中去，ChannelHandler被装载到ChannelPipeline中遵循以下几个原则：<br>1）一个ChannelInitializer被注册到ServerBootStraping上<br>2）当ChannelInitializer的initChannel方法被调用的时候，ChannelInitializer会装载自定义的一些ChannelHandler到管道上<br>3）ChannelInitializer将它自己从ChannelPipeline上移除<br>ChannelHandler的执行顺序由它们被添加的顺序决定。随着ChannelPipeline传送一个event，它会判断pipeline中的下一个ChannelHandler的类型是否符合event的走向。如果不符合，那么ChannelPipeline会跳过这个ChannelHandler.<br><img src="http://img.blog.csdn.net/20160408113348039?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>当一个ChannelHandler被加入到ChannelPipeline中的时候，它将被分配一个对应的ChannelHandlerContext,这个代表着ChannelHandler和ChannelPipeline之间的绑定关系，尽管ChannelHandlerContext这个对象可以直接获取到底层的Channel但是大多数情况下它被用为写入输出数据</p>
 <p>在Netty中，有两种方式去发送信息，第一种你可以直接将数据写入Channel,第二种你将输入写入与channelHandler关联的ChannelHandlerContext中，第一种方法会使消息从ChannelPipeline的尾部开始，后一个方法会使信息从ChannelPipeline的下一个处理器开始处理。</p>
-<h5 id="3-2-1-ChannelHandler的一些常用子类"><a href="#3-2-1-ChannelHandler的一些常用子类" class="headerlink" title="3.2.1 ChannelHandler的一些常用子类"></a>3.2.1 ChannelHandler的一些常用子类</h5><p>1）ChannelHandlerAdapter<br>2）ChannelInboundHandlerAdapter<br><img src="/2017/11/23/Netty Study Notes Chapter Three/channelInboundAdapter.png" alt="image"><br>3）ChannelOutboundHandler<br>4）ChannelDuplexHandler<br>如果一个所需的ChannelHandler既要处理入站事件又要处理出站事件，推荐继承此类。<br><img src="/2017/11/23/Netty Study Notes Chapter Three/ChannelDuplexHandler.png" alt="image"><br>5）解码器ByteToMessageDecoder/MessageToMessageDecoder<br>将入站的字节解析为java对象，或者将入站的对象解析为另一种对象<br><img src="/2017/11/23/Netty Study Notes Chapter Three/ByteToMessageDecoder.png" alt="image"><br>6）编码器MessageToMessageEncoder/MessageToMEssageEncoder<br>将出站的java对象解析为字节，或者将出站的对象解析为另一种对象<br>7） SimpleChannelInboudHandler</p>
+<p>ChannelHandler生命周期方法</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>handlerAdded</td>
+<td>当ChannelHandler被添加到一个ChannelPipeline时被调用</td>
+</tr>
+<tr>
+<td>handlerRemoved</td>
+<td>当ChannelHandler从一个ChannelPipeline中移除时被调用</td>
+</tr>
+<tr>
+<td>exceptionCaught</td>
+<td>处理过程中ChannelPipeline中发生错误时被调用</td>
+</tr>
+</tbody>
+</table>
+<h5 id="3-2-1-ChannelHandler的一些常用子类"><a href="#3-2-1-ChannelHandler的一些常用子类" class="headerlink" title="3.2.1 ChannelHandler的一些常用子类"></a>3.2.1 ChannelHandler的一些常用子类</h5><p>1）ChannelHandlerAdapter<br>ChannelHandlerAdapter还提供了一个工具方法++isSharable()++。如果类实现带@Sharable注解，那么这个方法就会返回true，意味着这个对象可以被添加到多个ChannelPipeline中。  </p>
+<p>2）ChannelInboundHandler<br>部分入站引发的方法</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>channelRegistered</td>
+<td>当一个Channel注册到EventLoop上，可以处理I/O时被调用</td>
+</tr>
+<tr>
+<td>channelUnregistered</td>
+<td>当一个Channel从它的EventLoop上解除注册，不再处理I/O时被调用</td>
+</tr>
+<tr>
+<td>channelActive</td>
+<td>当Channel变成活跃状态时被调用；Channel是连接/绑定、就绪的</td>
+</tr>
+<tr>
+<td>channelInactive</td>
+<td>当Channel离开活跃状态，不再连接到某个远端时被调用</td>
+</tr>
+<tr>
+<td>channelReadComplete</td>
+<td>当Channel上的某个读操作完成时被调用</td>
+</tr>
+<tr>
+<td>channelRead</td>
+<td>当从Channel中读数据时被调用</td>
+</tr>
+<tr>
+<td>channelWritabilityChanged</td>
+<td>当Channel的可写状态改变时被调用。通过这个方法，用户可以确保写操作不会进行地太快（避免OutOfMemoryError）或者当Channel又变成可写时继续写操作。Channel类的isWritable()方法可以用来检查Channel的可写状态。可写性的阈值可以通过Channel.config().setWriteHighWaterMark()和Channel.config().setWriteLowWaterMark()来设定。</td>
+</tr>
+<tr>
+<td>userEventTriggered</td>
+<td>因某个POJO穿过ChannelPipeline引发ChannelnboundHandler.fireUserEventTriggered()时被调用</td>
+</tr>
+</tbody>
+</table>
+<p>3）ChannelOutboundHandler<br>输出的操作和数据由ChannelOutBoundHandler处理。它的方法可以被Channel，ChannelPipeline和ChannelHandlerContext调用。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bind(ChannelHandlerContext,SocketAddress,ChannelPromise)</td>
+<td>请求绑定Channel到一个本地地址</td>
+</tr>
+<tr>
+<td>connect(ChannelHandlerContext, SocketAddress,SocketAddress,ChannelPromise)</td>
+<td>请求连接Channel到远端</td>
+</tr>
+<tr>
+<td>disconnect(ChannelHandlerContext, ChannelPromise)</td>
+<td>请求从远端断开Channel</td>
+</tr>
+<tr>
+<td>close(ChannelHandlerContext,ChannelPromise)</td>
+<td>请求关闭Channel</td>
+</tr>
+<tr>
+<td>deregister(ChannelHandlerContext, ChannelPromise)</td>
+<td>请求Channel从它的EventLoop上解除注册</td>
+</tr>
+<tr>
+<td>read(ChannelHandlerContext)</td>
+<td>请求从Channel中读更多的数据</td>
+</tr>
+<tr>
+<td>flush(ChannelHandlerContext)</td>
+<td>请求通过Channel刷队列数据到远端</td>
+</tr>
+<tr>
+<td>write(ChannelHandlerContext,Object, ChannelPromise)</td>
+<td>请求通过Channel写数据到远端</td>
+</tr>
+</tbody>
+</table>
+<p>ChannelOutboundHandler的大部分方法都用了一个ChannelPromise输入参数，用于当操作完成时收到通知。ChannelPromise是ChannelFuture的子接口，定义了可写的方法，比如setSuccess()，或者setFailure()，而ChannelFuture则是不可变对象。</p>
+<p>4）ChannelInboundHandlerAdapter/ChannelOutboundHandler<br><img src="/2017/11/23/Netty Study Notes Chapter Three/channelInboundAdapter.png" alt="image"><br>5）ChannelDuplexHandler<br>如果一个所需的ChannelHandler既要处理入站事件又要处理出站事件，推荐继承此类。<br><img src="/2017/11/23/Netty Study Notes Chapter Three/ChannelDuplexHandler.png" alt="image"><br>6）解码器ByteToMessageDecoder/MessageToMessageDecoder<br>将入站的字节解析为java对象，或者将入站的对象解析为另一种对象。<br><img src="/2017/11/23/Netty Study Notes Chapter Three/ByteToMessageDecoder.png" alt="image"><br>7）编码器MessageToMessageEncoder/MessageToMEssageEncoder<br>将出站的java对象解析为字节，或者将出站的对象解析为另一种对象。<br>8） SimpleChannelInboundHandler<br>当一个ChannelInboundHandler实现类重写channelRead()方法时，它要负责释放ByteBuf相关的内存。而SimpleChannelInboundHandler可以简化这些操作。<br><img src="http://ifeve.com/wp-content/uploads/2016/07/l6-2.jpg" alt="image"></p>
+<h4 id="3-3-ChannelHandlerContext"><a href="#3-3-ChannelHandlerContext" class="headerlink" title="3.3 ChannelHandlerContext"></a>3.3 ChannelHandlerContext</h4><p>ChannelHandlerContext让一个ChannelHandler可以和它的ChannelPipeline和其他handler的交互。通过ChannelHandlerContext，一个handler可以通知ChannelPipeline中的下一个ChannelHandler。<br>ChannelHandlerContext有很多方法，其中一些方法Channel和ChannelPipeline也有，但是有区别。如果你在Channel或者ChannelPipeline实例上调用这些方法，它们的调用会穿过整个pipeline。而在ChannelHandlerContext上调用的同样的方法，++仅仅从当前ChannelHandler开始，走到pipeline中下一个可以处理这个event的ChannelHandler。++<br>++一个ChannelHandler绑定的ChannelHandlerContext 永远不会改变，所以把它的引用缓存起来是安全的。++<br>1）从ChannelHandlerContext中获取了Channel的引用<br><img src="http://ifeve.com/wp-content/uploads/2016/07/l6-6.jpg" alt="image"><br>2）从ChannelHandlerContext从获取ChannelPipeline<br><img src="http://ifeve.com/wp-content/uploads/2016/07/l6-7.jpg" alt="image"></p>
+<p>ChannelPipleine通过ChannelContext传递event<br><img src="http://ifeve.com/wp-content/uploads/2016/07/f6-5.jpg" alt="image"></p>
 
   </section>
 

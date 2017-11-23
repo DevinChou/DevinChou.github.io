@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Netty Study Notes Chapter Four | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty Study Notes Chapter Four | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/11/24/Netty Study Notes Chapter Four/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
+<meta property="og:image" content="http://img.blog.csdn.net/20160416101750275?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://yoursite.com/2017/11/24/Netty Study Notes Chapter Four/eventloop.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20160416143027726?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="http://yoursite.com/2017/11/24/Netty Study Notes Chapter Four/eventloopgroup.png">
+<meta property="og:image" content="http://img.blog.csdn.net/20160416150647282?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:updated_time" content="2017-11-23T17:50:50.401Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty Study Notes Chapter Four | Rousseau Chou's Blog">
+<meta name="twitter:description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20160416101750275?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Netty Study Notes Chapter Four</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-11-24" class="post-meta__date date">2017-11-24</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="4-EventLoop"><a href="#4-EventLoop" class="headerlink" title="4 EventLoop"></a>4 EventLoop</h3><p>从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。<br>其基本的线程池模型是这样的：<br>1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法<br>2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。<br><img src="http://img.blog.csdn.net/20160416101750275?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的损耗++，这种损耗会在线程数陡增的时候会变成非常的明显，如果在高负载的情况下，会变得更加的严重，同时，与线程模型相关的一些其他问题也会在应用中慢慢体现出来，因为你的引用中会有相当复杂业务逻辑和相当高的并发需求。</p>
+<h4 id="4-1-EventLoop接口"><a href="#4-1-EventLoop接口" class="headerlink" title="4.1 EventLoop接口"></a>4.1 EventLoop接口</h4><p>EventLoop的继承关系<br><img src="/2017/11/24/Netty Study Notes Chapter Four/eventloop.png" alt="image"><br>Netty的EventLoop是一个将并发和网络这两个基本的API整合在一起然后一起协作的设计，首先，Netty的io.netty.util.concurrent包是构建于java.util.concurrent的基本java包之上的用来提供线程执行器。<br>Netty的EventLoop继承了ScheduledExecutorService，只定义了一个parent()方法，这个方法的目的是返回当前EventLoop实例属于的EventLoopGroup的引用。  SingThread保证EventLoop绑定单个线程，使单个线程负责一个channel的整个生命周期，Scheduled使任务可以在稍后的时间或者周期性的被执行，比如说心跳保活。<br>事件和任务执行顺序是FIFO的，这个通过保证字节内容可以按照正确的顺序去传输来消除了数据可能存在的混乱。</p>
+<p>Netty线程模型的高性能取决于确定执行当前线程的身份，换句话说，也就是确定当前的执行线程是否是分配给当前Channel和EventLoop的那么线程，同一个EventLoop需要在它的整个生命周期里为分配给他的Channel处理所有的事件。<br>如果调用线程是那个分配的EventLoop，那么这个代码块将会被执行，否则，EventLoop会把这个任务推迟一点事件执行把这个任务放入到内部队列中，当EventLoop下一个处理它的事件的时候，它会执行队列中的任务，这就解释了为什么任何线程可以相互交互，并且不需要在多个ChannelHandler同步了。<br><img src="http://img.blog.csdn.net/20160416143027726?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>每一个EventLoop都会有一个它自己的任务队列，独立于任何其他的EventLoop。</p>
+<h4 id="4-2-EventLoopGroup"><a href="#4-2-EventLoopGroup" class="headerlink" title="4.2 EventLoopGroup"></a>4.2 EventLoopGroup</h4><p>常用的NioEventLoopGroup继承关系<br><img src="/2017/11/24/Netty Study Notes Chapter Four/eventloopgroup.png" alt="image">  </p>
+<p>在EventLoopGroup容器中的EventLoop可以用来为Channel中的I/O和事件服务，根据你传输类型的不同，在EventLoopGroup中的EventLoop也会进行相应类型的创建和分配。<br>异步实现只使用少量的EventLoop，在这种设计模型中，一个EventLoop可能会被多个Channel共享，这种模型可以是多个Channel在尽可能少的数量下的线程下正常工作，而不是给每一个Channel分配一个线程。<br>EventLoopGroup负责为每一个新的创建好的Channel分配一个EventLoop，在目前的实现中，使用轮询的方式来获取最平衡的分发，同样的EventLoop可以分配给多个Channel<br><img src="http://img.blog.csdn.net/20160416150647282?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="image"><br>一旦一个Channel分配到一个EventLoop，那么这个Channel在其整个的生命周期里只会使用这一个EventLoop，这个特性可以使你不必担心线程安全和同步你的ChannelHandler的问题。<br>但是同样，EventLoop的分配会影响到ThreadLocal的使用，因为一个EventLoop会给不止一个的Channel使用，那么对于所有的关联的Channel来说，ThreadLocal将会是一样的。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
