@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Dubbo项目集成SpringCloud的Feign接口 | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="在项目中遇到了一期服务使用Dubbo，二期服务使用SpringCloud的情况。也就自然有了SpringCloud中消费Dubbo接口，和Dubbo服务中消费Feign接口的需求。SpringCloud中集成Dubbo已有珠玉在前，https://github.com/xionghuiCoder/spring-boot-starter-dubbo 。作者对dubbo和springboot的源码都十">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo项目集成SpringCloud的Feign接口 | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/12/13/Dubbo consumes Feign/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="在项目中遇到了一期服务使用Dubbo，二期服务使用SpringCloud的情况。也就自然有了SpringCloud中消费Dubbo接口，和Dubbo服务中消费Feign接口的需求。SpringCloud中集成Dubbo已有珠玉在前，https://github.com/xionghuiCoder/spring-boot-starter-dubbo 。作者对dubbo和springboot的源码都十">
+<meta property="og:updated_time" content="2017-12-27T12:13:17.397Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dubbo项目集成SpringCloud的Feign接口 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="在项目中遇到了一期服务使用Dubbo，二期服务使用SpringCloud的情况。也就自然有了SpringCloud中消费Dubbo接口，和Dubbo服务中消费Feign接口的需求。SpringCloud中集成Dubbo已有珠玉在前，https://github.com/xionghuiCoder/spring-boot-starter-dubbo 。作者对dubbo和springboot的源码都十">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Dubbo项目集成SpringCloud的Feign接口</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-12-13" class="post-meta__date date">2017-12-13</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>在项目中遇到了一期服务使用Dubbo，二期服务使用SpringCloud的情况。也就自然有了SpringCloud中消费Dubbo接口，和Dubbo服务中消费Feign接口的需求。<br>SpringCloud中集成Dubbo已有珠玉在前，<a href="https://github.com/xionghuiCoder/spring-boot-starter-dubbo" target="_blank" rel="external">https://github.com/xionghuiCoder/spring-boot-starter-dubbo</a> 。作者对dubbo和springboot的源码都十分了解，可以说是完美解决了这个需求。在里面，作者通过DubboAutoConfiguration完成相关Dubbo组件装配，扫描取出所有带有注解@DubboConsumer的bean,去组装出一个dubbo的ReferenceBean，从而实现dubbo接口的远程调用。<br>关于Dubbo服务中如何消费Feign接口，倒是一直找不到相关的框架。Feign接口的本质是对Http请求的封装，所以一开始想到的就是使用Spring的RestTemplate进行Http请求去消费服务，但是这样显然极不优雅。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">使用RestTemplate</div><div class="line">*/</div><div class="line">@Component</div><div class="line">@Slf4j</div><div class="line">public class ShopRestTemplate &#123;</div><div class="line"></div><div class="line">    @Autowired</div><div class="line">    private RestTemplate restTemplate;</div><div class="line"></div><div class="line">    @Value(&quot;#&#123;configProperties[&apos;ai.resource.url&apos;]&#125;&quot;)</div><div class="line">    private String dataResourceUrl;</div><div class="line"></div><div class="line">    public String getAccountByShopId(String shopId) &#123;</div><div class="line">        try &#123;</div><div class="line">            BaseResult res = restTemplate.getForObject(dataResourceUrl + &quot;/shop/shopDetail/&#123;shopId&#125;&quot;, BaseResult.class,</div><div class="line">                    shopId);</div><div class="line">            if (res.getCode() == BaseResult.FAILED) &#123;</div><div class="line">                log.warn(&quot;get shopDetail failed, shopId=&#123;&#125;, msg=&#123;&#125;&quot;, shopId, res.getMsg());</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">            HashMap shopDto = (HashMap) res.getData();// 需要自己去反序列化成Dto，这里直接使用HashMap</div><div class="line">            String account = shopDto.get(&quot;account&quot;).toString();</div><div class="line">            if (StringUtils.isBlank(account)) &#123;</div><div class="line">                log.warn(&quot; shop&apos;s account is null, shopId=&#123;&#125;&quot;, shopId);</div><div class="line">                return null;</div><div class="line">            &#125;</div><div class="line">            return account;</div><div class="line">        &#125; catch (Exception e) &#123;</div><div class="line">            log.error(&quot;get shopDetail error, shopId=&#123;&#125;&quot;, shopId, e);</div><div class="line">            return null;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>随后去查阅了Feign项目的github。 <a href="https://github.com/OpenFeign/feign" target="_blank" rel="external">https://github.com/OpenFeign/feign</a> 参考文章 <a href="https://www.jianshu.com/p/37e915bea7c8?winzoom=1" target="_blank" rel="external">https://www.jianshu.com/p/37e915bea7c8?winzoom=1</a>  考虑直接去使用Feign。<br>加入maven依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.netflix.feign&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;feign-core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;8.18.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.netflix.feign&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;feign-hystrix&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;8.18.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.netflix.feign&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;feign-ribbon&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;8.18.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.netflix.feign&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;feign-jackson&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;8.18.0&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>首先定义一个接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">public interface ShopRestService &#123;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * 根据account获取对应shopId</div><div class="line">     * @param account</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    @RequestLine(&quot;GET /shop/getShopIdByAccount/&#123;account&#125;&quot;)</div><div class="line">    BaseResult&lt;String&gt; getShopIdByAccount(@Param(&quot;account&quot;) String account);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>增加属性文件data-resource.properties</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">AI-DATA-RESOURCE.ribbon.MaxAutoRetries=1</div><div class="line">AI-DATA-RESOURCE.ribbon.MaxAutoRetriesNextServer=1</div><div class="line">AI-DATA-RESOURCE.ribbon.OkToRetryOnAllOperations=true</div><div class="line">AI-DATA-RESOURCE.ribbon.ConnectTimeout=3000</div><div class="line">AI-DATA-RESOURCE.ribbon.ReadTimeout=3000</div><div class="line">AI-DATA-RESOURCE.ribbon.listOfServers=127.0.0.1:8080</div><div class="line">AI-DATA-RESOURCE.ribbon.EnablePrimeConnections=false</div></pre></td></tr></table></figure>
+<p>然后定义一个配置类</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class DataResourceConfig &#123;</div><div class="line"></div><div class="line">    public DataResourceConfig() &#123;</div><div class="line">        try &#123;</div><div class="line">            ConfigurationManager.loadPropertiesFromResources(&quot;data-resource.properties&quot;);</div><div class="line">        &#125; catch (IOException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bean</div><div class="line">    public ShopRestService shopRestService() &#123;</div><div class="line">        ShopRestService shopRest = Feign.builder().client(getRibbonClient()).encoder(new JacksonEncoder())</div><div class="line">                .decoder(new JacksonDecoder()).target(ShopRestService.class, &quot;http://AI-DATA-RESOURCE&quot;);</div><div class="line">        return shopRest;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private RibbonClient getRibbonClient() &#123;</div><div class="line">        RibbonClient client = RibbonClient.builder().lbClientFactory((clientName) -&gt; &#123;</div><div class="line">            IClientConfig config = ClientFactory.getNamedConfig(clientName);</div><div class="line">            ILoadBalancer lb = ClientFactory.getNamedLoadBalancer(clientName);</div><div class="line">            ZoneAwareLoadBalancer zb = (ZoneAwareLoadBalancer) lb;</div><div class="line">            zb.setRule(zoneAvoidanceRule());</div><div class="line">            return LBClient.create(lb, config);</div><div class="line">        &#125;).build();</div><div class="line">        return client;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Ribbon负载均衡策略实现</div><div class="line">     * 使用ZoneAvoidancePredicate和AvailabilityPredicate来判断是否选择某个server，前一个判断判定一个zone的运行性能是否可用，</div><div class="line">     * 剔除不可用的zone（的所有server），AvailabilityPredicate用于过滤掉连接数过多的Server。</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    private IRule zoneAvoidanceRule() &#123;</div><div class="line">        return new ZoneAvoidanceRule();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Ribbon负载均衡策略实现</div><div class="line">     * 随机选择一个server。</div><div class="line">     * @return</div><div class="line">     */</div><div class="line">    private IRule randomRule() &#123;</div><div class="line">        return new RandomRule();</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过这种方式，显然是比直接使用RestTempalte更加优雅，至少序列化的问题已经通过JacksonEncoder和JacksonDecoder帮我们解决了。然而，这依然让人无法满意，<strong>第一，你需要重复定义api接口类，因为单独的Feign框架只支持自身框架的http相关注解，比如@RequestLine，@Param,无法识别SpringMVC的相关注解。第二，服务提供者的ip地址需要自己在AI-DATA-RESOURCE.ribbon.listOfServers中写明，不能通过注册中心自动发现。</strong>  如果能解决这两个问题，我们的集成就完美了。<br>注：上述方式会在项目中遇到包依赖冲突问题，请指定以下包版本。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.netflix.archaius&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;archaius-core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;0.6.6&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div><div class="line">&lt;dependency&gt;</div><div class="line">    &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;</div><div class="line">    &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;</div><div class="line">    &lt;version&gt;2.8.8&lt;/version&gt;</div><div class="line">&lt;/dependency&gt;</div></pre></td></tr></table></figure>
+<p>那么我们首先要看看Feign是如何去扫描注解实例化接口，通过查看feign-core包下的源码，我们会发现一个接口类Contract</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * Defines what annotations and values are valid on interfaces.</div><div class="line"> */</div><div class="line">public interface Contract &#123;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显然这个接口就是负责注解扫描的，它有一个内部类Contract.Default，实现了Contract的核心抽象方法processAnnotationOnClass，processAnnotationOnMethod和processAnnotationsOnParameter。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void processAnnotationOnMethod(MethodMetadata data, Annotation methodAnnotation,</div><div class="line">                                         Method method) &#123;</div><div class="line">  Class&lt;? extends Annotation&gt; annotationType = methodAnnotation.annotationType();</div><div class="line">  if (annotationType == RequestLine.class) &#123;</div><div class="line">    String requestLine = RequestLine.class.cast(methodAnnotation).value();</div><div class="line">    checkState(emptyToNull(requestLine) != null,</div><div class="line">               &quot;RequestLine annotation was empty on method %s.&quot;, method.getName());</div><div class="line">    if (requestLine.indexOf(&apos; &apos;) == -1) &#123;</div><div class="line">      checkState(requestLine.indexOf(&apos;/&apos;) == -1,</div><div class="line">          &quot;RequestLine annotation didn&apos;t start with an HTTP verb on method %s.&quot;,</div><div class="line">          method.getName());</div><div class="line">      data.template().method(requestLine);</div><div class="line">      return;</div><div class="line">    &#125;</div><div class="line">    data.template().method(requestLine.substring(0, requestLine.indexOf(&apos; &apos;)));</div><div class="line">    if (requestLine.indexOf(&apos; &apos;) == requestLine.lastIndexOf(&apos; &apos;)) &#123;</div><div class="line">      // no HTTP version is ok</div><div class="line">      data.template().append(requestLine.substring(requestLine.indexOf(&apos; &apos;) + 1));</div><div class="line">    &#125; else &#123;</div><div class="line">      // skip HTTP version</div><div class="line">      data.template().append(</div><div class="line">          requestLine.substring(requestLine.indexOf(&apos; &apos;) + 1, requestLine.lastIndexOf(&apos; &apos;)));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    data.template().decodeSlash(RequestLine.class.cast(methodAnnotation).decodeSlash());</div><div class="line"></div><div class="line">  &#125; else if (annotationType == Body.class) &#123;</div><div class="line">    String body = Body.class.cast(methodAnnotation).value();</div><div class="line">    checkState(emptyToNull(body) != null, &quot;Body annotation was empty on method %s.&quot;,</div><div class="line">               method.getName());</div><div class="line">    if (body.indexOf(&apos;&#123;&apos;) == -1) &#123;</div><div class="line">      data.template().body(body);</div><div class="line">    &#125; else &#123;</div><div class="line">      data.template().bodyTemplate(body);</div><div class="line">    &#125;</div><div class="line">  &#125; else if (annotationType == Headers.class) &#123;</div><div class="line">    String[] headersOnMethod = Headers.class.cast(methodAnnotation).value();</div><div class="line">    checkState(headersOnMethod.length &gt; 0, &quot;Headers annotation was empty on method %s.&quot;,</div><div class="line">               method.getName());</div><div class="line">    data.template().headers(toMap(headersOnMethod));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Default的processAnnotationOnMethod方法，是只支持自己的原生注解的。那么SpringCloud的源码中是如何让Feign去识别SpringMVC的注解呢？在spring-cloud-netflix-core包下面我们可以看到这个类FeignClientsConfiguration。没错，这个类就是SpringCloud中Feign的配置类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div></pre></td><td class="code"><pre><div class="line">@Configuration</div><div class="line">public class FeignClientsConfiguration &#123;</div><div class="line"></div><div class="line">	@Autowired</div><div class="line">	private ObjectFactory&lt;HttpMessageConverters&gt; messageConverters;</div><div class="line"></div><div class="line">	@Autowired(required = false)</div><div class="line">	private List&lt;AnnotatedParameterProcessor&gt; parameterProcessors = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">	@Autowired(required = false)</div><div class="line">	private List&lt;FeignFormatterRegistrar&gt; feignFormatterRegistrars = new ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">	@Autowired(required = false)</div><div class="line">	private Logger logger;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@ConditionalOnMissingBean</div><div class="line">	public Decoder feignDecoder() &#123;</div><div class="line">		return new ResponseEntityDecoder(new SpringDecoder(this.messageConverters));</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@ConditionalOnMissingBean</div><div class="line">	public Encoder feignEncoder() &#123;</div><div class="line">		return new SpringEncoder(this.messageConverters);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@ConditionalOnMissingBean</div><div class="line">	public Contract feignContract(ConversionService feignConversionService) &#123;</div><div class="line">		return new SpringMvcContract(this.parameterProcessors, feignConversionService);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	public FormattingConversionService feignConversionService() &#123;</div><div class="line">		FormattingConversionService conversionService = new DefaultFormattingConversionService();</div><div class="line">		for (FeignFormatterRegistrar feignFormatterRegistrar : feignFormatterRegistrars) &#123;</div><div class="line">			feignFormatterRegistrar.registerFormatters(conversionService);</div><div class="line">		&#125;</div><div class="line">		return conversionService;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Configuration</div><div class="line">	@ConditionalOnClass(&#123; HystrixCommand.class, HystrixFeign.class &#125;)</div><div class="line">	protected static class HystrixFeignConfiguration &#123;</div><div class="line">		@Bean</div><div class="line">		@Scope(&quot;prototype&quot;)</div><div class="line">		@ConditionalOnMissingBean</div><div class="line">		@ConditionalOnProperty(name = &quot;feign.hystrix.enabled&quot;, matchIfMissing = true)</div><div class="line">		public Feign.Builder feignHystrixBuilder() &#123;</div><div class="line">			return HystrixFeign.builder();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@ConditionalOnMissingBean</div><div class="line">	public Retryer feignRetryer() &#123;</div><div class="line">		return Retryer.NEVER_RETRY;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@Scope(&quot;prototype&quot;)</div><div class="line">	@ConditionalOnMissingBean</div><div class="line">	public Feign.Builder feignBuilder(Retryer retryer) &#123;</div><div class="line">		return Feign.builder().retryer(retryer);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	@Bean</div><div class="line">	@ConditionalOnMissingBean(FeignLoggerFactory.class)</div><div class="line">	public FeignLoggerFactory feignLoggerFactory() &#123;</div><div class="line">		return new DefaultFeignLoggerFactory(logger);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>注意到了这个方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">   @Bean</div><div class="line">@ConditionalOnMissingBean</div><div class="line">public Contract feignContract(ConversionService feignConversionService) &#123;</div><div class="line">	return new SpringMvcContract(this.parameterProcessors, feignConversionService);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>查阅这个类，我们在processAnnotationOnClass这些方法里，又找到我们熟悉的RequestMapping等注解，显然这个类就是我们需要的类。此时我们唯一需要做的就是在原来的DataResourceConfig中加一个.contract(new SpringMvcContract())，指定SpringMvcContract来扫描注解。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@Bean</div><div class="line">public ShopRestService shopRestService() &#123;</div><div class="line">    ShopRestService shopRest = Feign.builder().client(getRibbonClient()).contract(new SpringMvcContract()).encoder(new JacksonEncoder())</div><div class="line">            .decoder(new JacksonDecoder()).target(ShopRestService.class, &quot;http://AI-DATA-RESOURCE&quot;);</div><div class="line">    return shopRest;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在，我们已经不需要定义新的接口类了，只需要把服务提供方的接口类文件引入进来实例化即可。接下来，我们还需要集成Eureka来实现服务的自动发现。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

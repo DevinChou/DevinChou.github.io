@@ -7,7 +7,7 @@
     
 
     <title>
-      Netty Study Notes Chapter Four | Rousseau Chou&#39;s Blog 
+      Netty学习笔记4 | Rousseau Chou&#39;s Blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -18,7 +18,7 @@
 
     <meta name="description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty Study Notes Chapter Four | Rousseau Chou's Blog">
+<meta property="og:title" content="Netty学习笔记4 | Rousseau Chou's Blog">
 <meta property="og:url" content="http://yoursite.com/2017/11/24/Netty Study Notes Chapter Four/index.html">
 <meta property="og:site_name" content="Rousseau Chou's Blog">
 <meta property="og:description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
@@ -27,9 +27,9 @@
 <meta property="og:image" content="http://img.blog.csdn.net/20160416143027726?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 <meta property="og:image" content="http://yoursite.com/2017/11/24/Netty Study Notes Chapter Four/eventloopgroup.png">
 <meta property="og:image" content="http://img.blog.csdn.net/20160416150647282?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
-<meta property="og:updated_time" content="2017-11-23T17:50:50.401Z">
+<meta property="og:updated_time" content="2017-12-27T12:10:19.039Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Netty Study Notes Chapter Four | Rousseau Chou's Blog">
+<meta name="twitter:title" content="Netty学习笔记4 | Rousseau Chou's Blog">
 <meta name="twitter:description" content="4 EventLoop从JDK1.5引入juc包，它的线程池技术通过对线程的缓存和重复利用大大地提高了应用程序的性能。其基本的线程池模型是这样的：1）从线程中获取一个空闲的线程，用这个线程去执行一个实现Runnable或者Callable接口的方法2）当这个任务完成后，这个线程会重新回到线程中，来用于重复利用。池化可以减少为每个任务创建线程销毁线程带来的性能损耗，++但是并没有消除上下文切换带来的">
 <meta name="twitter:image" content="http://img.blog.csdn.net/20160416101750275?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
     
@@ -166,7 +166,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">Netty Study Notes Chapter Four</h1>
+    <h1 class="post-title">Netty学习笔记4</h1>
 
     
 
