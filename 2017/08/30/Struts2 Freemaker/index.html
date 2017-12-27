@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      改造Struts2的Freemarker集成实现页面拼接 | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="最近公司开始搞SSO单点登录，并且要把所有的项目后台都整成一个样式，这个样式是按照目前使用SpringMVC+Velocity的项目设计的，每次跳转都会拼接整个页面去跳转，导航栏+菜单栏+主页面。而我负责的需要被接入的项目还是基于Struts2+Freemarker，其原本的后台页面是使用iFrame去实现局部跳转。而iFreame的做法直接被cto否决了，而Struts2的页面返回都是这种形式的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="改造Struts2的Freemarker集成实现页面拼接 | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/08/30/Struts2 Freemaker/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="最近公司开始搞SSO单点登录，并且要把所有的项目后台都整成一个样式，这个样式是按照目前使用SpringMVC+Velocity的项目设计的，每次跳转都会拼接整个页面去跳转，导航栏+菜单栏+主页面。而我负责的需要被接入的项目还是基于Struts2+Freemarker，其原本的后台页面是使用iFrame去实现局部跳转。而iFreame的做法直接被cto否决了，而Struts2的页面返回都是这种形式的">
+<meta property="og:updated_time" content="2017-12-27T21:54:27.590Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="改造Struts2的Freemarker集成实现页面拼接 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="最近公司开始搞SSO单点登录，并且要把所有的项目后台都整成一个样式，这个样式是按照目前使用SpringMVC+Velocity的项目设计的，每次跳转都会拼接整个页面去跳转，导航栏+菜单栏+主页面。而我负责的需要被接入的项目还是基于Struts2+Freemarker，其原本的后台页面是使用iFrame去实现局部跳转。而iFreame的做法直接被cto否决了，而Struts2的页面返回都是这种形式的">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">改造Struts2的Freemarker集成实现页面拼接</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-08-30" class="post-meta__date date">2017-08-30</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>最近公司开始搞SSO单点登录，并且要把所有的项目后台都整成一个样式，这个样式是按照目前使用SpringMVC+Velocity的项目设计的，每次跳转都会拼接整个页面去跳转，导航栏+菜单栏+主页面。而我负责的需要被接入的项目还是基于Struts2+Freemarker，其原本的后台页面是使用iFrame去实现局部跳转。<br>而iFreame的做法直接被cto否决了，而Struts2的页面返回都是这种形式的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;action name=&quot;base&quot; class=&quot;com.xxx.action.admin.BaseAction&quot; method=&quot;base&quot;&gt;</div><div class="line">    &lt;result&gt;/admin/base/base.ftl&lt;/result&gt;</div><div class="line">&lt;/action&gt;</div></pre></td></tr></table></figure>
+<p>因为不想每个ftl文件(有上百个)都去修改样式添加include指令，也不愿动弹Struts2的xml文件，所以要找办法，在动静最小的情况下去实现页面拼接。   最好的办法自然是不管xml里的result如何定义，每次action返回页面都是返回同一个主页面(包含菜单栏导航栏)，这个页面里有一个include指令，将result里定义的页面路径include进来，从而实现页面拼接。这样，我们只需要修改一个页面的样式文件，而无需修改所有页面。显然，这个是Struts2的Freemarker集成方式所做不到，所以我们只能想办法去修改Struts2的集成代码。<br>对项目进行debug，一步步看Struts2是如何找到ftl页面，去渲染返回html页面的。可以定位到FreemakerResult类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div></pre></td><td class="code"><pre><div class="line">public class FreemarkerResult extends StrutsResultSupport &#123;</div><div class="line"> </div><div class="line">    ...</div><div class="line">    </div><div class="line">    public void doExecute(String locationArg, ActionInvocation invocation) throws IOException, TemplateException &#123;</div><div class="line">        this.location = locationArg;</div><div class="line">        this.invocation = invocation;</div><div class="line">        this.configuration = this.getConfiguration();</div><div class="line">        this.wrapper = this.getObjectWrapper();</div><div class="line">        ActionContext ctx = invocation.getInvocationContext();</div><div class="line">        HttpServletRequest req = (HttpServletRequest)ctx.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletRequest&quot;);</div><div class="line">        String absoluteLocation;</div><div class="line">        if(this.location.startsWith(&quot;/&quot;)) &#123;</div><div class="line">            absoluteLocation = this.location;</div><div class="line">        &#125; else &#123;</div><div class="line">            String template = invocation.getProxy().getNamespace();</div><div class="line">            if(template != null &amp;&amp; template.length() != 0 &amp;&amp; !template.equals(&quot;/&quot;)) &#123;</div><div class="line">                if(template.startsWith(&quot;/&quot;)) &#123;</div><div class="line">                    absoluteLocation = template + &quot;/&quot; + this.location;</div><div class="line">                &#125; else &#123;</div><div class="line">                    absoluteLocation = &quot;/&quot; + template + &quot;/&quot; + this.location;</div><div class="line">                &#125;</div><div class="line">            &#125; else &#123;</div><div class="line">                absoluteLocation = &quot;/&quot; + this.location;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        Template template1 = this.configuration.getTemplate(absoluteLocation, this.deduceLocale());</div><div class="line">        TemplateModel model = this.createModel();</div><div class="line">        if(this.preTemplateProcess(template1, model)) &#123;</div><div class="line">            try &#123;</div><div class="line">                Writer writer = this.getWriter();</div><div class="line">                if(!this.isWriteIfCompleted() &amp;&amp; this.configuration.getTemplateExceptionHandler() != TemplateExceptionHandler.RETHROW_HANDLER) &#123;</div><div class="line">                    template1.process(model, writer);</div><div class="line">                &#125; else &#123;</div><div class="line">                    CharArrayWriter parentCharArrayWriter = (CharArrayWriter)req.getAttribute(PARENT_TEMPLATE_WRITER);</div><div class="line">                    boolean isTopTemplate = false;</div><div class="line">                    if(isTopTemplate = parentCharArrayWriter == null) &#123;</div><div class="line">                        parentCharArrayWriter = new CharArrayWriter();</div><div class="line">                        req.setAttribute(PARENT_TEMPLATE_WRITER, parentCharArrayWriter);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    try &#123;</div><div class="line">                        template1.process(model, parentCharArrayWriter);</div><div class="line">                        if(isTopTemplate) &#123;</div><div class="line">                            parentCharArrayWriter.flush();</div><div class="line">                            parentCharArrayWriter.writeTo(writer);</div><div class="line">                        &#125;</div><div class="line">                    &#125; catch (TemplateException var22) &#123;</div><div class="line">                        if(LOG.isErrorEnabled()) &#123;</div><div class="line">                            LOG.error(&quot;Error processing Freemarker result!&quot;, var22, new String[0]);</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                        throw var22;</div><div class="line">                    &#125; catch (IOException var23) &#123;</div><div class="line">                        if(LOG.isErrorEnabled()) &#123;</div><div class="line">                            LOG.error(&quot;Error processing Freemarker result!&quot;, var23, new String[0]);</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                        throw var23;</div><div class="line">                    &#125; finally &#123;</div><div class="line">                        if(isTopTemplate &amp;&amp; parentCharArrayWriter != null) &#123;</div><div class="line">                            req.removeAttribute(PARENT_TEMPLATE_WRITER);</div><div class="line">                            parentCharArrayWriter.close();</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; finally &#123;</div><div class="line">                this.postTemplateProcess(template1, model);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>核心就在doExecute这个方法，可以看到locationArg就是result中所定义的页面路径，通过校验是否有”/“开头等，获得absoluteLocation，然后用absoluteLocation去创建得到Freemaker的Template对象。这个方法的大部分代码都无需修改，我们只需要继承这个类，override这个方法，稍作修改即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div></pre></td><td class="code"><pre><div class="line">public class SSOFreemarkerResult extends FreemarkerResult &#123;</div><div class="line"></div><div class="line">    private static final String PARENT_TEMPLATE_WRITER = FreemarkerResult.class.getName() + &quot;.parentWriter&quot;;</div><div class="line"></div><div class="line">    private Logger log = LoggerFactory.getLogger(this.getClass());</div><div class="line"></div><div class="line">    // 弹窗页面，即无需拼接</div><div class="line">    private static List&lt;String&gt; layerUrl = new ArrayList&lt;&gt;();</div><div class="line">    static &#123;</div><div class="line">        layerUrl.add(&quot;/admin/main/changePwd.ftl&quot;);</div><div class="line">        layerUrl.add(&quot;/admin/main/top.ftl&quot;);</div><div class="line">        layerUrl.add(&quot;/pw/admin/channel/user.ftl&quot;);</div><div class="line">        layerUrl.add(&quot;/pw/admin/train/driver.ftl&quot;);</div><div class="line">        layerUrl.add(&quot;/pw/admin/driver/hero.ftl&quot;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void doExecute(String locationArg, ActionInvocation invocation) throws IOException, TemplateException &#123;</div><div class="line">        this.location = locationArg;</div><div class="line">        this.invocation = invocation;</div><div class="line">        this.configuration = this.getConfiguration();</div><div class="line">        this.wrapper = this.getObjectWrapper();</div><div class="line">        ActionContext ctx = invocation.getInvocationContext();</div><div class="line">        HttpServletRequest req = (HttpServletRequest)ctx.get(&quot;com.opensymphony.xwork2.dispatcher.HttpServletRequest&quot;);</div><div class="line">        String absoluteLocation;</div><div class="line">        if(this.location.startsWith(&quot;/&quot;)) &#123;</div><div class="line">            absoluteLocation = this.location;</div><div class="line">        &#125; else &#123;</div><div class="line">            String template = invocation.getProxy().getNamespace();</div><div class="line">            if(template != null &amp;&amp; template.length() != 0 &amp;&amp; !template.equals(&quot;/&quot;)) &#123;</div><div class="line">                if(template.startsWith(&quot;/&quot;)) &#123;</div><div class="line">                    absoluteLocation = template + &quot;/&quot; + this.location;</div><div class="line">                &#125; else &#123;</div><div class="line">                    absoluteLocation = &quot;/&quot; + template + &quot;/&quot; + this.location;</div><div class="line">                &#125;</div><div class="line">            &#125; else &#123;</div><div class="line">                absoluteLocation = &quot;/&quot; + this.location;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        // 默认返回subsystemindex页面</div><div class="line">        String ssoLoaction = &quot;/admin/main/subsystemindex.ftl&quot;;</div><div class="line">        // 如果是弹窗页，则直接返回</div><div class="line">        if (layerUrl.contains(absoluteLocation)) &#123;</div><div class="line">            ssoLoaction = absoluteLocation;</div><div class="line">        &#125;</div><div class="line">        // 这里改成ssoLoaction</div><div class="line">        Template template1 = this.configuration.getTemplate(ssoLoaction, this.deduceLocale());</div><div class="line">        TemplateModel model = this.createModel();</div><div class="line">        // 将原来的absoluteLocation保存到model中</div><div class="line">        if (!absoluteLocation.equals(ssoLoaction)) &#123;</div><div class="line">            ((ScopesHashModel) model).put(&quot;ftlPath&quot;, absoluteLocation);</div><div class="line">        &#125;</div><div class="line">        if(this.preTemplateProcess(template1, model)) &#123;</div><div class="line">            try &#123;</div><div class="line">                Writer writer = this.getWriter();</div><div class="line">                if(!this.isWriteIfCompleted() &amp;&amp; this.configuration.getTemplateExceptionHandler() != TemplateExceptionHandler.RETHROW_HANDLER) &#123;</div><div class="line">                    template1.process(model, writer);</div><div class="line">                &#125; else &#123;</div><div class="line">                    CharArrayWriter parentCharArrayWriter = (CharArrayWriter)req.getAttribute(PARENT_TEMPLATE_WRITER);</div><div class="line">                    boolean isTopTemplate = false;</div><div class="line">                    if(isTopTemplate = parentCharArrayWriter == null) &#123;</div><div class="line">                        parentCharArrayWriter = new CharArrayWriter();</div><div class="line">                        req.setAttribute(PARENT_TEMPLATE_WRITER, parentCharArrayWriter);</div><div class="line">                    &#125;</div><div class="line"></div><div class="line">                    try &#123;</div><div class="line">                        template1.process(model, parentCharArrayWriter);</div><div class="line">                        if(isTopTemplate) &#123;</div><div class="line">                            parentCharArrayWriter.flush();</div><div class="line">                            parentCharArrayWriter.writeTo(writer);</div><div class="line">                        &#125;</div><div class="line">                    &#125; catch (TemplateException var22) &#123;</div><div class="line">                        if(log.isErrorEnabled()) &#123;</div><div class="line">                            log.error(&quot;Error processing Freemarker result!&quot;, var22, new String[0]);</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                        throw var22;</div><div class="line">                    &#125; catch (IOException var23) &#123;</div><div class="line">                        if(log.isErrorEnabled()) &#123;</div><div class="line">                            log.error(&quot;Error processing Freemarker result!&quot;, var23, new String[0]);</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                        throw var23;</div><div class="line">                    &#125; finally &#123;</div><div class="line">                        if(isTopTemplate &amp;&amp; parentCharArrayWriter != null) &#123;</div><div class="line">                            req.removeAttribute(PARENT_TEMPLATE_WRITER);</div><div class="line">                            parentCharArrayWriter.close();</div><div class="line">                        &#125;</div><div class="line"></div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; finally &#123;</div><div class="line">                this.postTemplateProcess(template1, model);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>用SSOFreemarkerResult代替StrutS2默认的FreemarkerResult，幸好，这个扩展余地是Struts2本身就具有的。不然又要去看源码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;result-types&gt;</div><div class="line">	&lt;result-type name=&quot;freemarker&quot; class=&quot;com.yaowang.cms.util.freemark.SSOFreemarkerResult&quot;/&gt;</div><div class="line">&lt;/result-types&gt;</div></pre></td></tr></table></figure>
+<p>现在我们再在修改完样式的subsystemindex.ftl文件中加入这样一定代码</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;#if ftlPath?exists&gt;</div><div class="line">    &lt;#include &quot;$&#123;ftlPath! &#125;&quot;&gt;</div><div class="line">&lt;/#if&gt;</div></pre></td></tr></table></figure>
+<p>大功告成！</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
