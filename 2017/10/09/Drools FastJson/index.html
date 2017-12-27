@@ -24,14 +24,14 @@
 <meta property="og:site_name" content="Rousseau Chou's Blog">
 <meta property="og:description" content="在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。
 12345public class ParserConfig &amp;#123;">
-<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof.png">
-<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof2.png">
-<meta property="og:updated_time" content="2017-12-27T13:54:59.186Z">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/hprof.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/hprof2.png">
+<meta property="og:updated_time" content="2017-12-27T13:56:57.659Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Drools使用FastJson造成内存溢出 | Rousseau Chou's Blog">
 <meta name="twitter:description" content="在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。
 12345public class ParserConfig &amp;#123;">
-<meta name="twitter:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/09/Drools FastJson/hprof.png">
     
     
     
@@ -192,9 +192,9 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <p>在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。<br>从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。<br><img src="/2017/10/09/Drools FastJson/essayindex/hprof.png" alt="image"><br>可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。</p>
+    <p>在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。<br>从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。<br><img src="/2017/10/09/Drools FastJson/hprof.png" alt="image"><br>可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class ParserConfig &#123;</div><div class="line">    ...</div><div class="line">    private final IdentityHashMap&lt;Type, ObjectDeserializer&gt; deserializers;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>我们再在jprofile里查看下这个deserializers里主要存的哪些对象。<br><img src="/2017/10/09/Drools FastJson/essayindex/hprof2.png" alt="image"><br>可以看到，fastjson为了性能，保存了所有反序列化类的相关类信息，也就是说IdentityHashMap的\<k,v\>是一个类和一个该类的JavaBeanDeserializer。这个设计本身没什么问题，然而碰上Drools则刚好天雷碰地火，问题大条了。<br>Drools是一个开源业务规则引擎，是java扩展语言，和jdk8的Nashorn相似，可以在.drl模板文件中定义java类，编写业务逻辑被jvm所执行。<br>因为在每个模板文件中都可以定义相同的java类，比如StateMachineModel。</k,v\></p>
+<p>我们再在jprofile里查看下这个deserializers里主要存的哪些对象。<br><img src="/2017/10/09/Drools FastJson/hprof2.png" alt="image"><br>可以看到，fastjson为了性能，保存了所有反序列化类的相关类信息，也就是说IdentityHashMap的\<k,v\>是一个类和一个该类的JavaBeanDeserializer。这个设计本身没什么问题，然而碰上Drools则刚好天雷碰地火，问题大条了。<br>Drools是一个开源业务规则引擎，是java扩展语言，和jdk8的Nashorn相似，可以在.drl模板文件中定义java类，编写业务逻辑被jvm所执行。<br>因为在每个模板文件中都可以定义相同的java类，比如StateMachineModel。</k,v\></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package com.xxx.drools.rules</div><div class="line"></div><div class="line"> declare StateMachineModel</div><div class="line">     height:Float =0;</div><div class="line">     weight:Float =0;</div><div class="line">     state:Integer =0;</div><div class="line">     productionId:String =&quot;&quot;;</div><div class="line"> end</div><div class="line"></div><div class="line"> rule &quot;身高体重选择尺码1&quot;</div><div class="line"> no-loop true</div><div class="line">     when</div><div class="line">         not StateMachineModel()</div><div class="line">         $tmpQuestion:IntelligentTemplate()</div><div class="line">     then</div><div class="line">     ...</div></pre></td></tr></table></figure>
 <p>而该模板文件被jvm加载执行后，StateMachineModel的包路径则是com.xxx.drools.rules.StateMachineModel,因为不同模板文件的包路径都可以重复，所以drools为了不引起类加载冲突，每次加载模板，去加载类时都会new一个新的类加载器。<br>OK，问题已经确定了，drools每次加载模板后，都会new一个新的类加载器去加载模板中定义类，该类在被fastjson序列化后，都会在IdentityHashMap保存相关类信息。因为每次加载后都是不同的类(同路径不同类加载器)，所以随着时间的流逝，模板被一次次执行，IdentityHashMap就越来越膨胀，直到发生内存溢出。<br>解决方法:将每个模板加载后创建的InternalKnowledgeBase对象在内存中缓存起来。从而避免模板中类的重复加载。</p>
 
