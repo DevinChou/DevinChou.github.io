@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      Drools使用FastJson造成内存溢出 | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。
+12345public class ParserConfig &amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Drools使用FastJson造成内存溢出 | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2017/10/09/Drools FastJson/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。
+12345public class ParserConfig &amp;#123;">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof.png">
+<meta property="og:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof2.png">
+<meta property="og:updated_time" content="2017-12-27T13:54:59.186Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Drools使用FastJson造成内存溢出 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。
+12345public class ParserConfig &amp;#123;">
+<meta name="twitter:image" content="http://yoursite.com/2017/10/09/Drools FastJson/essayindex/hprof.png">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/essay" title="" class="">essay</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">Drools使用FastJson造成内存溢出</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2017-10-09" class="post-meta__date date">2017-10-09</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>在使用drools的项目，测试环境运行了大概一个月后，出现了内存溢出的错误。<br>从服务器上拿到堆转储hprof文件，使用jprofile进行了分析。<br><img src="/2017/10/09/Drools FastJson/essayindex/hprof.png" alt="image"><br>可以看到，fastjson的ParserConfig对象异乎寻常的大，占到差不多1.5g的内存，而占有这么大内存的就是ParserConfig内的IdentityHashMap。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class ParserConfig &#123;</div><div class="line">    ...</div><div class="line">    private final IdentityHashMap&lt;Type, ObjectDeserializer&gt; deserializers;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们再在jprofile里查看下这个deserializers里主要存的哪些对象。<br><img src="/2017/10/09/Drools FastJson/essayindex/hprof2.png" alt="image"><br>可以看到，fastjson为了性能，保存了所有反序列化类的相关类信息，也就是说IdentityHashMap的\<k,v\>是一个类和一个该类的JavaBeanDeserializer。这个设计本身没什么问题，然而碰上Drools则刚好天雷碰地火，问题大条了。<br>Drools是一个开源业务规则引擎，是java扩展语言，和jdk8的Nashorn相似，可以在.drl模板文件中定义java类，编写业务逻辑被jvm所执行。<br>因为在每个模板文件中都可以定义相同的java类，比如StateMachineModel。</k,v\></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">package com.xxx.drools.rules</div><div class="line"></div><div class="line"> declare StateMachineModel</div><div class="line">     height:Float =0;</div><div class="line">     weight:Float =0;</div><div class="line">     state:Integer =0;</div><div class="line">     productionId:String =&quot;&quot;;</div><div class="line"> end</div><div class="line"></div><div class="line"> rule &quot;身高体重选择尺码1&quot;</div><div class="line"> no-loop true</div><div class="line">     when</div><div class="line">         not StateMachineModel()</div><div class="line">         $tmpQuestion:IntelligentTemplate()</div><div class="line">     then</div><div class="line">     ...</div></pre></td></tr></table></figure>
+<p>而该模板文件被jvm加载执行后，StateMachineModel的包路径则是com.xxx.drools.rules.StateMachineModel,因为不同模板文件的包路径都可以重复，所以drools为了不引起类加载冲突，每次加载模板，去加载类时都会new一个新的类加载器。<br>OK，问题已经确定了，drools每次加载模板后，都会new一个新的类加载器去加载模板中定义类，该类在被fastjson序列化后，都会在IdentityHashMap保存相关类信息。因为每次加载后都是不同的类(同路径不同类加载器)，所以随着时间的流逝，模板被一次次执行，IdentityHashMap就越来越膨胀，直到发生内存溢出。<br>解决方法:将每个模板加载后创建的InternalKnowledgeBase对象在内存中缓存起来。从而避免模板中类的重复加载。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
