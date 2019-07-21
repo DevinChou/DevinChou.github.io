@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      ��һ�μ���Jpa��ʹ��StatementInspector | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="�����ĿҪʹ��MyCat��ʵ�ֵ�Ӧ�ö��⻧����Ҫ��sqlִ��ǰ����sqlע����·�ɡ�hibernate�����ṩ��Interceptor��ʵ�����أ�����ʵ�������ò��̳�EmptyInterceptor��дonPrepareStatement������û����Ч�������Interceptor�ӿ��Ӹ÷����ѱ����Ϊ@depr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="��һ�μ���Jpa��ʹ��StatementInspector | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/05/22/StatementInspector/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="�����ĿҪʹ��MyCat��ʵ�ֵ�Ӧ�ö��⻧����Ҫ��sqlִ��ǰ����sqlע����·�ɡ�hibernate�����ṩ��Interceptor��ʵ�����أ�����ʵ�������ò��̳�EmptyInterceptor��дonPrepareStatement������û����Ч�������Interceptor�ӿ��Ӹ÷����ѱ����Ϊ@depr">
+<meta property="og:updated_time" content="2019-07-21T18:36:40.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="��һ�μ���Jpa��ʹ��StatementInspector | Rousseau Chou's Blog">
+<meta name="twitter:description" content="�����ĿҪʹ��MyCat��ʵ�ֵ�Ӧ�ö��⻧����Ҫ��sqlִ��ǰ����sqlע����·�ɡ�hibernate�����ṩ��Interceptor��ʵ�����أ�����ʵ�������ò��̳�EmptyInterceptor��дonPrepareStatement������û����Ч�������Interceptor�ӿ��Ӹ÷����ѱ����Ϊ@depr">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">��һ�μ���Jpa��ʹ��StatementInspector</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-05-22" class="post-meta__date date">2019-05-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>�����ĿҪʹ��MyCat��ʵ�ֵ�Ӧ�ö��⻧����Ҫ��sqlִ��ǰ����sqlע����·�ɡ�<br>hibernate�����ṩ��Interceptor��ʵ�����أ�����ʵ�������ò��̳�EmptyInterceptor��дonPrepareStatement������û����Ч�������Interceptor�ӿ��Ӹ÷����ѱ����Ϊ@deprecated��<br>��ѯ���ϵõ�hibernate��Ϊʹ��<strong>StatementInspector</strong>�ӿ�(��������jpa�淶��)����Ȼhibernate��sessionFactoryBuilder��֧��ע��StatementInspector��������spring��hibernate�ļ��������в���֧�֣�����spring��LocalSessionFactoryBean��LocalSessionFactoryBuilder��ȫ�Ǻ�hibernate��SessionFactory,SessionFactoryBuilder�޹ص��࣬<strong>ֻ��ͨ��ʵ�ֽӿ�FactoryBean<sessionfactory>ȥת��</sessionfactory></strong>����дspring������ȥ���֧�־ͱȽ����ѡ�  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">// FactoryBean�ӿڴ��룬���ǱȽ�����˼�����</div><div class="line">public interface FactoryBean&lt;T&gt; &#123;</div><div class="line">    T getObject() throws Exception;</div><div class="line"></div><div class="line">    Class&lt;?&gt; getObjectType();</div><div class="line"></div><div class="line">    boolean isSingleton();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>���ֻ�ܸ���Jpa-hibernate�����á�xml���������£���Щ����ʱ���������Ϊ�˿������ֱ��ע��û�����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line">&lt;bean id=&quot;entityManagerFactory&quot;</div><div class="line">          class=&quot;cloud.org.spring.MyLocalContainerEntityManagerFactoryBean&quot;&gt;</div><div class="line">        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;</div><div class="line">        &lt;property name=&quot;jpaVendorAdapter&quot;&gt;</div><div class="line">            &lt;bean class=&quot;org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter&quot;&gt;</div><div class="line">                &lt;property name=&quot;showSql&quot; value=&quot;true&quot; /&gt;</div><div class="line">                &lt;property name=&quot;generateDdl&quot; value=&quot;true&quot; /&gt;</div><div class="line">                &lt;property name=&quot;databasePlatform&quot; value=&quot;org.hibernate.dialect.MySQL5Dialect&quot; /&gt;</div><div class="line">            &lt;/bean&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">        &lt;property name=&quot;persistenceUnitName&quot; value=&quot;myPersistenceUnit&quot;/&gt;</div><div class="line">        &lt;property name=&quot;packagesToScan&quot;&gt;</div><div class="line">            &lt;array&gt;</div><div class="line">                &lt;value&gt;ctd.mvc.upload&lt;/value&gt;</div><div class="line">                &lt;value&gt;cloud.org.entity&lt;/value&gt;</div><div class="line">            &lt;/array&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">        &lt;property name=&quot;jpaProperties&quot;&gt;</div><div class="line">            &lt;props&gt;</div><div class="line">                &lt;!-- base --&gt;</div><div class="line">                &lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;update&lt;/prop&gt;</div><div class="line">                &lt;!-- ������ --&gt;</div><div class="line">                &lt;prop key=&quot;hibernate.session_factory.statement_inspector&quot;&gt;cloud.org.spring.TenantInterceptor&lt;/prop&gt;</div><div class="line">                &lt;prop key=&quot;hibernate.transaction.flush_before_completion&quot;&gt;true&lt;/prop&gt;</div><div class="line">                &lt;!-- show_sql --&gt;</div><div class="line">                &lt;prop key=&quot;hibernate.show_sql&quot;&gt;false&lt;/prop&gt;</div><div class="line">                &lt;!-- cache --&gt;</div><div class="line">                &lt;!--&lt;prop key=&quot;hibernate.cache.use_query_cache&quot;&gt;true&lt;/prop&gt;--&gt;</div><div class="line">                &lt;!--&lt;prop key=&quot;hibernate.cache.use_second_level_cache&quot;&gt;true&lt;/prop&gt;--&gt;</div><div class="line">                &lt;!--&lt;prop key=&quot;hibernate.cache.provider_class&quot;&gt;net.sf.ehcache.hibernate.EhCacheProvider&lt;/prop&gt;--&gt;</div><div class="line">                &lt;!--&lt;prop key=&quot;hibernate.cache.region.factory_class&quot;&gt;org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory--&gt;</div><div class="line">                &lt;!--&lt;/prop&gt;--&gt;</div><div class="line">            &lt;/props&gt;</div><div class="line">        &lt;/property&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line"></div><div class="line">    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.orm.jpa.JpaTransactionManager&quot;&gt;</div><div class="line">        &lt;property name=&quot;entityManagerFactory&quot; ref=&quot;entityManagerFactory&quot; /&gt;</div><div class="line">    &lt;/bean&gt;</div><div class="line"></div><div class="line">    &lt;tx:annotation-driven transaction-manager=&quot;transactionManager&quot; proxy-target-class=&quot;true&quot; /&gt;</div></pre></td></tr></table></figure></p>
+<p>��������spring��������jpa��<strong>��Ϊjpa�Ĺ淶Ҫ��META-INF�±���Ҫ��һ��persistence.xml</strong>��<br>��Ϊ��˾�Ŀ���ڼ���Hibernateʱ����˺ܶ��߼��������schema�Ĵ������Բ��ò�������һ����MyLocalContainerEntityManagerFactoryBean�̳�jpa��LocalContainerEntityManagerFactoryBean������ԭ�����߼��Ƶ����<br>���⹫˾�����ִ��sql�ļ����У�ֻ֧��hibernate��sessionFactory����jap��entityManagerFactoryͬ�������ϵ���Ϻ�sessionFactory�޹ء����Ա����ٶ���һ����ȥ�ṩת����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public class MySessionFactory implements FactoryBean&lt;SessionFactory&gt; &#123;</div><div class="line"></div><div class="line"></div><div class="line">    private SessionFactory sessionFactory;</div><div class="line"></div><div class="line">    public void setEntityManagerFactory(EntityManagerFactory entityManagerFactory) &#123;</div><div class="line">        sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public SessionFactory getObject() &#123;</div><div class="line">        return this.sessionFactory;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public Class&lt;?&gt; getObjectType() &#123;</div><div class="line">        return this.sessionFactory != null?this.sessionFactory.getClass():SessionFactory.class;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public boolean isSingleton() &#123;</div><div class="line">        return true;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>��ʱ��Ŀ���������������debug����StatementInspectorͬ��û����Ч��<br>����ֹ�˾��ܶ�hibernate�ļ����ڵײ㶼ʹ����statelessSession���������ᴥ����������<br>�ӡ�<br>�����ͨ��Druid��Filter���̳�FilterEventAdapter��дconnection_prepareStatement����ʵ�֣�</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

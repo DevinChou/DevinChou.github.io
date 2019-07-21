@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVMʵ��(��)-��Ͷ����������ָ�� | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="��JVMʵ��(��)���г�������ָ�������Ϊƪ��˳��û�и�������ʵ�֣���JVMʵ��(��)������Ͷ����ʵ�ֺ󣬱��¾Ϳ�����ص�ָ��ʵ�֡�
+5.1 ��Ͷ����������ָ��
+
+
+������
+ָ����
+����
+
+
+
+
+0xb2
+getstatic
+��ȡָ����ľ�̬�򣬲�����ֵѹ��ջ��
+
+
+0xb3
+putsta">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVMʵ��(��)-��Ͷ����������ָ�� | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/06/18/JVM5-object/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="��JVMʵ��(��)���г�������ָ�������Ϊƪ��˳��û�и�������ʵ�֣���JVMʵ��(��)������Ͷ����ʵ�ֺ󣬱��¾Ϳ�����ص�ָ��ʵ�֡�
+5.1 ��Ͷ����������ָ��
+
+
+������
+ָ����
+����
+
+
+
+
+0xb2
+getstatic
+��ȡָ����ľ�̬�򣬲�����ֵѹ��ջ��
+
+
+0xb3
+putsta">
+<meta property="og:updated_time" content="2019-07-21T18:33:15.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVMʵ��(��)-��Ͷ����������ָ�� | Rousseau Chou's Blog">
+<meta name="twitter:description" content="��JVMʵ��(��)���г�������ָ�������Ϊƪ��˳��û�и�������ʵ�֣���JVMʵ��(��)������Ͷ����ʵ�ֺ󣬱��¾Ϳ�����ص�ָ��ʵ�֡�
+5.1 ��Ͷ����������ָ��
+
+
+������
+ָ����
+����
+
+
+
+
+0xb2
+getstatic
+��ȡָ����ľ�̬�򣬲�����ֵѹ��ջ��
+
+
+0xb3
+putsta">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVMʵ��(��)-��Ͷ����������ָ��</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-06-18" class="post-meta__date date">2019-06-18</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>��JVMʵ��(��)���г�������ָ�������Ϊƪ��˳��û�и�������ʵ�֣���JVMʵ��(��)������Ͷ����ʵ�ֺ󣬱��¾Ϳ�����ص�ָ��ʵ�֡�</p>
+<h4 id="5-1-��Ͷ����������ָ��"><a href="#5-1-��Ͷ����������ָ��" class="headerlink" title="5.1 ��Ͷ����������ָ��"></a>5.1 ��Ͷ����������ָ��</h4><table>
+<thead>
+<tr>
+<th>������</th>
+<th>ָ����</th>
+<th>����</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xb2</td>
+<td>getstatic</td>
+<td>��ȡָ����ľ�̬�򣬲�����ֵѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xb3</td>
+<td>putstatic</td>
+<td>Ϊָ������ľ�̬��ֵ</td>
+</tr>
+<tr>
+<td>0xb4</td>
+<td>getfield</td>
+<td>��ȡָ�����ʵ���򣬲�����ֵѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xb5</td>
+<td>putfield</td>
+<td>Ϊָ�������ʵ����ֵ</td>
+</tr>
+<tr>
+<td>0xbb</td>
+<td>new</td>
+<td>����һ�����󣬲���������ֵѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xc0</td>
+<td>checkcast</td>
+<td>��������ת��������δͨ�����׳�ClassCastException</td>
+</tr>
+<tr>
+<td>0xc1</td>
+<td>instanceof</td>
+<td>��������Ƿ���ָ�������ʵ��������ǽ�1ѹ��ջ��������0ѹ��ջ��</td>
+</tr>
+</tbody>
+</table>
+<h4 id="5-2-newָ��"><a href="#5-2-newָ��" class="headerlink" title="5.2 newָ��"></a>5.2 newָ��</h4><p>ָ��ʵ��<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">type NEW struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *NEW) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	classRef := cp.GetConstant(self.Index).(*heap.ClassRef)</div><div class="line">	class := classRef.ResolvedClass()</div><div class="line">	if !class.InitStarted() &#123;</div><div class="line">		frame.RevertNextPC()</div><div class="line">		base.InitClass(frame.Thread(), class)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line">	if class.IsInterface() || class.IsAbstract() &#123;</div><div class="line">		panic(&quot;java.lang.InstantiationError&quot;)</div><div class="line">	&#125;</div><div class="line">	ref := class.NewObject()</div><div class="line">	frame.OperandStack().PushRef(ref)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>�������δ��ʼ��(clinit��������ʼ����̬������ִ�о�̬�����)����ع�nextPc(ʹclinit����ִ���������ص���ָ��)����ִ��clinit������<br>RevertNextPC()</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func (self *Frame) RevertNextPC() &#123;</div><div class="line">	self.nextPc = self.thread.pc</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>base.InitClass(frame.Thread(), class)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">func InitClass(thread *rtda.Thread, class *heap.Class) &#123;</div><div class="line">	class.StartInit()</div><div class="line">	scheduleClinit(thread, class)</div><div class="line">	initSuperClass(thread, class)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func scheduleClinit(thread *rtda.Thread, class *heap.Class) &#123;</div><div class="line">	clinit := class.GetClinitMethod()</div><div class="line">	if clinit != nil &#123;</div><div class="line">		// exec &lt;clinit&gt;</div><div class="line">		newFrame := thread.NewFrame(clinit)</div><div class="line">		thread.PushFrame(newFrame)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func initSuperClass(thread *rtda.Thread, class *heap.Class) &#123;</div><div class="line">	if !class.IsInterface() &#123;</div><div class="line">		superClass := class.SuperClass()</div><div class="line">		if superClass != nil &amp;&amp; !superClass.InitStarted() &#123;</div><div class="line">			InitClass(thread, superClass)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-3-putstaticָ��"><a href="#5-3-putstaticָ��" class="headerlink" title="5.3 putstaticָ��"></a>5.3 putstaticָ��</h4><p>�ӳ���ֵ�л���ֶ����ã�����У�飬�������ֶ����ʹӲ�����ջ�ӵ�����Ӧ��ֵ����ֵ����̬����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line">type PUT_STATIC struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *PUT_STATIC) Execute(frame *rtda.Frame) &#123;</div><div class="line">	currentMethod := frame.Method()</div><div class="line">	currentClass := currentMethod.Class()</div><div class="line">	cp := currentClass.ConstantPool()</div><div class="line">	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)</div><div class="line">	field := fieldRef.ResolvedField()</div><div class="line">	class := field.Class()</div><div class="line">	if !class.InitStarted() &#123;</div><div class="line">		frame.RevertNextPC()</div><div class="line">		base.InitClass(frame.Thread(), class)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if !field.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangError&quot;)</div><div class="line">	&#125;</div><div class="line">	if field.IsFinal() &#123;</div><div class="line">		if currentClass != class || currentMethod.Name() != &quot;&lt;clinit&gt;&quot; &#123;</div><div class="line">			panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	descriptor := field.Descriptor()</div><div class="line">	slotId := field.SlotId()</div><div class="line">	slots := class.StaticVars()</div><div class="line">	stack := frame.OperandStack()</div><div class="line"></div><div class="line">	switch descriptor[0] &#123;</div><div class="line">	case &apos;Z&apos;, &apos;B&apos;, &apos;C&apos;, &apos;S&apos;, &apos;I&apos;:</div><div class="line">		slots.SetInt(slotId, stack.PopInt())</div><div class="line">	case &apos;D&apos;:</div><div class="line">		slots.SetDouble(slotId, stack.PopDouble())</div><div class="line">	case &apos;F&apos;:</div><div class="line">		slots.SetFloat(slotId, stack.PopFloat())</div><div class="line">	case &apos;J&apos;:</div><div class="line">		slots.SetLong(slotId, stack.PopLong())</div><div class="line">	case &apos;L&apos;, &apos;[&apos;:</div><div class="line">		slots.SetRef(slotId, stack.PopRef())</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-4-getstaticָ��"><a href="#5-4-getstaticָ��" class="headerlink" title="5.4 getstaticָ��"></a>5.4 getstaticָ��</h4><p>�ӳ���ֵ�л���ֶ����ã�����У�飬�������ֶ����ͻ�ȡ��Ӧ��̬������ֵѹ�������ջ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">type GET_STATIC struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *GET_STATIC) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)</div><div class="line">	field := fieldRef.ResolvedField()</div><div class="line">	class := field.Class()</div><div class="line">	if !class.InitStarted() &#123;</div><div class="line">		frame.RevertNextPC()</div><div class="line">		base.InitClass(frame.Thread(), class)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if !field.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	descriptor := field.Descriptor()</div><div class="line">	slotId := field.SlotId()</div><div class="line">	slots := class.StaticVars()</div><div class="line">	stack := frame.OperandStack()</div><div class="line"></div><div class="line">	switch descriptor[0] &#123;</div><div class="line">	case &apos;Z&apos;, &apos;B&apos;, &apos;C&apos;, &apos;S&apos;, &apos;I&apos;:</div><div class="line">		stack.PushInt(slots.GetInt(slotId))</div><div class="line">	case &apos;D&apos;:</div><div class="line">		stack.PushDouble(slots.GetDouble(slotId))</div><div class="line">	case &apos;F&apos;:</div><div class="line">		stack.PushFloat(slots.GetFloat(slotId))</div><div class="line">	case &apos;J&apos;:</div><div class="line">		stack.PushLong(slots.GetLong(slotId))</div><div class="line">	case &apos;L&apos;, &apos;[&apos;:</div><div class="line">		stack.PushRef(slots.GetRef(slotId))</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-5-putfieldָ��"><a href="#5-5-putfieldָ��" class="headerlink" title="5.5 putfieldָ��"></a>5.5 putfieldָ��</h4><p>�ӳ������л�ȡ�ֶ����ã�����У�飬�����ֶ����ʹӲ�����ջ�е�����Ӧֵ�Ͷ��󣬽�ֵ���õ������С�<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">func (self *PUT_FIELD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	currentMethod := frame.Method()</div><div class="line">	currentClass := currentMethod.Class()</div><div class="line">	cp := currentClass.ConstantPool()</div><div class="line">	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)</div><div class="line">	field := fieldRef.ResolvedField()</div><div class="line"></div><div class="line">	if field.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line">	if field.IsFinal() &#123;</div><div class="line">		if currentClass != field.Class() || currentMethod.Name() != &quot;&lt;init&gt;&quot; &#123;</div><div class="line">			panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	descriptor := field.Descriptor()</div><div class="line">	slotId := field.SlotId()</div><div class="line">	stack := frame.OperandStack()</div><div class="line"></div><div class="line">	switch descriptor[0] &#123;</div><div class="line">	case &apos;Z&apos;, &apos;B&apos;, &apos;C&apos;, &apos;S&apos;, &apos;I&apos;:</div><div class="line">		val := stack.PopInt()</div><div class="line">		ref := stack.PopRef()</div><div class="line">		if ref == nil &#123;</div><div class="line">			panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">		&#125;</div><div class="line">		ref.Fields().SetInt(slotId, val)</div><div class="line">	case &apos;F&apos;:</div><div class="line">		val := stack.PopFloat()</div><div class="line">		ref := stack.PopRef()</div><div class="line">		if ref == nil &#123;</div><div class="line">			panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">		&#125;</div><div class="line">		ref.Fields().SetFloat(slotId, val)</div><div class="line">	case &apos;J&apos;:</div><div class="line">		val := stack.PopLong()</div><div class="line">		ref := stack.PopRef()</div><div class="line">		if ref == nil &#123;</div><div class="line">			panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">		&#125;</div><div class="line">		ref.Fields().SetLong(slotId, val)</div><div class="line">	case &apos;D&apos;:</div><div class="line">		val := stack.PopDouble()</div><div class="line">		ref := stack.PopRef()</div><div class="line">		if ref == nil &#123;</div><div class="line">			panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">		&#125;</div><div class="line">		ref.Fields().SetDouble(slotId, val)</div><div class="line">	case &apos;L&apos;, &apos;[&apos;:</div><div class="line">		val := stack.PopRef()</div><div class="line">		ref := stack.PopRef()</div><div class="line">		if ref == nil &#123;</div><div class="line">			panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">		&#125;</div><div class="line">		ref.Fields().SetRef(slotId, val)</div><div class="line">	default:</div><div class="line">		// todo</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-6-getfieldָ��"><a href="#5-6-getfieldָ��" class="headerlink" title="5.6 getfieldָ��"></a>5.6 getfieldָ��</h4><p>��ȡ�����ʵ������ֵ��Ȼ�����������ջ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">type GET_FIELD struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *GET_FIELD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)</div><div class="line">	field := fieldRef.ResolvedField()</div><div class="line"></div><div class="line">	if field.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref := stack.PopRef()</div><div class="line">	if ref == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	descriptor := field.Descriptor()</div><div class="line">	slotId := field.SlotId()</div><div class="line">	slots := ref.Fields()</div><div class="line"></div><div class="line">	switch descriptor[0] &#123;</div><div class="line">	case &apos;Z&apos;, &apos;B&apos;, &apos;C&apos;, &apos;S&apos;, &apos;I&apos;:</div><div class="line">		stack.PushInt(slots.GetInt(slotId))</div><div class="line">	case &apos;F&apos;:</div><div class="line">		stack.PushFloat(slots.GetFloat(slotId))</div><div class="line">	case &apos;J&apos;:</div><div class="line">		stack.PushLong(slots.GetLong(slotId))</div><div class="line">	case &apos;D&apos;:</div><div class="line">		stack.PushDouble(slots.GetDouble(slotId))</div><div class="line">	case &apos;L&apos;, &apos;[&apos;:</div><div class="line">		stack.PushRef(slots.GetRef(slotId))</div><div class="line">	default:</div><div class="line">		// todo</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="5-7-instanceofָ��"><a href="#5-7-instanceofָ��" class="headerlink" title="5.7 instanceofָ��"></a>5.7 instanceofָ��</h4><p>�ӳ����ػ�ȡclass���ã��Ӳ�����ջ��������У������Ƿ��Ǹ�class��ʵ����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">type INSTANCE_OF struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INSTANCE_OF) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref := stack.PopRef()</div><div class="line">	if ref == nil &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	classRef := cp.GetConstant(self.Index).(*heap.ClassRef)</div><div class="line">	class := classRef.ResolvedClass()</div><div class="line">	if ref.IsInstanceOf(class) &#123;</div><div class="line">		stack.PushInt(1)</div><div class="line">	&#125; else &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Object���IsInstanceOf����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func (self *Object) IsInstanceOf(class *Class) bool &#123;</div><div class="line">	return class.IsAssignableFrom(self.class)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>IsAssignableFrom����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line">func (self *Class) IsAssignableFrom(other *Class) bool &#123;</div><div class="line">	son, father := other, self</div><div class="line"></div><div class="line">	if son == father &#123; //�����������ͬ����true</div><div class="line">		return true</div><div class="line">	&#125;</div><div class="line">	if son.IsArray() &#123;</div><div class="line">	    // ���son��father�������飬У�����������Ƿ���ͬ��ݹ�У��</div><div class="line">		if father.IsArray() &#123; </div><div class="line">			sc := son.ComponentClass()</div><div class="line">			fc := father.ComponentClass()</div><div class="line">			return  sc == fc || fc.IsAssignableFrom(sc)</div><div class="line">		// ���son�����飬father�������飬��У��father�Ƿ���object�࣬cloneable��Serializable�ӿ�</div><div class="line">		&#125; else &#123; </div><div class="line">			if father.IsInterface() &#123;</div><div class="line">				return father.isJlCloneable() || father.isJioSerializable()</div><div class="line">			&#125; else &#123;</div><div class="line">				return father.isJlObject()</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125; else &#123;</div><div class="line">	    // ���son�ǽӿڣ���У��father�Ƿ����丸�ӿڻ�object��</div><div class="line">		if son.IsInterface() &#123;</div><div class="line">			if father.IsInterface() &#123;</div><div class="line">				return father.isSuperInterfaceOf(son)</div><div class="line">			&#125; else &#123;</div><div class="line">				return father.isJlObject()</div><div class="line">			&#125;</div><div class="line">		// ���son����ͨ�࣬��У��son�Ƿ�ʵ��father�ӿڻ�����father������	</div><div class="line">		&#125; else &#123;</div><div class="line">			if father.IsInterface() &#123;</div><div class="line">				return son.IsImplements(father)</div><div class="line">			&#125; else &#123;</div><div class="line">				return son.IsSubClassOf(father)</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-8-checkcastָ��"><a href="#5-8-checkcastָ��" class="headerlink" title="5.8 checkcastָ��"></a>5.8 checkcastָ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">type CHECK_CAST struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">	class *heap.Class</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *CHECK_CAST) Execute(frame *rtda.Frame) &#123;</div><div class="line">	if self.class == nil &#123;</div><div class="line">		cp := frame.Method().Class().ConstantPool()</div><div class="line">		kClass := cp.GetConstant(self.Index).(*heap.ConstantClass)</div><div class="line">		self.class = kClass.Class()</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref := stack.PopRef()</div><div class="line">	stack.PushRef(ref)</div><div class="line"></div><div class="line">	if ref == nil &#123;</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if !ref.IsInstanceOf(self.class) &#123;</div><div class="line">		frame.Thread().ThrowClassCastException(ref.Class(), self.class)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

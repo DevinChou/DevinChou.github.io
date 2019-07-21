@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVMʵ��(��)-������ַ��� | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="7.1 ��������ͬ����һ������ͬ����������ͬҲ��һ����Ӧ��Class������������Ԫ���ǻ������ͣ����ǻ����������飬��������ö������������������顣������������һ����һά���飬����������������Ԫ��Ҳ�����飬��ô�����Ƕ�ά���顣�������ͨ�����ǲ�ͬ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVMʵ��(��)-������ַ��� | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/07/10/JVM7-array and string/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="7.1 ��������ͬ����һ������ͬ����������ͬҲ��һ����Ӧ��Class������������Ԫ���ǻ������ͣ����ǻ����������飬��������ö������������������顣������������һ����һά���飬����������������Ԫ��Ҳ�����飬��ô�����Ƕ�ά���顣�������ͨ�����ǲ�ͬ">
+<meta property="og:updated_time" content="2019-07-21T18:34:53.777Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVMʵ��(��)-������ַ��� | Rousseau Chou's Blog">
+<meta name="twitter:description" content="7.1 ��������ͬ����һ������ͬ����������ͬҲ��һ����Ӧ��Class������������Ԫ���ǻ������ͣ����ǻ����������飬��������ö������������������顣������������һ����һά���飬����������������Ԫ��Ҳ�����飬��ô�����Ƕ�ά���顣�������ͨ�����ǲ�ͬ">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVMʵ��(��)-������ַ���</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-07-10" class="post-meta__date date">2019-07-10</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="7-1-����"><a href="#7-1-����" class="headerlink" title="7.1 ����"></a>7.1 ����</h3><p>����ͬ����һ������ͬ����������ͬҲ��һ����Ӧ��Class������������Ԫ���ǻ������ͣ����ǻ����������飬��������ö������������������顣������������һ����һά���飬����������������Ԫ��Ҳ�����飬��ô�����Ƕ�ά���顣<br>�������ͨ�����ǲ�ͬ�ġ�   </p>
+<ol>
+<li>��ͨ���class�ļ��м��أ���������jvm����ʱ����</li>
+<li>�����������������([)+����Ԫ�ص�����������+; ����int[]��������[I,int[][]��������[[I,Object[]��������[Ljava/lang/Object;,String[][]����������[[Ljava/lang/String;��</li>
+<li>��������ķ�ʽҲ�ʹ�����ͨ����ķ�ʽ��ͬ����ͨ��������newָ���,����invokespecialָ����ù��캯����ʼ���������������������newarrayָ�������������������anewarrayָ�������ά��������multianewarrayָ�����</li>
+<li>�������ͨ�����ŵķ�ʽҲ�ǲ�ͬ�ġ���ͨ�����д�ŵ���ʵ��������ͨ��putfield��getfieldָ���ȡ����������д��������Ԫ�أ�ͨ��<t>aload��<t>astoreָ�������ȡ������һ����arraylengthָ�����Ի�ȡ���鳤�ȡ�</t></t></li>
+</ol>
+<h4 id="7-1-1-�������"><a href="#7-1-1-�������" class="headerlink" title="7.1.1 �������"></a>7.1.1 �������</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">type Object struct &#123;</div><div class="line">	class *Class</div><div class="line">	data interface&#123;&#125;</div><div class="line">	extra interface&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>��ǰ�棬���Ǿ��Ѿ�ʵ����Object�ṹ�壬go���Ե�interface{}�����c���Ե�void*,���������κ����͵����顣������ͨ�������,data�д�ŵ���Ȼ��Slots������</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func (self *Object) Fields() Slots &#123;</div><div class="line">	return self.data.(Slots)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>�������������ԣ����������зŸ������͵����顣</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">func (self *Object) Bytes() []int8 &#123;</div><div class="line">	return self.data.([]int8)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Shorts() []int16 &#123;</div><div class="line">	return self.data.([]int16)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Ints() []int32 &#123;</div><div class="line">	return self.data.([]int32)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Longs() []int64 &#123;</div><div class="line">	return self.data.([]int64)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Floats() []float32 &#123;</div><div class="line">	return self.data.([]float32)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Doubles() []float64 &#123;</div><div class="line">	return self.data.([]float64)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Chars() []uint16 &#123;</div><div class="line">	return self.data.([]uint16)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) Refs() []*Object &#123;</div><div class="line">	return self.data.([]*Object)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>����8�������ֱ�����������������7�ֻ����������鷵�صľ����������ݡ����⻹��һ��ArrayLength()��������֧��arraylengthָ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">func (self *Object) ArraysLength() int32 &#123;</div><div class="line">	switch self.data.(type) &#123;</div><div class="line">	case []int8:</div><div class="line">		return int32(len(self.data.([]int8)))</div><div class="line">	case []int16:</div><div class="line">		return int32(len(self.data.([]int16)))</div><div class="line">	case []int32:</div><div class="line">		return int32(len(self.data.([]int32)))</div><div class="line">	case []int64:</div><div class="line">		return int32(len(self.data.([]int64)))</div><div class="line">	case []uint16:</div><div class="line">		return int32(len(self.data.([]uint16)))</div><div class="line">	case []float32:</div><div class="line">		return int32(len(self.data.([]float32)))</div><div class="line">	case []float64:</div><div class="line">		return int32(len(self.data.([]float64)))</div><div class="line">	case []*Object:</div><div class="line">		return int32(len(self.data.([]*Object)))</div><div class="line">	default:</div><div class="line">		panic(&quot;Not array!&quot;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="7-1-2-������"><a href="#7-1-2-������" class="headerlink" title="7.1.2 ������"></a>7.1.2 ������</h4><p>��Class�ṹ�����Ӵ����������ķ���<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">func (self *Class) NewArray(count uint) *Object &#123;</div><div class="line">	if !self.IsArray() &#123;</div><div class="line">		panic(&quot;Not array class:&quot; + self.name)</div><div class="line">	&#125;</div><div class="line">	switch self.Name() &#123;</div><div class="line">	case &quot;[Z&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]int8, count), nil&#125;</div><div class="line">	case &quot;[B&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]int8, count), nil&#125;</div><div class="line">	case &quot;[C&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]uint16, count), nil&#125;</div><div class="line">	case &quot;[S&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]int16, count), nil&#125;</div><div class="line">	case &quot;[I&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]int32, count), nil&#125;</div><div class="line">	case &quot;[J&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]int64, count), nil&#125;</div><div class="line">	case &quot;[F&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]float32, count), nil&#125;</div><div class="line">	case &quot;[D&quot;:</div><div class="line">		return &amp;Object&#123;self, make([]float64, count), nil&#125;</div><div class="line">	default:</div><div class="line">		return &amp;Object&#123;self, make([]*Object, count), nil&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>ǰ�������������Ҳ����������ļ��ط�����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadArrayClass(name string) *Class &#123;</div><div class="line">	class := &amp;Class&#123;</div><div class="line">		accessFlags: ACC_PUBLIC,</div><div class="line">		name:        name,</div><div class="line">		loader:      self,</div><div class="line">		initStarted: true,</div><div class="line">		superClass:  self.LoadClass(&quot;java/lang/Object&quot;),</div><div class="line">		interfaces: []*Class&#123;</div><div class="line">			self.LoadClass(&quot;java/lang/Cloneable&quot;),</div><div class="line">			self.LoadClass(&quot;java/io/Serializable&quot;),</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line">	self.classMap[name] = class</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>��Ϊ�����಻��Ҫ��ʼ�������԰�initStarted����Ϊtrue������ĳ�����java.lang.Object������ʵ����java.lang.Cloneable��java.io.Serializable�ӿڡ�</p>
+<h4 id="7-1-3-�������ָ��"><a href="#7-1-3-�������ָ��" class="headerlink" title="7.1.3 �������ָ��"></a>7.1.3 �������ָ��</h4><p>�������ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x2E | iaload|ָ����int�������ָ���±괦��ֵ��ջ<br>0x2F | laload | ָ����long�������ָ���±괦��ֵ��ջ<br>0x30 | faload | ָ����float�������ָ���±괦��ֵ��ջ<br>0x31 | daload | ָ����double�������ָ���±괦��ֵ��ջ<br>0x32 |aaload | ָ���������������ָ���±괦��ֵ��ջ<br>0x33 | baload | ָ����boolean��byte�������ָ���±괦��ֵ��ջ<br>0x34 | caload | ָ����char�������ָ���±괦��ֵ��ջ<br>0x35 | saload | ָ����short�������ָ���±괦��ֵ��ջ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">type AALOAD struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *AALOAD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	index := stack.PopInt()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line"></div><div class="line">	checkNotNil(arrRef) //���Ϊ���׳�NullPointerException</div><div class="line">	refs := arrRef.Refs()</div><div class="line">	checkIndex(len(refs), index) //����������鳤���׳�ArrayIndexOutOfBoundsException</div><div class="line">	stack.PushRef(refs[index])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>����洢ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x4f | iastore | ��ջ��int����ֵ����ָ�������ָ������λ��<br>0x50 | lastore |     ��ջ��long����ֵ����ָ�������ָ������λ��<br>0x51 | fastore | ��ջ��float����ֵ����ָ�������ָ������λ��<br>0x52 | dastore | ��ջ��double����ֵ����ָ�������ָ������λ��<br>0x53 | aastore |   ��ջ����������ֵ����ָ�������ָ������λ��<br>0x54 | bastore |    ��ջ��boolean��byte����ֵ����ָ�������ָ������λ��<br>0x55 | castore |    ��ջ��char����ֵ����ָ�������ָ������λ��<br>0x56 | sastore |    ��ջ��short����ֵ����ָ�������ָ������λ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">type AASTORE struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *AASTORE) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref := stack.PopRef()</div><div class="line">	index := stack.PopInt()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line"></div><div class="line">	checkNotNil(arrRef)</div><div class="line">	refs := arrRef.Refs()</div><div class="line">	checkIndex(len(refs), index)</div><div class="line">	refs[index] = ref</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>������</th>
+<th>ָ����</th>
+<th>����</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xbc</td>
+<td>newarray</td>
+<td>����һ��ָ��ԭʼ���ͣ���int, float, char���������飬����������ֵѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xbd</td>
+<td>anewarray</td>
+<td>����һ�������ͣ����࣬�ӿڣ����飩�����飬����������ֵѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xbe</td>
+<td>arraylength</td>
+<td>�������ĳ���ֵ��ѹ��ջ��</td>
+</tr>
+<tr>
+<td>0xc5</td>
+<td>multianewarray</td>
+<td>����ָ�����ͺ�ָ��ά�ȵĶ�ά���飨ִ�и�ָ��ʱ������ջ�б��������ά�ȵĳ���ֵ��������������ֵѹ��ջ��</td>
+</tr>
+</tbody>
+</table>
+<p>newarrayָ��ʵ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line">const (</div><div class="line">	//Array Type  atype</div><div class="line">	AT_BOOLEAN = 4</div><div class="line">	AT_CHAR    = 5</div><div class="line">	AT_FLOAT   = 6</div><div class="line">	AT_DOUBLE  = 7</div><div class="line">	AT_BYTE    = 8</div><div class="line">	AT_SHORT   = 9</div><div class="line">	AT_INT     = 10</div><div class="line">	AT_LONG    = 11</div><div class="line">)</div><div class="line"></div><div class="line">type NEW_ARRAY struct &#123;</div><div class="line">	base.Index8Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *NEW_ARRAY) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	count := stack.PopInt()</div><div class="line">	if count &lt; 0 &#123;</div><div class="line">		panic(&quot;java.lang.NegativeArraySizeException&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	classLoader := frame.Method().Class().Loader()</div><div class="line">	arrClass := getPrimitiveArrayClass(classLoader, uint8(self.Index))</div><div class="line">	arrObject := arrClass.NewArray(uint(count))</div><div class="line">	stack.PushRef(arrObject)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func getPrimitiveArrayClass(loader *heap.ClassLoader, atype uint8) *heap.Class &#123;</div><div class="line">	switch atype &#123;</div><div class="line">	case AT_BOOLEAN:</div><div class="line">		return loader.LoadClass(&quot;[Z&quot;)</div><div class="line">	case AT_BYTE:</div><div class="line">		return loader.LoadClass(&quot;[B&quot;)</div><div class="line">	case AT_CHAR:</div><div class="line">		return loader.LoadClass(&quot;[C&quot;)</div><div class="line">	case AT_SHORT:</div><div class="line">		return loader.LoadClass(&quot;[S&quot;)</div><div class="line">	case AT_INT:</div><div class="line">		return loader.LoadClass(&quot;[I&quot;)</div><div class="line">	case AT_LONG:</div><div class="line">		return loader.LoadClass(&quot;[J&quot;)</div><div class="line">	case AT_FLOAT:</div><div class="line">		return loader.LoadClass(&quot;[F&quot;)</div><div class="line">	case AT_DOUBLE:</div><div class="line">		return loader.LoadClass(&quot;[D&quot;)</div><div class="line">	default:</div><div class="line">		panic(&quot;Invalid atype!&quot;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>anewarrayָ��ʵ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">type ANEW_ARRAY struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ANEW_ARRAY) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	classRef := cp.GetConstant(self.Index).(*heap.ClassRef)</div><div class="line">	componentClass := classRef.ResolvedClass()</div><div class="line"></div><div class="line">	stack := frame.OperandStack()</div><div class="line">	count := stack.PopInt()</div><div class="line">	if count &lt; 0 &#123;</div><div class="line">		panic(&quot;java.lang.NegativeArraySizeException&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	arrClass := componentClass.ArrayClass()</div><div class="line">	arr := arrClass.NewArray(uint(count))</div><div class="line">	stack.PushRef(arr)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ArrayClass()�����У�����������Ϊ��������,����java/lang/Object-&gt;[Ljava/lang/Object;�����������������</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func (self *Class) ArrayClass() *Class &#123;</div><div class="line">	arrayClassName := getArrayClassName(self.name)</div><div class="line">	return self.loader.LoadClass(arrayClassName)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>arraylengthָ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">type ARRAY_LENGTH struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (slef *ARRAY_LENGTH) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line">	if arrRef == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line">	arrLen := arrRef.ArraysLength()</div><div class="line">	stack.PushInt(arrLen)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>multianewarryaָ��ʵ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">type MULTI_ANEW_ARRAY struct &#123;</div><div class="line">	index      uint16 // ���������</div><div class="line">	dimensions uint8 // ����ά��</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *MULTI_ANEW_ARRAY) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	self.index = reader.ReadUint16()</div><div class="line">	self.dimensions = reader.ReadUint8()</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *MULTI_ANEW_ARRAY) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	classRef := cp.GetConstant(uint(self.index)).(*heap.ClassRef)</div><div class="line">	arrClass := classRef.ResolvedClass()</div><div class="line"></div><div class="line">	stack := frame.OperandStack()</div><div class="line">	counts := popAndCheckCounts(stack, int(self.dimensions))</div><div class="line">	arr := newMultiDimensionalArray(counts, arrClass)</div><div class="line">	stack.PushRef(arr)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func popAndCheckCounts(stack *rtda.OperandStack, dimensions int) []int32 &#123;</div><div class="line">	counts := make([]int32, dimensions)</div><div class="line">	for i := dimensions - 1; i &gt;=0; i-- &#123;</div><div class="line">		counts[i] = stack.PopInt()</div><div class="line">		if counts[i] &lt; 0 &#123;</div><div class="line">			panic(&quot;java.lang.NegativeArraySizeException&quot;)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return counts</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newMultiDimensionalArray(counts []int32, arrClass *heap.Class) *heap.Object &#123;</div><div class="line">	count := uint(counts[0])</div><div class="line">	arr := arrClass.NewArray(count)</div><div class="line"></div><div class="line">	if len(counts) &gt; 1 &#123;</div><div class="line">		refs := arr.Refs()</div><div class="line">		for i := range refs &#123;</div><div class="line">			refs[i] = newMultiDimensionalArray(counts[1:], arrClass.ComponentClass())</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	return arr</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="7-2-�ַ���"><a href="#7-2-�ַ���" class="headerlink" title="7.2 �ַ���"></a>7.2 �ַ���</h3><p>��class�ļ��У��ַ�������MUTF8��ʽ���棬��jvm�����ڼ�,�ַ�����java.lang.String������ʽ���ڣ����ڶ����ڲ����ַ�������utf16��ʽ���档<br>String����2��ʵ������������һ����value���������ַ����飬���ڴ��utf16�������ַ����С���һ����hash�������ַ����Ĺ�ϣ��</p>
+<h4 id="7-2-1-�ַ�����"><a href="#7-2-1-�ַ�����" class="headerlink" title="7.2.1 �ַ�����"></a>7.2.1 �ַ�����</h4><p>��map����ʾ�ַ�����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">var internedStrings = map[string]*Object&#123;&#125;</div><div class="line"></div><div class="line">// go string -&gt; java.lang.String</div><div class="line">func JString(loader *ClassLoader, goStr string) *Object &#123;</div><div class="line">	if internedStr, ok := internedStrings[goStr]; ok &#123;</div><div class="line">		return internedStr</div><div class="line">	&#125;</div><div class="line">	chars := stringToUtf16(goStr)</div><div class="line">	jChars := &amp;Object&#123;class:loader.LoadClass(&quot;[C&quot;), data:chars&#125;</div><div class="line"></div><div class="line">	jStr := loader.LoadClass(&quot;java/lang/String&quot;).NewObject()</div><div class="line">	jStr.SetRefVar(&quot;value&quot;, &quot;[C&quot;, jChars)</div><div class="line"></div><div class="line">	internedStrings[goStr] = jStr</div><div class="line">	return jStr</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>JString()��������Go�ַ���������Ӧ��java�ַ���ʵ�������java�ַ����Ѿ��ڳ��У�ֱ�ӷ��ؼ��ɣ������Ȱ�go�ַ���(utf8��ʽ)ת����java�ַ�����(utf16��ʽ)��Ȼ�󴴽�һ��java�ַ���ʵ����������value�������óɸո�ת�������ַ����飬����java�ַ���������С�<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// utf8 -&gt; utf16</div><div class="line">func stringToUtf16(s string) []uint16 &#123;</div><div class="line">	runes := []rune(s)         // utf32</div><div class="line">	return utf16.Encode(runes) // func Encode(s []rune) []uint16</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>go�����ַ������ڴ�����utf8����ģ��Ƚ���ǿ��ת��utf32��Ȼ�����utf16.Encode()�����������Ϊutf16</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func (self *Object) SetRefVar(fieldName string, descriptor string, ref *Object) &#123;</div><div class="line">	field := self.class.getField(fieldName, descriptor, false)</div><div class="line">	self.Fields().SetRef(field.slotId, ref)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>getField����ͨ���ֶ������������ҵ�field�ֶΣ�Ȼ��ֵ��</p>
+<h4 id="7-2-2-����ldcָ��"><a href="#7-2-2-����ldcָ��" class="headerlink" title="7.2.2 ����ldcָ��"></a>7.2.2 ����ldcָ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">func _ldc(frame *rtda.Frame, index uint) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	class := frame.Method().Class()</div><div class="line">	c := class.ConstantPool().GetConstant(index)</div><div class="line"></div><div class="line">	switch c.(type) &#123;</div><div class="line">	case int32:</div><div class="line">		stack.PushInt(c.(int32))</div><div class="line">	case float32:</div><div class="line">		stack.PushFloat(c.(float32))</div><div class="line">	case string:</div><div class="line">		internedStr := heap.JString(class.Loader(), c.(string))</div><div class="line">		stack.PushRef(internedStr)</div><div class="line">	case *heap.ClassRef:</div><div class="line">		classRef := c.(*heap.ClassRef)</div><div class="line">		classObj := classRef.ResolvedClass().JClass()</div><div class="line">		stack.PushRef(classObj)</div><div class="line">		// case MethodType, MethodHandle</div><div class="line">	default:</div><div class="line">		panic(&quot;todo: ldc!&quot;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ldcָ����ͼ������ʱ�������м����ַ�����������ͨ�������õ�go�ַ�����Ȼ��ת����java�ַ���ʵ�����������ջ����</p>
+<h4 id="7-2-3-�����������"><a href="#7-2-3-�����������" class="headerlink" title="7.2.3 �����������"></a>7.2.3 �����������</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">func initStaticFinalVar(class *Class, field *Field) &#123;</div><div class="line">	vars := class.staticVars</div><div class="line">	cp := class.constantPool</div><div class="line">	cpIndex := field.constValueIndex</div><div class="line">	slotId := field.slotId</div><div class="line"></div><div class="line">	if cpIndex &gt; 0 &#123;</div><div class="line">		switch field.Descriptor() &#123;</div><div class="line">		case &quot;Z&quot;, &quot;B&quot;, &quot;C&quot;, &quot;S&quot;, &quot;I&quot;:</div><div class="line">			val := cp.GetConstant(cpIndex).(int32)</div><div class="line">			vars.SetInt(slotId, val)</div><div class="line">		.....</div><div class="line">		case &quot;Ljava/lang/String&quot;:</div><div class="line">			goStr := cp.GetConstant(cpIndex).(string)</div><div class="line">			jStr := JString(class.Loader(), goStr)</div><div class="line">			vars.SetRef(slotId, jStr)</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

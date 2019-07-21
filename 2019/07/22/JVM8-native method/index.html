@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVMʵ��(��)-���ط����ͷ��� | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="Java�����Ҫ��Java���Ա�д��һЩ�޷���java����ʵ�ֵķ�����ʹ�ñ������Ա�д����Щ��������Ϊ���ط�����OpenJDK����еı��ط�������JNI(java Native Interface)��д��Ϊ�˲�����JNI�淶��ϸ���У����ﻹ����Go������ʵ����Щ������
+8.1 ע��Ͳ��ұ��">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVMʵ��(��)-���ط����ͷ��� | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/07/22/JVM8-native method/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="Java�����Ҫ��Java���Ա�д��һЩ�޷���java����ʵ�ֵķ�����ʹ�ñ������Ա�д����Щ��������Ϊ���ط�����OpenJDK����еı��ط�������JNI(java Native Interface)��д��Ϊ�˲�����JNI�淶��ϸ���У����ﻹ����Go������ʵ����Щ������
+8.1 ע��Ͳ��ұ��">
+<meta property="og:updated_time" content="2019-07-21T18:35:42.968Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVMʵ��(��)-���ط����ͷ��� | Rousseau Chou's Blog">
+<meta name="twitter:description" content="Java�����Ҫ��Java���Ա�д��һЩ�޷���java����ʵ�ֵķ�����ʹ�ñ������Ա�д����Щ��������Ϊ���ط�����OpenJDK����еı��ط�������JNI(java Native Interface)��д��Ϊ�˲�����JNI�淶��ϸ���У����ﻹ����Go������ʵ����Щ������
+8.1 ע��Ͳ��ұ��">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVMʵ��(��)-���ط����ͷ���</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-07-22" class="post-meta__date date">2019-07-22</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>Java�����Ҫ��Java���Ա�д��һЩ�޷���java����ʵ�ֵķ�����ʹ�ñ������Ա�д����Щ��������Ϊ���ط�����<br>OpenJDK����еı��ط�������JNI(java Native Interface)��д��Ϊ�˲�����JNI�淶��ϸ���У����ﻹ����Go������ʵ����Щ������</p>
+<h3 id="8-1-ע��Ͳ��ұ��ط���"><a href="#8-1-ע��Ͳ��ұ��ط���" class="headerlink" title="8.1 ע��Ͳ��ұ��ط���"></a>8.1 ע��Ͳ��ұ��ط���</h3><p>��java.lang.Object������ͨ��һ������registernNatives()�ı��ط���ȥע���������ط����ģ���Ȼ����Ҳ�����Լ�ȥע�᱾�ط���</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">type NativeMethod func(frame *rtda.Frame)</div><div class="line"></div><div class="line">var registry = map[string]NativeMethod&#123;&#125;</div><div class="line"></div><div class="line">func Register(className, methodName, methodDescriptor string, method NativeMethod) &#123;</div><div class="line">	key := className + &quot;-&quot; + methodName + &quot;-&quot; + methodDescriptor</div><div class="line">	registry[key] = method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func FindNative(className, methodName, methodDescriptor string) NativeMethod&#123;</div><div class="line">	key := className + &quot;-&quot; + methodName + &quot;-&quot; + methodDescriptor</div><div class="line">	if method, ok := registry[key]; ok &#123;</div><div class="line">		return method</div><div class="line">	&#125;</div><div class="line">	if methodDescriptor == &quot;()V&quot; &amp;&amp; methodName == &quot;registerNatives&quot; &#123;</div><div class="line">		return emptyNativeMethod</div><div class="line">	&#125;</div><div class="line">	return nil</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ʹ��һ��map��Ϊ���ط���ע�������������������������������һ�����Ψһȷ��һ�����������Խ����ǵ������Ϊkey����ʵ��NativeMethod�ķ�����Ϊvalue��</p>
+<h3 id="8-2-���n��ط���"><a href="#8-2-���n��ط���" class="headerlink" title="8.2 ���ñ��ط���"></a>8.2 ���ñ��ط���</h3><h4 id="8-2-1-���ط�����ʼ��"><a href="#8-2-1-���ط�����ʼ��" class="headerlink" title="8.2.1 ���ط�����ʼ��"></a>8.2.1 ���ط�����ʼ��</h4><p>���ط����ڷ������ĳ�ʼ����ǰ��Ĵ����Ѿ�������</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">func (self *Method) injectCodeAttribute(returnType string) &#123;</div><div class="line">	self.maxStack = 4</div><div class="line">	self.maxLocals = self.argSlotCount</div><div class="line">	switch returnType[0] &#123;</div><div class="line">	case &apos;V&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xb1&#125; // return</div><div class="line">	case &apos;D&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xaf&#125; // dreturn</div><div class="line">	case &apos;F&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xae&#125; // freturn</div><div class="line">	case &apos;J&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xad&#125; // lreturn</div><div class="line">	case &apos;L&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xb0&#125; // areturn</div><div class="line">	default:</div><div class="line">		self.code = []byte&#123;0xfe, 0xac&#125; // ireturn</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>���ط�����class�ļ���û��code���ԣ�������Ҫ��maxStack��maxLocals�ֶθ�ֵ�����ط����Ĳ�����ջ����Ҫ�����ɷ���ֵ��Ϊ�˼򻯴��룬��ʱ��maxStack�ֶθ�ֵΪ4����Ϊ���ط���ջ�ľֲ�������ֻ������Ų���ֵ�����԰�argSlotCount����maxLocals�ֶθպá�����code�ֶΣ�Ҳ���Ǳ��ط������ֽ��룬��һ��ָ���0xFE��Ҳ����invokenativeָ��ڶ���ָ����ݷ��صĲ�ͬѡ����Ӧ����ָ�  </p>
+<h4 id="8-2-1-invokeָ��ʵ��"><a href="#8-2-1-invokeָ��ʵ��" class="headerlink" title="8.2.1 invokeָ��ʵ��"></a>8.2.1 invokeָ��ʵ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">type INVOKE_NATIVE struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INVOKE_NATIVE) Execute(frame *rtda.Frame) &#123;</div><div class="line">	method := frame.Method()</div><div class="line">	className := method.Class().Name()</div><div class="line">	methodName := method.Name()</div><div class="line">	methodDescriptor := method.Descriptor()</div><div class="line"></div><div class="line">	nativeMethod := native.FindNative(className, methodName, methodDescriptor)</div><div class="line">	if nativeMethod == nil &#123;</div><div class="line">		methodInfo := className + &quot;.&quot; + methodName + methodDescriptor</div><div class="line">		panic(&quot;java.lang.UnsatisfiedLinkError: &quot; + methodInfo)</div><div class="line">	&#125;</div><div class="line">	nativeMethod(frame)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="8-3-����"><a href="#8-3-����" class="headerlink" title="8.3 ����"></a>8.3 ����</h3><p>Java�ķ�����Ʒǳ�ǿ���������۵�ֻ�Ǳ�ɽһ�ǡ�</p>
+<h4 id="8-3-1-��Ͷ���L�ϵ"><a href="#8-3-1-��Ͷ���L�ϵ" class="headerlink" title="8.3.1 ��Ͷ���Ĺ�ϵ"></a>8.3.1 ��Ͷ���Ĺ�ϵ</h4><p>��Java�У���Ҳ����Ϊ��ͨ�Ķ�����������java.lang.Class��<br>ͨ��Class�ṹ���jClass�ֶν�������������������Ĺ�����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type Class struct &#123;</div><div class="line">	...// �����ֶ�</div><div class="line">	jClass            *Object</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>ͨ��Object�ṹ���class�ֶν����˶������֮��Ĺ�ϵ,extra�ֶν�����������֮��Ĺ�ϵ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">type Object struct &#123;</div><div class="line">	class *Class</div><div class="line">	data interface&#123;&#125;</div><div class="line">	extra interface&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>�������Ǽ��������һ��Object�����Class�����Object���󣬷���������Object�࣬Class�ࡣ��ô<br>Object������е�class��Class��,extra����Object�ࡣ<br>Class������е�class��Class�࣬extraҲ��Class�ࡣ<br>Object�����е�class��Object�࣬extraΪnil��<br>Object���jClassָ��Object�����Class���jClassָ��Class�����</p>
+<h4 id="8-3-2-�������"><a href="#8-3-2-�������" class="headerlink" title="8.3.2 �������"></a>8.3.2 �������</h4><p>��֮ǰ��������������������Ѿ��ᵽ��jClass���������ǻع�һ����Щ���롣<br>loadBasicClasses()�����ȼ���java.lang.Class�࣬Ȼ��ᴥ����java.lang.Object����ͽӿڵļ��ء�Ȼ�����classMap����ÿһ�����ص����������󣬲�����������й�����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadBasicClasses() &#123;</div><div class="line">	jlClassClass := self.LoadClass(&quot;java/lang/Class&quot;)</div><div class="line">	for _, class := range self.classMap &#123;</div><div class="line">		if class.jClass == nil &#123;</div><div class="line">			class.jClass = jlClassClass.NewObject()</div><div class="line">			class.jClass.extra = class</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>LoadClass����Ҳ��һ���ģ�������������Class���Ѿ����أ�������������󣬲�����������й�����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) LoadClass(name string) *Class &#123;</div><div class="line">	if class, ok := self.classMap[name]; ok &#123;</div><div class="line">		return class</div><div class="line">	&#125;</div><div class="line">	var class *Class</div><div class="line">	if name[0] == &apos;[&apos; &#123;</div><div class="line">		class = self.loadArrayClass(name)</div><div class="line">	&#125; else &#123;</div><div class="line">		class = self.loadNonArrayClass(name)</div><div class="line">	&#125;</div><div class="line">	if jlClassClass, ok := self.classMap[&quot;java/lang/Class&quot;]; ok &#123;</div><div class="line">		class.jClass = jlClassClass.NewObject()</div><div class="line">		class.jClass.extra = class</div><div class="line">	&#125;</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="8-3-3-ͨ�������ȡ����"><a href="#8-3-3-ͨ�������ȡ����" class="headerlink" title="8.3.3 ͨ�������ȡ����"></a>8.3.3 ͨ�������ȡ����</h4><p>Ϊ��֧��ͨ�������ȡ���������ｫʵ������3�����ط���</p>
+<ul>
+<li>java.lang.Object.getClass()</li>
+<li>java.lang.Class.getPrimitiveClass()</li>
+<li>java.lang.Class.getName0()</li>
+</ul>
+<p>�����ط���ע�����ע��getClass()�����������ܼ򵥣��ӱ��ر������л�ö������ã�ͨ���������õ�����Ϣ��ȡ����Ӧ�������<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">	native.Register(&quot;java/lang/Object&quot;, &quot;getClass&quot;, &quot;()Ljava/lang/Class;&quot;, getClass)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func getClass(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line">	class := this.Class().JClass()</div><div class="line">	frame.OperandStack().PushRef(class)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>�����ط���ע�����ע��getPrimitiveClass(), getName0()����������ͬ���ܼ򵥣����ﲻ���������<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">	native.Register(jlClass, &quot;getPrimitiveClass&quot;,</div><div class="line">		&quot;(Ljava/lang/String;)Ljava/lang/Class;&quot;, getPrimitiveClass)</div><div class="line">	native.Register(jlClass, &quot;getName0&quot;,</div><div class="line">		&quot;()Ljava/lang/String;&quot;, getName0)</div><div class="line">	native.Register(jlClass, &quot;desiredAssertionStatus0&quot;,</div><div class="line">		&quot;(Ljava/lang/Class;)Z&quot;, desiredAssertionStatus0)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func getPrimitiveClass(frame *rtda.Frame) &#123;</div><div class="line">	nameObj := frame.LocalVars().GetRef(0)</div><div class="line">	name := heap.GoString(nameObj)</div><div class="line"></div><div class="line">	loader := frame.Method().Class().Loader()</div><div class="line">	class := loader.LoadClass(name).JClass()</div><div class="line"></div><div class="line">	frame.OperandStack().PushRef(class)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func getName0(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line">	class := this.Extra().(*heap.Class)</div><div class="line"></div><div class="line">	name := class.JavaName()</div><div class="line">	nameObj := heap.JString(class.Loader(), name)</div><div class="line"></div><div class="line">	frame.OperandStack().PushRef(nameObj)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Class�󲿷ֵ��඼�Ǳ��ط���������isInterface(), isArray(), getSuperClass(), getInterfaces0()��,ʵ�ֶ������ӡ�</p>
+<h3 id="8-4-�ַ���y�Ӻ�inter-����"><a href="#8-4-�ַ���y�Ӻ�inter-����" class="headerlink" title="8.4 �ַ���ƴ�Ӻ�inter()����"></a>8.4 �ַ���ƴ�Ӻ�inter()����</h3><h4 id="8-4-1-�ַ���y��"><a href="#8-4-1-�ַ���y��" class="headerlink" title="8.4.1 �ַ���ƴ��"></a>8.4.1 �ַ���ƴ��</h4><p>��java�����У�����ͨ���Ӻ���ƴ���ַ�������Ϊ�Ż�,javac����������ַ���ƴ�Ӳ���ת����Stringbuilder��ʹ�á������Ҫ����3�����ط�����֧��:</p>
+<ul>
+<li>System.arrayCopy()</li>
+<li>Float.floatToRawIntBits()</li>
+<li>Double.doubleToRawLongBits()</li>
+</ul>
+<p>��Щ���ط�������������أ�<br>StringBuilder��append()�������ø���AbstractStringBuilder��append()����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public StringBuilder append(String str) &#123;</div><div class="line">    super.append(str);</div><div class="line">    return this;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>��AbstractStringBuilder��append()��������str.getChars()����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public AbstractStringBuilder append(String str) &#123;</div><div class="line">    if (str == null)</div><div class="line">        return appendNull();</div><div class="line">    int len = str.length();</div><div class="line">    ensureCapacityInternal(count + len);</div><div class="line">    str.getChars(0, len, value, count);</div><div class="line">    count += len;</div><div class="line">    return this;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>str.getChars()����������System.arraycopy���ط���<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">public void getChars(int srcBegin, int srcEnd, char dst[], int dstBegin) &#123;</div><div class="line">    if (srcBegin &lt; 0) &#123;</div><div class="line">        throw new StringIndexOutOfBoundsException(srcBegin);</div><div class="line">    &#125;</div><div class="line">    if (srcEnd &gt; value.length) &#123;</div><div class="line">        throw new StringIndexOutOfBoundsException(srcEnd);</div><div class="line">    &#125;</div><div class="line">    if (srcBegin &gt; srcEnd) &#123;</div><div class="line">        throw new StringIndexOutOfBoundsException(srcEnd - srcBegin);</div><div class="line">    &#125;</div><div class="line">    System.arraycopy(value, srcBegin, dst, dstBegin, srcEnd - srcBegin);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>StringBuilder��toString���������String���캯��<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">public String toString() &#123;</div><div class="line">    // Create a copy, don&apos;t share the array</div><div class="line">    return new String(value, 0, count);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>String���캯�������Arrays.copyOfRange()����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">public String(char value[], int offset, int count) &#123;</div><div class="line">    if (offset &lt; 0) &#123;</div><div class="line">        throw new StringIndexOutOfBoundsException(offset);</div><div class="line">    &#125;</div><div class="line">    if (count &lt;= 0) &#123;</div><div class="line">        if (count &lt; 0) &#123;</div><div class="line">            throw new StringIndexOutOfBoundsException(count);</div><div class="line">        &#125;</div><div class="line">        if (offset &lt;= value.length) &#123;</div><div class="line">            this.value = &quot;&quot;.value;</div><div class="line">            return;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    // Note: offset or count might be near -1&gt;&gt;&gt;1.</div><div class="line">    if (offset &gt; value.length - count) &#123;</div><div class="line">        throw new StringIndexOutOfBoundsException(offset + count);</div><div class="line">    &#125;</div><div class="line">    this.value = Arrays.copyOfRange(value, offset, offset+count);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Arrays.copyOfRange()������Math��<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">public static char[] copyOfRange(char[] original, int from, int to) &#123;</div><div class="line">    int newLength = to - from;</div><div class="line">    if (newLength &lt; 0)</div><div class="line">        throw new IllegalArgumentException(from + &quot; &gt; &quot; + to);</div><div class="line">    char[] copy = new char[newLength];</div><div class="line">    System.arraycopy(original, from, copy, 0,</div><div class="line">                     Math.min(original.length - from, newLength));</div><div class="line">    return copy;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>��Math���ʼ��ʱ�����Float.floatToRawIntBits()��Double.doubleToRawLongBits()�������ط���</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">private static long negativeZeroFloatBits  = Float.floatToRawIntBits(-0.0f);</div><div class="line">private static long negativeZeroDoubleBits = Double.doubleToRawLongBits(-0.0d);</div></pre></td></tr></table></figure>
+<p>�������ط�����ʵ��<br>1.arraycopy()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">	native.Register(jlSystem, &quot;arraycopy&quot;,</div><div class="line">		&quot;(Ljava/lang/Object;ILjava/lang/Object;II)V&quot;, arraycopy)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func arraycopy(frame *rtda.Frame) &#123;</div><div class="line">	vars := frame.LocalVars()</div><div class="line">	src := vars.GetRef(0)</div><div class="line">	srcPos := vars.GetInt(1)</div><div class="line">	dst := vars.GetRef(2)</div><div class="line">	dstPos := vars.GetInt(3)</div><div class="line">	length := vars.GetInt(4)</div><div class="line"></div><div class="line">	if src == nil || dst == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line">	if !checkArrayCopy(src, dst) &#123;</div><div class="line">		panic(&quot;java.lang.ArrayStoreException&quot;)</div><div class="line">	&#125;</div><div class="line">	if srcPos &lt; 0 || dstPos &lt; 0 || length &lt; 0 ||</div><div class="line">		srcPos + length &gt; src.ArraysLength() || dstPos+ length &gt; dst.ArraysLength() &#123;</div><div class="line">		panic(&quot;java.lang.IndexOutOfBoundsException&quot;)</div><div class="line">	&#125;</div><div class="line">	heap.ArrayCopy(src, dst, srcPos, dstPos, length)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>2.doubleToRawLongBits()<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">func init()  &#123;</div><div class="line">	native.Register(&quot;java/lang/Double&quot;,</div><div class="line">		&quot;doubleToRawLongBits&quot;, &quot;(D)J&quot;, doubleToRawLongBits)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func doubleToRawLongBits(frame *rtda.Frame)  &#123;</div><div class="line">	value := frame.LocalVars().GetDouble(0)</div><div class="line">	bits := math.Float64bits(value)</div><div class="line">	frame.OperandStack().PushLong(int64(bits))</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.floatToRawIntBits()ʵ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">func init()  &#123;</div><div class="line">	native.Register(&quot;java/lang/Float&quot;,</div><div class="line">		&quot;floatToRawIntBits&quot;, &quot;(F)I&quot;, floatToRawIntBits)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func floatToRawIntBits(frame *rtda.Frame) &#123;</div><div class="line">	value := frame.LocalVars().GetFloat(0)</div><div class="line">	bits := math.Float32bits(value)</div><div class="line">	frame.OperandStack().PushInt(int32(bits))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="8-4-2-intern-����"><a href="#8-4-2-intern-����" class="headerlink" title="8.4.2 intern()����"></a>8.4.2 intern()����</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">	native.Register(&quot;java/lang/String&quot;, &quot;intern&quot;, &quot;()Ljava/lang/String;&quot;, intren)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func intren(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line">	interned := heap.InternString(this)</div><div class="line">	frame.OperandStack().PushRef(interned)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="8-5-Object��Ĳ��ֱ��ط���"><a href="#8-5-Object��Ĳ��ֱ��ط���" class="headerlink" title="8.5 Object��Ĳ��ֱ��ط���"></a>8.5 Object��Ĳ��ֱ��ط���</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">func init() &#123;</div><div class="line">	native.Register(&quot;java/lang/Object&quot;, &quot;getClass&quot;, &quot;()Ljava/lang/Class;&quot;, getClass)</div><div class="line">	native.Register(&quot;java/lang/Object&quot;, &quot;hashCode&quot;, &quot;()I&quot;, hashCode)</div><div class="line">	native.Register(&quot;java/lang/Object&quot;, &quot;clone&quot;, &quot;()Ljava/lang/Object;&quot;, clone)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func getClass(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line">	class := this.Class().JClass()</div><div class="line">	frame.OperandStack().PushRef(class)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func hashCode(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line">	hash := int32(uintptr(unsafe.Pointer(this)))</div><div class="line">	frame.OperandStack().PushInt(hash)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func clone(frame *rtda.Frame) &#123;</div><div class="line">	this := frame.LocalVars().GetThis()</div><div class="line"></div><div class="line">	cloneable := this.Class().Loader().LoadClass(&quot;java/lang/Cloneable&quot;)</div><div class="line">	if !this.Class().IsImplements(cloneable) &#123;</div><div class="line">		panic(&quot;java.lang.CloneNotSupprotException&quot;)</div><div class="line">	&#125;</div><div class="line">	frame.OperandStack().PushRef(this.Clone())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Clone()��������һ������<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line">func (self *Object) Clone() *Object&#123;</div><div class="line">	return &amp;Object&#123;</div><div class="line">		class: self.class,</div><div class="line">		data:  self.cloneData(),</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) cloneData() interface&#123;&#125; &#123;</div><div class="line">	switch self.data.(type) &#123;</div><div class="line">	case []int8:</div><div class="line">		elements := self.data.([]int8)</div><div class="line">		elements2 := make([]int8, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []int16:</div><div class="line">		elements := self.data.([]int16)</div><div class="line">		elements2 := make([]int16, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []uint16:</div><div class="line">		elements := self.data.([]uint16)</div><div class="line">		elements2 := make([]uint16, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []int32:</div><div class="line">		elements := self.data.([]int32)</div><div class="line">		elements2 := make([]int32, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []int64:</div><div class="line">		elements := self.data.([]int64)</div><div class="line">		elements2 := make([]int64, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []float32:</div><div class="line">		elements := self.data.([]float32)</div><div class="line">		elements2 := make([]float32, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []float64:</div><div class="line">		elements := self.data.([]float64)</div><div class="line">		elements2 := make([]float64, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	case []*Object:</div><div class="line">		elements := self.data.([]*Object)</div><div class="line">		elements2 := make([]*Object, len(elements))</div><div class="line">		copy(elements2, elements)</div><div class="line">		return elements2</div><div class="line">	default: // []Slot</div><div class="line">		slots := self.data.(Slots)</div><div class="line">		slots2 := newSlots(uint(len(slots)))</div><div class="line">		copy(slots2, slots)</div><div class="line">		return slots2</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>���ط����кܶ࣬����Ͳ���һһ�ٳ�������OpenJDK�ı��ط�������������ⶨ��native������ֻҪ���jvm֧����Щnative������</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

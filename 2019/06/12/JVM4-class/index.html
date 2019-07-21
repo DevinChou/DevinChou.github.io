@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVMʵ��(��)-�࣬����ؼ����� | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="4.1 �������������ɶ���̹߳�����Ҫ��Ŵ�class�ļ���ȡ������Ϣ���������(Class���͵�Object)
+4.1.1 ��ṹ123456789101112131415161718type Class struct &amp;#123;	accessFlags       uint16 // ���ʱ�־	name              string">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVMʵ��(��)-�࣬����ؼ����� | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/06/12/JVM4-class/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="4.1 �������������ɶ���̹߳�����Ҫ��Ŵ�class�ļ���ȡ������Ϣ���������(Class���͵�Object)
+4.1.1 ��ṹ123456789101112131415161718type Class struct &amp;#123;	accessFlags       uint16 // ���ʱ�־	name              string">
+<meta property="og:updated_time" content="2019-07-21T18:32:25.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVMʵ��(��)-�࣬����ؼ����� | Rousseau Chou's Blog">
+<meta name="twitter:description" content="4.1 �������������ɶ���̹߳�����Ҫ��Ŵ�class�ļ���ȡ������Ϣ���������(Class���͵�Object)
+4.1.1 ��ṹ123456789101112131415161718type Class struct &amp;#123;	accessFlags       uint16 // ���ʱ�־	name              string">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVMʵ��(��)-�࣬����ؼ�����</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-06-12" class="post-meta__date date">2019-06-12</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h3 id="4-1-������"><a href="#4-1-������" class="headerlink" title="4.1 ������"></a>4.1 ������</h3><p>�������ɶ���̹߳�����Ҫ��Ŵ�class�ļ���ȡ������Ϣ���������(Class���͵�Object)</p>
+<h4 id="4-1-1-��u"><a href="#4-1-1-��u" class="headerlink" title="4.1.1 ��ṹ"></a>4.1.1 ��ṹ</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">type Class struct &#123;</div><div class="line">	accessFlags       uint16 // ���ʱ�־</div><div class="line">	name              string // ������</div><div class="line">	superClassName    string // ��������</div><div class="line">	interfaceNames    []string // ʵ�ֵĽӿ�����</div><div class="line">	constantPool      *ConstantPool // ������</div><div class="line">	fields            []*Field // ��</div><div class="line">	methods           []*Method // ����</div><div class="line">	loader            *ClassLoader // �������</div><div class="line">	superClass        *Class // ����</div><div class="line">	interfaces        []*Class // �ӿ�����</div><div class="line">	instanceSlotCount uint // ʵ��������</div><div class="line">	staticSlotCount   uint // ��̬������</div><div class="line">	staticVars        Slots // ��̬����</div><div class="line">	initStarted       bool // �Ƿ��ʼ��</div><div class="line">	sourceFile        string // Դ�ļ�</div><div class="line">	jClass            *Object // ��Ӧ��Class����Object</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>accessFlags����ķ��ʱ�־���ܹ�16���أ����¡�</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">const (</div><div class="line">	ACC_PUBLIC       = 0x0001 // class field method</div><div class="line">	ACC_PRIVATE      = 0x0002 //       field method</div><div class="line">	ACC_PROTECTED    = 0x0004 //       field method</div><div class="line">	ACC_STATIC       = 0x0008 //       field method</div><div class="line">	ACC_FINAL        = 0x0010 // class field method</div><div class="line">	ACC_SUPER        = 0x0020 // class</div><div class="line">	ACC_SYNCHRONIZED = 0x0020 //             method</div><div class="line">	ACC_VOLATILE     = 0x0040 //       field</div><div class="line">	ACC_BRIDGE       = 0x0040 //             method</div><div class="line">	ACC_TRANSIENT    = 0x0080 //       field</div><div class="line">	ACC_VARARGS      = 0x0080 //             method</div><div class="line">	ACC_NATIVE       = 0x0100 //             method</div><div class="line">	ACC_INTERFACE    = 0x0200 // class</div><div class="line">	ACC_ABSTRACT     = 0x0400 // class       method</div><div class="line">	ACC_STRICT       = 0x0800 //             method</div><div class="line">	ACC_SYNTHETIC    = 0x1000 // class field method</div><div class="line">	ACC_ANNOTATION   = 0x2000 // class</div><div class="line">	ACC_ENUM         = 0x4000 // class field</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>��Class�оͿ��Զ�����ط���</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">func (self *Class) IsPublic() bool &#123;</div><div class="line">	return 0 != self.accessFlags&amp;ACC_PUBLIC</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>��newClass�����У����洢��������Ϣ��ClassFile�ṹת����Class�ṹ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">func newClass(cf *classfile.ClassFile) *Class &#123;</div><div class="line">	class := &amp;Class&#123;&#125;</div><div class="line">	class.accessFlags = cf.AccessFlags()</div><div class="line">	class.name = cf.ClassName()</div><div class="line">	class.superClassName = cf.SuperClassName()</div><div class="line">	class.interfaceNames = cf.InterfaceNames()</div><div class="line">	class.constantPool = newConstantPool(class, cf.ConstantPool())</div><div class="line">	class.fields = newFields(class, cf.Fields())</div><div class="line">	class.methods = newMethods(class, cf.Methods())</div><div class="line">	class.sourceFile = getSourceFile(cf)</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-1-2-�ֶκͷ���"><a href="#4-1-2-�ֶκͷ���" class="headerlink" title="4.1.2 �ֶκͷ���"></a>4.1.2 �ֶκͷ���</h4><p>��field��method���һЩ�����ֶγ��������һ��ClassMember�ṹ��<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type ClassMember struct &#123;</div><div class="line">	accessFlags uint16</div><div class="line">	name        string</div><div class="line">	descriptor  string</div><div class="line">	class       *Class // ���ָ��</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ClassMember) copyMemberInfo(memberInfo *classfile.MemberInfo) &#123;</div><div class="line">	self.accessFlags = memberInfo.AccessFlags()</div><div class="line">	self.name = memberInfo.Name()</div><div class="line">	self.descriptor = memberInfo.Descriptor()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>filed�ṹ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">type Field struct &#123;</div><div class="line">	ClassMember</div><div class="line">	constValueIndex uint // fieldΪ����ʱ������������</div><div class="line">	slotId  // field��˳���±꣬��̬��ʵ���Ƿֿ�����</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field &#123;</div><div class="line">	fields := make([]*Field, len(cfFields))</div><div class="line">	for i, cfField := range cfFields &#123;</div><div class="line">		fields[i] = &amp;Field&#123;&#125;</div><div class="line">		fields[i].class = class</div><div class="line">		fields[i].copyMemberInfo(cfField)</div><div class="line">		fields[i].copyAttributes(cfField)</div><div class="line">	&#125;</div><div class="line">	return fields</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Field) copyAttributes(cfField *classfile.MemberInfo) &#123;</div><div class="line">	if valAttr := cfField.ConstantValueAttribute(); valAttr != nil &#123;</div><div class="line">		self.constValueIndex = uint(valAttr.ConstantValueIndex())</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Method�ṹ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line">type Method struct &#123;</div><div class="line">	ClassMember</div><div class="line">	maxStack                uint // ����ջ�������</div><div class="line">	maxLocals               uint // �ֲ��������������</div><div class="line">	code                    []byte // �ֽ���</div><div class="line">	argSlotCount            uint // ��������</div><div class="line">	exceptionTable          ExceptionTable // �쳣��</div><div class="line">	lineNumberTable         *classfile.LineNumberTableAttribute // �к�</div><div class="line">	exceptions              *classfile.ExceptionsAttribute // �쳣</div><div class="line">	parsedDescriptor        *MethodDescriptor // ��������������</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method &#123;</div><div class="line">	methods := make([]*Method, len(cfMethods))</div><div class="line">	for i, cfMethod := range cfMethods &#123;</div><div class="line">		methods[i] = newMethod(class, cfMethod)</div><div class="line">	&#125;</div><div class="line">	return methods</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newMethod(class *Class, cfMethod *classfile.MemberInfo) *Method &#123;</div><div class="line">	method := &amp;Method&#123;&#125;</div><div class="line">	method.class = class</div><div class="line">	method.copyMemberInfo(cfMethod) // ���ƻ�����Ϣ</div><div class="line">	method.copyAttribute(cfMethod) // ��������</div><div class="line">	md := parseMethodDescriptor(method.descriptor) // ͨ����������ý�����</div><div class="line">	method.parsedDescriptor = md</div><div class="line">	method.calcArgSlotCount(md.parameterTypes) // ͳ�Ʒ����Ĳ�������</div><div class="line">	if method.IsNative() &#123;</div><div class="line">		method.injectCodeAttribute(md.returnType) // �����native�����������ֽ���</div><div class="line">	&#125;</div><div class="line">	return method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Method) copyAttribute(cfMethod *classfile.MemberInfo) &#123;</div><div class="line">	if codeAttr := cfMethod.CodeAttribute(); codeAttr != nil &#123;</div><div class="line">		self.maxLocals = codeAttr.MaxLocals()</div><div class="line">		self.maxStack = codeAttr.MaxStack()</div><div class="line">		self.code = codeAttr.Code()</div><div class="line">		self.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(), self.class.constantPool)</div><div class="line">		self.lineNumberTable = codeAttr.LineNumberTableAttribute()</div><div class="line">		self.exceptions = cfMethod.ExceptionsAttribute()</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line">    ���������native����������code,0xfe��invoke_nativeָ��</div><div class="line">*/</div><div class="line">func (self *Method) injectCodeAttribute(returnType string) &#123;</div><div class="line">	self.maxStack = 4</div><div class="line">	self.maxLocals = self.argSlotCount</div><div class="line">	switch returnType[0] &#123;</div><div class="line">	case &apos;V&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xb1&#125; // return</div><div class="line">	case &apos;D&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xaf&#125; // dreturn</div><div class="line">	case &apos;F&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xae&#125; // freturn</div><div class="line">	case &apos;J&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xad&#125; // lreturn</div><div class="line">	case &apos;L&apos;:</div><div class="line">		self.code = []byte&#123;0xfe, 0xb0&#125; // areturn</div><div class="line">	default:</div><div class="line">		self.code = []byte&#123;0xfe, 0xac&#125; // ireturn</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-2-������"><a href="#4-2-������" class="headerlink" title="4.2 ������"></a>4.2 ������</h3><p>����ʱ��������Ҫ���������Ϣ:������(litreal)�ͷ�������(symbolic reference)���������������������������ַ������������������ð�����������ã��ֶη������ã������������úͽӿڷ����������á�</p>
+<h4 id="4-2-1-ConstantPool�u"><a href="#4-2-1-ConstantPool�u" class="headerlink" title="4.2.1 ConstantPool�ṹ"></a>4.2.1 ConstantPool�ṹ</h4><p>��classfile.ConstantPoolת��Ϊheap.ConstantPool<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div></pre></td><td class="code"><pre><div class="line">type ConstantPool struct &#123;</div><div class="line">	class *Class</div><div class="line">	consts []Constant</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool &#123;</div><div class="line">	cpCount := len(cfCp)</div><div class="line">	consts := make([]Constant, cpCount)</div><div class="line">	rtCp := &amp;ConstantPool&#123;class, consts&#125;</div><div class="line"></div><div class="line">	for i := 1; i &lt; cpCount; i++ &#123;</div><div class="line">		cpInfo := cfCp[i]</div><div class="line">		switch cpInfo.(type) &#123;</div><div class="line">		case *classfile.ConstantIntegerInfo:</div><div class="line">			intInfo := cpInfo.(*classfile.ConstantIntegerInfo)</div><div class="line">			consts[i] = intInfo.Value()</div><div class="line">		case *classfile.ConstantFloatInfo:</div><div class="line">			floatInfo := cpInfo.(*classfile.ConstantFloatInfo)</div><div class="line">			consts[i] = floatInfo.Value()</div><div class="line">		case *classfile.ConstantLongInfo:</div><div class="line">			longInfo := cpInfo.(*classfile.ConstantLongInfo)</div><div class="line">			consts[i] = longInfo.Value()</div><div class="line">			i++ // longռ��2��λ��</div><div class="line">		case *classfile.ConstantDoubleInfo:</div><div class="line">			doubleInfo := cpInfo.(*classfile.ConstantDoubleInfo)</div><div class="line">			consts[i] = doubleInfo.Value()</div><div class="line">			i++ // doubleռ��2��λ��</div><div class="line">		case *classfile.ConstantStringInfo:</div><div class="line">			stringInfo := cpInfo.(*classfile.ConstantStringInfo)</div><div class="line">			consts[i] = stringInfo.String()</div><div class="line">		case *classfile.ConstantClassInfo:</div><div class="line">			classInfo := cpInfo.(*classfile.ConstantClassInfo)</div><div class="line">			consts[i] = newClassRef(rtCp, classInfo) // ���������</div><div class="line">		case *classfile.ConstantFieldrefInfo:</div><div class="line">			fieldrefInfo := cpInfo.(*classfile.ConstantFieldrefInfo)</div><div class="line">			consts[i] = newFieldRef(rtCp, fieldrefInfo) // �ֶη�������</div><div class="line">		case *classfile.ConstantMethodrefInfo:</div><div class="line">			methodrefInfo := cpInfo.(*classfile.ConstantMethodrefInfo)</div><div class="line">			consts[i] = newMethodRef(rtCp, methodrefInfo) //������������</div><div class="line">		case *classfile.ConstantInterfaceMethodrefInfo:</div><div class="line">			methodrefInfo := cpInfo.(*classfile.ConstantInterfaceMethodrefInfo)</div><div class="line">			consts[i] = newInterfaceMethodRef(rtCp, methodrefInfo) // �ӿڷ�����������</div><div class="line">		default:</div><div class="line">			// todo</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return rtCp</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="4-2-2-���ַ�������"><a href="#4-2-2-���ַ�������" class="headerlink" title="4.2.2 ���ַ�������"></a>4.2.2 ���ַ�������</h4><p>����һ���ɸ��õ�SymRef�ࡣ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">type SymRef struct &#123;</div><div class="line">	cp        *ConstantPool // ָ����������</div><div class="line">	className string // ����</div><div class="line">	class     *Class // ������������õ���Class</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *SymRef) ResolvedClass() *Class &#123;</div><div class="line">	if self.class == nil &#123;</div><div class="line">		self.resolveClassRef()</div><div class="line">	&#125;</div><div class="line">	return self.class</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *SymRef) resolveClassRef() &#123;</div><div class="line">	d := self.cp.class</div><div class="line">	c := d.loader.LoadClass(self.className) // ���������������ʵ��</div><div class="line">	if !c.isAccessibleTo(d) &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line">	self.class = c</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>�ٶ���һ��MemberRef�ࡣ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">type MemberRef struct &#123;</div><div class="line">	SymRef</div><div class="line">	name       string  // �ֶ����򷽷���</div><div class="line">	descriptor string  // ������</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *MemberRef) copyMemberRefInfo(refInfo *classfile.ConstantMemberrefInfo) &#123;</div><div class="line">	self.className = refInfo.ClassName()</div><div class="line">	self.name, self.descriptor = refInfo.NameAndDescriptor()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>���������ClassRef</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">type ClassRef struct &#123;</div><div class="line">	SymRef</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newClassRef(cp *ConstantPool, classInfo *classfile.ConstantClassInfo) *ClassRef &#123;</div><div class="line">	ref := &amp;ClassRef&#123;&#125;</div><div class="line">	ref.cp = cp</div><div class="line">	ref.className = classInfo.Name()</div><div class="line">	return ref</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>�ֶη�������FieldRef</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">type FieldRef struct &#123;</div><div class="line">	MemberRef</div><div class="line">	field *Field</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newFieldRef(cp *ConstantPool, refInfo *classfile.ConstantFieldrefInfo) *FieldRef &#123;</div><div class="line">	ref := &amp;FieldRef&#123;&#125;</div><div class="line">	ref.cp = cp</div><div class="line">	ref.copyMemberRefInfo(&amp;refInfo.ConstantMemberrefInfo)</div><div class="line">	return ref</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *FieldRef) ResolvedField() *Field &#123;</div><div class="line">	if self.field == nil &#123;</div><div class="line">		self.resolveFieldRef()</div><div class="line">	&#125;</div><div class="line">	return self.field</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *FieldRef) resolveFieldRef() &#123;</div><div class="line">	d := self.cp.class</div><div class="line">	c := self.ResolvedClass()</div><div class="line">	field := lookupField(c, self.name, self.descriptor) //�ݹ�ӵ�ǰ�༰�丸���в�ѯField</div><div class="line"></div><div class="line">	if field == nil &#123;</div><div class="line">		panic(&quot;java.lang.NoSuchFieldError&quot;)</div><div class="line">	&#125;</div><div class="line">	if !field.isAccessibleTo(d) &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	self.field = field</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>������������MethodRef</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">type MethodRef struct &#123;</div><div class="line">	MemberRef</div><div class="line">	method *Method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newMethodRef(cp *ConstantPool, refInfo *classfile.ConstantMethodrefInfo) *MethodRef &#123;</div><div class="line">	ref := &amp;MethodRef&#123;&#125;</div><div class="line">	ref.cp = cp</div><div class="line">	ref.copyMemberRefInfo(&amp;refInfo.ConstantMemberrefInfo)</div><div class="line">	return ref</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *MethodRef) ResolvedMethod() *Method &#123;</div><div class="line">	if self.method == nil &#123;</div><div class="line">		self.resolvedMethodRef()</div><div class="line">	&#125;</div><div class="line">	return self.method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *MethodRef) resolvedMethodRef() &#123;</div><div class="line">	d := self.cp.class</div><div class="line">	c := self.ResolvedClass()</div><div class="line"></div><div class="line">	if c.IsInterface() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	method := lookupMethod(c, self.name, self.descriptor) //�ݹ�Ĵӵ�ǰ�༰�丸�࣬�ӿ������л�ȡMethod</div><div class="line">	if method == nil &#123;</div><div class="line">		panic(&quot;java.lang.NoSuchMethodError&quot;)</div><div class="line">	&#125;</div><div class="line">	if !method.isAccessibleTo(d) &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line">	self.method = method</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>�ӿڷ�����������</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">type InterfaceMethodRef struct &#123;</div><div class="line">	MemberRef</div><div class="line">	method *Method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newInterfaceMethodRef(cp *ConstantPool, refInfo *classfile.ConstantInterfaceMethodrefInfo) *InterfaceMethodRef &#123;</div><div class="line">	ref := &amp;InterfaceMethodRef&#123;&#125;</div><div class="line">	ref.cp = cp</div><div class="line">	ref.copyMemberRefInfo(&amp;refInfo.ConstantMemberrefInfo)</div><div class="line">	return ref</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *InterfaceMethodRef) ResolvedInterfaceMethod() *Method &#123;</div><div class="line">	if self.method != nil &#123;</div><div class="line">		self.resolveInterfaceMethodRef()</div><div class="line">	&#125;</div><div class="line">	return self.method</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *InterfaceMethodRef) resolveInterfaceMethodRef() &#123;</div><div class="line">	d := self.cp.class</div><div class="line">	c := self.ResolvedClass()</div><div class="line">	if !c.IsInterface() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	method := lookupInterfaceMethod(c, self.name, self.descriptor) // �ӵ�ǰ�ӿڼ��丸�ӿ��л�ȡ����</div><div class="line">	if method == nil &#123;</div><div class="line">		panic(&quot;java.lang.NoSuchMethodError&quot;)</div><div class="line">	&#125;</div><div class="line">	if !method.isAccessibleTo(d) &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line">	self.method = method</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-3-����"><a href="#4-3-����" class="headerlink" title="4.3 ����"></a>4.3 ����</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">type Object struct &#123;</div><div class="line">	class *Class</div><div class="line">	data interface&#123;&#125; // �洢ʵ���������ߵ�����������ʱ��������</div><div class="line">	extra interface&#123;&#125; // �洢�����Ӧ��Class���󣬻����쳣������쳣ջ��Ϣ��</div><div class="line">&#125; </div><div class="line"></div><div class="line">func newObject(class *Class) *Object &#123;</div><div class="line">	return &amp;Object&#123;</div><div class="line">		class:class,</div><div class="line">		data: newSlots(class.instanceSlotCount),</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) SetRefVar(fieldName string, descriptor string, ref *Object) &#123;</div><div class="line">	field := self.class.getField(fieldName, descriptor, false)</div><div class="line">	self.Fields().SetRef(field.slotId, ref)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Object) GetRefVar(fieldName string, descriptor string) *Object&#123;</div><div class="line">	field := self.class.getField(fieldName, descriptor, false)</div><div class="line">	return self.Fields().GetRef(field.slotId)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="4-4-�������"><a href="#4-4-�������" class="headerlink" title="4.4 �������"></a>4.4 �������</h3><p>JVM�������ϵͳʮ�ָ��ӣ�����ֻʵ��һ�����׵����������<br>ClassLoader�ṹ��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">type ClassLoader struct &#123;</div><div class="line">	cp          *classpath.Classpath // ��·��</div><div class="line">	classMap    map[string]*Class  // ������ع����࣬���Ե����򵥷�������ʵ��</div><div class="line">&#125;</div><div class="line"></div><div class="line">func NewClassLoader(cp *classpath.Classpath, verboseFlag bool) *ClassLoader &#123;</div><div class="line">	loader := &amp;ClassLoader&#123;</div><div class="line">		cp:          cp,</div><div class="line">		classMap:    make(map[string]*Class),</div><div class="line">	&#125;</div><div class="line">	loader.loadBasicClasses() // ����Class�༰�丸��Ȼ�����</div><div class="line">	loader.loadPrimitiveClasses() // ����int��ԭʼ��</div><div class="line">	return loader</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>loadBasicClass����Class�࣬��LoadClass�����л�ݹ���ظ���ͽӿڣ������Ѽ��ص����������ɶ�Ӧ��Class����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadBasicClasses() &#123;</div><div class="line">	jlClassClass := self.LoadClass(&quot;java/lang/Class&quot;)</div><div class="line">	for _, class := range self.classMap &#123;</div><div class="line">		if class.jClass == nil &#123;</div><div class="line">			class.jClass = jlClassClass.NewObject()</div><div class="line">			class.jClass.extra = class</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>loadPrimitiveClass����void,boolean,byte,short,int,long,char,float,double8�������������ͣ���Ϊÿһ�����ɶ�Ӧ��Class������int.class��</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadPrimitiveClasses() &#123;</div><div class="line">	for primitiveType := range primitiveTypes &#123;</div><div class="line">		self.loadPrimitiveClass(primitiveType)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ClassLoader) loadPrimitiveClass(primitiveType string) &#123;</div><div class="line">	class := &amp;Class&#123;</div><div class="line">		accessFlags:ACC_PUBLIC,</div><div class="line">		name:primitiveType,</div><div class="line">		loader:self,</div><div class="line">		initStarted:true,</div><div class="line">	&#125;</div><div class="line">	class.jClass = self.classMap[&quot;java/lang/Class&quot;].NewObject()</div><div class="line">	class.jClass.extra = class</div><div class="line">	self.classMap[primitiveType] = class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-4-1-�����LoadClass"><a href="#4-4-1-�����LoadClass" class="headerlink" title="4.4.1 �����LoadClass"></a>4.4.1 �����LoadClass</h4><p>LoadClass���������࣬������Ѽ��أ��򷵻�go Class�������δ���أ����ж��������໹�Ƿ������࣬���ڼ���������ɶ�Ӧ���͵�Class����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) LoadClass(name string) *Class &#123;</div><div class="line">	if class, ok := self.classMap[name]; ok &#123;</div><div class="line">		return class</div><div class="line">	&#125;</div><div class="line">	var class *Class</div><div class="line">	if name[0] == &apos;[&apos; &#123;</div><div class="line">		class = self.loadArrayClass(name)</div><div class="line">	&#125; else &#123;</div><div class="line">		class = self.loadNonArrayClass(name)</div><div class="line">	&#125;</div><div class="line">	if jlClassClass, ok := self.classMap[&quot;java/lang/Class&quot;]; ok &#123;</div><div class="line">		class.jClass = jlClassClass.NewObject()</div><div class="line">		class.jClass.extra = class</div><div class="line">	&#125;</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>loadArrayClass����������</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadArrayClass(name string) *Class &#123;</div><div class="line">	class := &amp;Class&#123;</div><div class="line">		accessFlags: ACC_PUBLIC,</div><div class="line">		name:        name,</div><div class="line">		loader:      self,</div><div class="line">		initStarted: true,</div><div class="line">		superClass:  self.LoadClass(&quot;java/lang/Object&quot;),</div><div class="line">		interfaces: []*Class&#123;</div><div class="line">			self.LoadClass(&quot;java/lang/Cloneable&quot;),</div><div class="line">			self.LoadClass(&quot;java/io/Serializable&quot;),</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line">	self.classMap[name] = class</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>loadNonArrayClass���ط������࣬�ȶ�ȡ����ֽڣ��������ֽ�תΪgo Class���뷽����,Ȼ�������֤�ͳ�ʼ����������ÿ��ʵ������field�;�̬����field�ֱ�����slotId,��ʼ��������ֵ</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) loadNonArrayClass(name string) *Class &#123;</div><div class="line">	data, entry := self.readClass(name)</div><div class="line">	class := self.defineClass(data)</div><div class="line">	link(class)</div><div class="line">	if self.verboseFlag &#123;</div><div class="line">		fmt.Printf(&quot;[Loaded %s from %s]\n&quot;, name, entry)</div><div class="line">	&#125;</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>readClass�����������޶�������ȡ����ֽ�����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) readClass(name string) ([]byte, classpath.Entry) &#123;</div><div class="line">	data, entry, err := self.cp.ReadClass(name)</div><div class="line">	if err != nil &#123;</div><div class="line">		panic(&quot;java.lang.ClassNotFoundException: &quot; + name)</div><div class="line">	&#125;</div><div class="line">	return data, entry</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="4-4-2-defineClass����Class"><a href="#4-4-2-defineClass����Class" class="headerlink" title="4.4.2 defineClass����Class"></a>4.4.2 defineClass����Class</h4><p>defineClass�����ֽ����鹹��go Class�����ȥ�����丸��ͽӿڣ����뷽����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func (self *ClassLoader) defineClass(data []byte) *Class &#123;</div><div class="line">	class := parseClass(data)</div><div class="line">	class.loader = self</div><div class="line">	resolveSuperClass(class)</div><div class="line">	resolveInterfaces(class)</div><div class="line">	self.classMap[class.name] = class</div><div class="line">	return class</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>parseClass���ֽ�ת��classfile�ļ���Ȼ�����go Class��newClass������classfileת�� go Class<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func parseClass(data []byte) *Class &#123;</div><div class="line">	cf, err := classfile.Parse(data)</div><div class="line">	if err != nil &#123;</div><div class="line">		//panic(&quot;java.lang.ClassFormatError&quot;)</div><div class="line">		panic(err)</div><div class="line">	&#125;</div><div class="line">	return newClass(cf)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>���ظ���<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">func resolveSuperClass(class *Class) &#123;</div><div class="line">	if class.name != &quot;java/lang/Object&quot; &#123;</div><div class="line">		class.superClass = class.loader.LoadClass(class.superClassName)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>���ؽӿ�<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">func resolveInterfaces(class *Class) &#123;</div><div class="line">	interfaceCount := len(class.interfaceNames)</div><div class="line">	if interfaceCount &gt; 0 &#123;</div><div class="line">		class.interfaces = make([]*Class, interfaceCount)</div><div class="line">		for i, interfaceName := range class.interfaceNames &#123;</div><div class="line">			class.interfaces[i] = class.loader.LoadClass(interfaceName)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="4-4-3-link��֤��׼��"><a href="#4-4-3-link��֤��׼��" class="headerlink" title="4.4.3 link��֤��׼��"></a>4.4.3 link��֤��׼��</h4><p>java������淶4.10����ϸ�����������֤�㷨�����ﲻ��ʵ�֡�<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func link(class *Class) &#123;</div><div class="line">	verify(class)</div><div class="line">	prepare(class)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>׼���׶θ����������ռ䲢�����ʼֵ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">func prepare(class *Class) &#123;</div><div class="line">	calcInstanceFieldSlotIds(class)</div><div class="line">	calcStaticFieldSlotIds(class)</div><div class="line">	allocAndInitStaticVars(class)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>calcInstanceFieldSlotIds����ÿ��ʵ������field��slotId,���������ڣ���Ӹ������ʵ������ʼͳ�ƣ������long����double���ͣ�������ռ��2��λ�á�<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">func calcInstanceFieldSlotIds(class *Class) &#123;</div><div class="line">	slotId := uint(0)</div><div class="line">	if class.superClass != nil &#123;</div><div class="line">		slotId = class.superClass.instanceSlotCount</div><div class="line">	&#125;</div><div class="line">	for _, field := range class.fields &#123;</div><div class="line">		if !field.IsStatic() &#123;</div><div class="line">			field.slotId = slotId</div><div class="line">			slotId++</div><div class="line">			if field.isLongOrDouble() &#123;</div><div class="line">				slotId++</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	class.instanceSlotCount = slotId</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>calcStaticFieldSlotIds����ÿ����̬����field��slotId</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func calcStaticFieldSlotIds(class *Class) &#123;</div><div class="line">	slotId := uint(0)</div><div class="line">	for _, field := range class.fields &#123;</div><div class="line">		if field.IsStatic() &#123;</div><div class="line">			field.slotId = slotId</div><div class="line">			slotId++</div><div class="line">			if field.isLongOrDouble() &#123;</div><div class="line">				slotId++</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	class.staticSlotCount = slotId</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>allocAndInitStaticVars��ʼ����̬���������Ҹ�������ʼֵ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func allocAndInitStaticVars(class *Class) &#123;</div><div class="line">	class.staticVars = newSlots(class.staticSlotCount)</div><div class="line">	for _, field := range class.fields &#123;</div><div class="line">		if field.IsStatic() &amp;&amp; field.IsFinal() &#123;</div><div class="line">			initStaticFinalVar(class, field)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>��ʼֵ����</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">func initStaticFinalVar(class *Class, field *Field) &#123;</div><div class="line">	vars := class.staticVars</div><div class="line">	cp := class.constantPool</div><div class="line">	cpIndex := field.constValueIndex</div><div class="line">	slotId := field.slotId</div><div class="line"></div><div class="line">	if cpIndex &gt; 0 &#123;</div><div class="line">		switch field.Descriptor() &#123;</div><div class="line">		case &quot;Z&quot;, &quot;B&quot;, &quot;C&quot;, &quot;S&quot;, &quot;I&quot;:</div><div class="line">			val := cp.GetConstant(cpIndex).(int32)</div><div class="line">			vars.SetInt(slotId, val)</div><div class="line">		case &quot;J&quot;:</div><div class="line">			val := cp.GetConstant(cpIndex).(int64)</div><div class="line">			vars.SetLong(slotId, val)</div><div class="line">		case &quot;F&quot;:</div><div class="line">			val := cp.GetConstant(cpIndex).(float32)</div><div class="line">			vars.SetFloat(slotId, val)</div><div class="line">		case &quot;D&quot;:</div><div class="line">			val := cp.GetConstant(cpIndex).(float64)</div><div class="line">			vars.SetDouble(slotId, val)</div><div class="line">		case &quot;Ljava/lang/String&quot;:</div><div class="line">			goStr := cp.GetConstant(cpIndex).(string)</div><div class="line">			jStr := JString(class.Loader(), goStr)</div><div class="line">			vars.SetRef(slotId, jStr)</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

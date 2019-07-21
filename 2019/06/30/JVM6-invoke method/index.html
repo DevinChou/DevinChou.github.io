@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVMʵ��(��)-�������ü�ָ�� | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="�ӵ��ýǶȿ����������Է�Ϊ���࣬��̬������ʵ����������̬����ͨ�������õ��ã���̬�󶨣���̬����ͨ���������õ��ã���̬�󶨡���ʵ�ֽǶȿ����������Է�Ϊ���࣬���󷽷���Java������Native������Java������淶һ���ṩ��4����������ָ�
+
+����invokestat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVMʵ��(��)-�������ü�ָ�� | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/06/30/JVM6-invoke method/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="�ӵ��ýǶȿ����������Է�Ϊ���࣬��̬������ʵ����������̬����ͨ�������õ��ã���̬�󶨣���̬����ͨ���������õ��ã���̬�󶨡���ʵ�ֽǶȿ����������Է�Ϊ���࣬���󷽷���Java������Native������Java������淶һ���ṩ��4����������ָ�
+
+����invokestat">
+<meta property="og:updated_time" content="2019-07-21T18:34:12.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVMʵ��(��)-�������ü�ָ�� | Rousseau Chou's Blog">
+<meta name="twitter:description" content="�ӵ��ýǶȿ����������Է�Ϊ���࣬��̬������ʵ����������̬����ͨ�������õ��ã���̬�󶨣���̬����ͨ���������õ��ã���̬�󶨡���ʵ�ֽǶȿ����������Է�Ϊ���࣬���󷽷���Java������Native������Java������淶һ���ṩ��4����������ָ�
+
+����invokestat">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVMʵ��(��)-�������ü�ָ��</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-06-30" class="post-meta__date date">2019-06-30</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <p>�ӵ��ýǶȿ����������Է�Ϊ���࣬��̬������ʵ����������̬����ͨ�������õ��ã���̬�󶨣���̬����ͨ���������õ��ã���̬�󶨡�<br>��ʵ�ֽǶȿ����������Է�Ϊ���࣬���󷽷���Java������Native������<br>Java������淶һ���ṩ��4����������ָ�</p>
+<ol>
+<li>����invokestaticָ���������þ�̬������</li>
+<li>invokespecialָ��������붯̬�󶨵�ʵ���������������캯����˽�з�����ͨ��super�ؼ��ֵ��õĳ��෽����</li>
+<li>invokeinterfaceָ����ö�̬�󶨵Ľӿڷ�����</li>
+<li>invokevirtualָ����ö�̬�󶨵���ͨ������</li>
+</ol>
+<h3 id="6-1-InvokeMethod"><a href="#6-1-InvokeMethod" class="headerlink" title="6.1 InvokeMethod"></a>6.1 InvokeMethod</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func InvokeMethod(invokeFrame *rtda.Frame, method *heap.Method) &#123;</div><div class="line">	thread := invokeFrame.Thread()</div><div class="line">	newFrame := thread.NewFrame(method)</div><div class="line">	thread.PushFrame(newFrame)</div><div class="line"></div><div class="line">	argSlotSlot := int(method.ArgSlotCount())</div><div class="line">	if argSlotSlot &gt; 0 &#123;</div><div class="line">		for i := argSlotSlot - 1; i &gt;= 0; i-- &#123;</div><div class="line">			slot := invokeFrame.OperandStack().PopSlot()</div><div class="line">			newFrame.LocalVars().SetSlot(uint(i), slot)</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>����ǰ���У������µ�ջ֡�����������ջ��ʣ�µĴ��뽫�������ݸ��µ�ջ֡�Ĳ�����ջ��++����Ĳ�����������ͬ��Java�����еĲ���������һ��long��double���Ͳ���ռ��2��λ�ã����Ƕ���ʵ���������Ὣ�������ü��ڲ����б�ǰ���ݹ�ȥ������this���á�++<br>return���ָ���ڵ������Ѿ���������</p>
+<h3 id="6-2-��������ָ��"><a href="#6-2-��������ָ��" class="headerlink" title="6.2 ��������ָ��"></a>6.2 ��������ָ��</h3><p>�ĸ�����ָ�����ʵ��</p>
+<h4 id="6-2-1-invokestaticָ��"><a href="#6-2-1-invokestaticָ��" class="headerlink" title="6.2.1 invokestaticָ��"></a>6.2.1 invokestaticָ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">type INVOKE_STATIC struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INVOKE_STATIC) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	methodRef := cp.GetConstant(self.Index).(*heap.MethodRef)</div><div class="line">	resolvedMethod := methodRef.ResolvedMethod()</div><div class="line">	class := resolvedMethod.Class()</div><div class="line">	if !class.InitStarted() &#123;</div><div class="line">		frame.RevertNextPC()</div><div class="line">		base.InitClass(frame.Thread(), class)</div><div class="line">		return</div><div class="line">	&#125;</div><div class="line">	if !resolvedMethod.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line">	base.InvokeMethod(frame, resolvedMethod)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="6-2-2-invokespecialָ��"><a href="#6-2-2-invokespecialָ��" class="headerlink" title="6.2.2 invokespecialָ��"></a>6.2.2 invokespecialָ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">type INVOKE_SPECIAL struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">// hack!</div><div class="line">func (self *INVOKE_SPECIAL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	currentClass := frame.Method().Class()</div><div class="line">	cp := currentClass.ConstantPool()</div><div class="line">	methodRef := cp.GetConstant(self.Index).(*heap.MethodRef)</div><div class="line">	resolvedClass := methodRef.ResolvedClass()</div><div class="line">	resolvedMethod := methodRef.ResolvedMethod()</div><div class="line"></div><div class="line">	if resolvedMethod.Name() == &quot;&lt;init&gt;&quot; &amp;&amp; resolvedMethod.Class() != resolvedClass &#123;</div><div class="line">		panic(&quot;java.lang.NoSuchMethodError&quot;)</div><div class="line">	&#125;</div><div class="line">	if resolvedMethod.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount()-1)</div><div class="line">	if ref == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    // protected����ֻ�ܱ������÷���������������</div><div class="line">	if resolvedMethod.IsProtected() &amp;&amp;</div><div class="line">		resolvedMethod.Class().IsSuperClassOf(currentClass) &amp;&amp;</div><div class="line">		resolvedMethod.Class().GetPackageName() != currentClass.GetPackageName() &amp;&amp;</div><div class="line">		ref.Class() != currentClass &amp;&amp;</div><div class="line">		!ref.Class().IsSubClassOf(currentClass) &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	methodToBeInvoked := resolvedMethod</div><div class="line">	if currentClass.IsSuper() &amp;&amp;</div><div class="line">		resolvedClass.IsSuperClassOf(currentClass) &amp;&amp;</div><div class="line">		resolvedMethod.Name() != &quot;&lt;init&gt;&quot; &#123;</div><div class="line">		methodToBeInvoked = heap.LookupMethodInClass(currentClass.SuperClass(), methodRef.Name(), methodRef.Descriptor())</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() &#123;</div><div class="line">		panic(&quot;java.lang.AbstractMethodError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	base.InvokeMethod(frame, methodToBeInvoked)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="6-2-3-invokevitualָ��"><a href="#6-2-3-invokevitualָ��" class="headerlink" title="6.2.3 invokevitualָ��"></a>6.2.3 invokevitualָ��</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">type INVOKE_VIRTUAL struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INVOKE_VIRTUAL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	currentClass := frame.Method().Class()</div><div class="line">	cp := currentClass.ConstantPool()</div><div class="line">	methodRef := cp.GetConstant(self.Index).(*heap.MethodRef)</div><div class="line">	resolvedMethod := methodRef.ResolvedMethod()</div><div class="line">	if resolvedMethod.IsStatic() &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line">	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount()-1)</div><div class="line">	if ref == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	if resolvedMethod.IsProtected() &amp;&amp;</div><div class="line">		resolvedMethod.Class().IsSuperClassOf(currentClass) &amp;&amp;</div><div class="line">		resolvedMethod.Class().GetPackageName() != currentClass.GetPackageName() &amp;&amp;</div><div class="line">		ref.Class() != currentClass &amp;&amp;</div><div class="line">		!ref.Class().IsSubClassOf(currentClass) &#123;</div><div class="line"></div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	methodToBeInvoked := heap.LookupMethodInClass(ref.Class(),</div><div class="line">		methodRef.Name(), methodRef.Descriptor())</div><div class="line">	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() &#123;</div><div class="line">		panic(&quot;java.lang.AbstractMethodError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	base.InvokeMethod(frame, methodToBeInvoked)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="6-2-4-invokeinterfaceָ��"><a href="#6-2-4-invokeinterfaceָ��" class="headerlink" title="6.2.4 invokeinterfaceָ��"></a>6.2.4 invokeinterfaceָ��</h4><p>invokeinterfaceָ��������4�ֽڶ�����2�ֽ�++~~��ǰ���ֽڵĺ��������ָ����ͬ���Ǹ�Uint16�����������������ֽڵ�ֵ�Ǹ��������ݲ�����Ҫ��slot������Method�ṹ���argSlotCount�ֶ���ͬ������ڽ�����ʷԭ�򡣵����ֽ������Oracle��ĳЩJava�����ʵ���õģ�����ֵ����Ҫ��0��<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">type INVOKE_INTERFACE struct &#123;</div><div class="line">	index uint</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INVOKE_INTERFACE) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	self.index = uint(reader.ReadUint16())</div><div class="line">	reader.ReadUint8()  // count</div><div class="line">	reader.ReadUint8()  // 0</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *INVOKE_INTERFACE) Execute(frame *rtda.Frame) &#123;</div><div class="line">	cp := frame.Method().Class().ConstantPool()</div><div class="line">	methodRef := cp.GetConstant(self.index).(*heap.InterfaceMethodRef)</div><div class="line">	resolvedMethod := methodRef.ResolvedInterfaceMethod()</div><div class="line"></div><div class="line">	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount() - 1)</div><div class="line">	if ref == nil &#123;</div><div class="line">		panic(&quot;java.lang.NullPointerException&quot;)</div><div class="line">	&#125;</div><div class="line">	if !ref.Class().IsImplements(methodRef.ResolvedClass()) &#123;</div><div class="line">		panic(&quot;java.lang.IncompatibleClassChangeError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	methodToBeInvoked := heap.LookupMethodInClass(ref.Class(), methodRef.Name(), methodRef.Descriptor())</div><div class="line">	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() &#123;</div><div class="line">		panic(&quot;java.lang.AbstractMethodError&quot;)</div><div class="line">	&#125;</div><div class="line">	if !methodToBeInvoked.IsPublic() &#123;</div><div class="line">		panic(&quot;java.lang.IllegalAccessError&quot;)</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	base.InvokeMethod(frame, methodToBeInvoked)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="6-3-������"><a href="#6-3-������" class="headerlink" title="6.3 ������"></a>6.3 ������</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">func interpret(thread *rtda.Thread, logInst bool) &#123;</div><div class="line">	defer catchErr(thread)</div><div class="line">	loop(thread, logInst)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func catchErr(thread *rtda.Thread) &#123;</div><div class="line">	if r := recover(); r != nil &#123;</div><div class="line">		logFrames(thread)  // ��־��¼</div><div class="line">		panic(r)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">func loop(thread *rtda.Thread, logInst bool) &#123;</div><div class="line">	reader := &amp;base.ByteCodeReader&#123;&#125;</div><div class="line">	for &#123;</div><div class="line">		frame := thread.CurrentFrame()</div><div class="line">		pc := frame.NextPc()</div><div class="line">		thread.SetPC(pc) // �̱߳��浱ǰpc��ַ�������ڷ�����;ִ��clinit��������Իص���ǰ����</div><div class="line"></div><div class="line">		reader.Reset(frame.Method().Code(), pc)</div><div class="line">		opCode := reader.ReadUint8()  // ��ȡָ����</div><div class="line">		inst := instructions.NewInstruction(opCode)</div><div class="line">		inst.FetchOperands(reader) // ��ȡ������</div><div class="line">		frame.SetNextPc(reader.PC()) // �����¸�pc��ַ</div><div class="line"></div><div class="line">		if logInst &#123;</div><div class="line">			logInstruction(frame, inst) // ��־��¼</div><div class="line">		&#125;</div><div class="line">		inst.Execute(frame) // ִ��ָ��</div><div class="line">		if thread.IsStackEmpty() &#123;</div><div class="line">			break</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>
