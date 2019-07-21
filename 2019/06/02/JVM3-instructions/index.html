@@ -24,7 +24,7 @@
 <meta property="og:site_name" content="Rousseau Chou's Blog">
 <meta property="og:description" content="3.1 指令集每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。
 由于操作数栈和局部变量表只存放数据的值，并不记录数据类型，因此指令必须知">
-<meta property="og:updated_time" content="2019-07-21T19:21:03.477Z">
+<meta property="og:updated_time" content="2019-07-21T19:22:30.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM实现(三)-指令集 | Rousseau Chou's Blog">
 <meta name="twitter:description" content="3.1 指令集每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。
@@ -1287,13 +1287,147 @@ classes that you can use:
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">type LCMP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *LCMP) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopLong()</div><div class="line">	v1 := stack.PopLong()</div><div class="line">	if v1 &gt; v2 &#123;</div><div class="line">		stack.PushInt(1)</div><div class="line">	&#125; else if v1 == v2 &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">	&#125; else &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.2 fcmp<op>和dcmp<op>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x95 | fcmpl  | 比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶<br>0x96 | fcmpg  | 比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶<br>0x97 | dcmpl  |   比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶<br>0x98 | dcmpg  |   比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</op></op></p>
+<p>3.10.2 fcmp<op>和dcmp<op>指令</op></op></p>
+<table>
+<thead>
+<tr>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x95</td>
+<td>fcmpl</td>
+<td>比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0x96</td>
+<td>fcmpg</td>
+<td>比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</td>
+</tr>
+<tr>
+<td>0x97</td>
+<td>dcmpl</td>
+<td>比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶</td>
+</tr>
+<tr>
+<td>0x98</td>
+<td>dcmpg</td>
+<td>比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">type FCMPL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *FCMPL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopFloat()</div><div class="line">	v1 := stack.PopFloat()</div><div class="line">	if v1 &gt; v2 &#123;</div><div class="line">		stack.PushInt(1)</div><div class="line">	&#125; else if v1 == v2 &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">	&#125; else if v1 &lt; v2 &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125; else &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.3 if<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x99 | ifeq | 当栈顶int型数值等于0时跳转<br>0x9a | ifne | 当栈顶int型数值不等于0时跳转<br>0x9b | iflt | 当栈顶int型数值小于0时跳转<br>0x9c | ifge | 当栈顶int型数值大于等于0时跳转<br>0x9d | ifgt | 当栈顶int型数值大于0时跳转<br>0x9e | ifle | 当栈顶int型数值小于等于0时跳转</cond></p>
+<p>3.10.3 if<cond>指令</cond></p>
+<table>
+<thead>
+<tr>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x99</td>
+<td>ifeq</td>
+<td>当栈顶int型数值等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9a</td>
+<td>ifne</td>
+<td>当栈顶int型数值不等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9b</td>
+<td>iflt</td>
+<td>当栈顶int型数值小于0时跳转</td>
+</tr>
+<tr>
+<td>0x9c</td>
+<td>ifge</td>
+<td>当栈顶int型数值大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0x9d</td>
+<td>ifgt</td>
+<td>当栈顶int型数值大于0时跳转</td>
+</tr>
+<tr>
+<td>0x9e</td>
+<td>ifle</td>
+<td>当栈顶int型数值小于等于0时跳转</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">type IFEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IFEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.OperandStack().PopInt()</div><div class="line">	if val == 0 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.4 if_icmp<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x9f | if_icmpeq | 比较栈顶两int型数值大小，当结果等于0时跳转<br>0xa0 | if_icmpne | 比较栈顶两int型数值大小，当结果不等于0时跳转<br>0xa1 | if_icmplt | 比较栈顶两int型数值大小，当结果小于0时跳转<br>0xa2 | if_icmpge | 比较栈顶两int型数值大小，当结果大于等于0时跳转<br>0xa3 | if_icmpgt | 比较栈顶两int型数值大小，当结果大于0时跳转<br>0xa4 | if_icmple | 比较栈顶两int型数值大小，当结果小于等于0时跳转</cond></p>
+<p>3.10.4 if_icmp<cond>指令</cond></p>
+<table>
+<thead>
+<tr>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0x9f</td>
+<td>if_icmpeq</td>
+<td>比较栈顶两int型数值大小，当结果等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa0</td>
+<td>if_icmpne</td>
+<td>比较栈顶两int型数值大小，当结果不等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa1</td>
+<td>if_icmplt</td>
+<td>比较栈顶两int型数值大小，当结果小于0时跳转</td>
+</tr>
+<tr>
+<td>0xa2</td>
+<td>if_icmpge</td>
+<td>比较栈顶两int型数值大小，当结果大于等于0时跳转</td>
+</tr>
+<tr>
+<td>0xa3</td>
+<td>if_icmpgt</td>
+<td>比较栈顶两int型数值大小，当结果大于0时跳转</td>
+</tr>
+<tr>
+<td>0xa4</td>
+<td>if_icmple</td>
+<td>比较栈顶两int型数值大小，当结果小于等于0时跳转</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type IF_ICMPEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IF_ICMPEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	if v1 == v2 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.5 if_acmp<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0xa5 | if_acmpeq |  比较栈顶两引用型数值，当结果相等时跳转<br>0xa6 | if_acmpne |  比较栈顶两引用型数值，当结果不相等时跳转</cond></p>
+<p>3.10.5 if_acmp<cond>指令</cond></p>
+<table>
+<thead>
+<tr>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0xa5</td>
+<td>if_acmpeq</td>
+<td>比较栈顶两引用型数值，当结果相等时跳转</td>
+</tr>
+<tr>
+<td>0xa6</td>
+<td>if_acmpne</td>
+<td>比较栈顶两引用型数值，当结果不相等时跳转</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type IF_ACMPEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IF_ACMPEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref2 := stack.PopRef()</div><div class="line">	ref1 := stack.PopRef()</div><div class="line">	if ref1 == ref2 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="3-11-控制指令"><a href="#3-11-控制指令" class="headerlink" title="3.11 控制指令"></a>3.11 控制指令</h4><table>
 <thead>
