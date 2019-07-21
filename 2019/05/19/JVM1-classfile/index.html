@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    
+
+    <title>
+      JVM实现(一)-解析Class文件字节码 | Rousseau Chou&#39;s Blog 
+    </title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    
+      <meta name="author" content="Zhou Hangqi">
+    
+    
+
+    <meta name="description" content="1.1 Class文件解析
+读取4个字节的magic值，CAFEBABE
+读取2个字节minorVersion,2个字节的majorVersion
+constantPool先读取2个字节的常量池大小，依次读取常量，先读1个字节的常量类型（常量类型共14种），根据不同类型再读取不同字节数。   
+Integer和Float类型读取4个字节，Long和Double类型读取8个字节。
+Utf8类型读取2">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM实现(一)-解析Class文件字节码 | Rousseau Chou's Blog">
+<meta property="og:url" content="http://yoursite.com/2019/05/19/JVM1-classfile/index.html">
+<meta property="og:site_name" content="Rousseau Chou's Blog">
+<meta property="og:description" content="1.1 Class文件解析
+读取4个字节的magic值，CAFEBABE
+读取2个字节minorVersion,2个字节的majorVersion
+constantPool先读取2个字节的常量池大小，依次读取常量，先读1个字节的常量类型（常量类型共14种），根据不同类型再读取不同字节数。   
+Integer和Float类型读取4个字节，Long和Double类型读取8个字节。
+Utf8类型读取2">
+<meta property="og:updated_time" content="2019-07-21T18:56:07.127Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM实现(一)-解析Class文件字节码 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="1.1 Class文件解析
+读取4个字节的magic值，CAFEBABE
+读取2个字节minorVersion,2个字节的majorVersion
+constantPool先读取2个字节的常量池大小，依次读取常量，先读1个字节的常量类型（常量类型共14种），根据不同类型再读取不同字节数。   
+Integer和Float类型读取4个字节，Long和Double类型读取8个字节。
+Utf8类型读取2">
+    
+    
+    
+      <link rel="icon" type="image/x-icon" href="/favicon.png">
+    
+    <link rel="stylesheet" href="/css/uno.css">
+    <link rel="stylesheet" href="/css/highlight.css">
+    <link rel="stylesheet" href="/css/archive.css">
+    <link rel="stylesheet" href="/css/china-social-icon.css">
+
+</head>
+<body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="icon icon-list btn-mobile-menu__icon"></i>
+        <i class="icon icon-x-circle btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+
+<header class="panel-cover panel-cover--collapsed">
+
+
+  <div class="panel-main">
+
+  
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        
+
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage">Rousseau Chou&#39;s Blog</a></h1>
+        <hr class="panel-cover__divider" />
+
+        
+        <p class="panel-cover__description">
+          These violent delights have violent ends.
+        </p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+
+        <div class="navigation-wrapper">
+
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+
+              
+                
+                <li class="navigation__item"><a href="/#blog" title="" class="blog-button">home</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/code" title="" class="">code</a></li>
+              
+                
+                <li class="navigation__item"><a href="/categories/peruse" title="" class="">peruse</a></li>
+              
+                
+                <li class="navigation__item"><a href="/about" title="" class="">about</a></li>
+              
+
+            </ul>
+          </nav>
+
+          <!-- ----------------------------
+To add a new social icon simply duplicate one of the list items from below
+and change the class in the <i> tag to match the desired social network
+and then add your link to the <a>. Here is a full list of social network
+classes that you can use:
+
+    icon-social-500px
+    icon-social-behance
+    icon-social-delicious
+    icon-social-designer-news
+    icon-social-deviant-art
+    icon-social-digg
+    icon-social-dribbble
+    icon-social-facebook
+    icon-social-flickr
+    icon-social-forrst
+    icon-social-foursquare
+    icon-social-github
+    icon-social-google-plus
+    icon-social-hi5
+    icon-social-instagram
+    icon-social-lastfm
+    icon-social-linkedin
+    icon-social-medium
+    icon-social-myspace
+    icon-social-path
+    icon-social-pinterest
+    icon-social-rdio
+    icon-social-reddit
+    icon-social-skype
+    icon-social-spotify
+    icon-social-stack-overflow
+    icon-social-steam
+    icon-social-stumbleupon
+    icon-social-treehouse
+    icon-social-tumblr
+    icon-social-twitter
+    icon-social-vimeo
+    icon-social-xbox
+    icon-social-yelp
+    icon-social-youtube
+    icon-social-zerply
+    icon-mail
+
+-------------------------------->
+
+<!-- add social info here -->
+
+
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay"></div>
+  </div>
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner entry">
+            
+
+<article class="post-container post-container--single">
+
+  <header class="post-header">
+    
+    <h1 class="post-title">JVM实现(一)-解析Class文件字节码</h1>
+
+    
+
+    <div class="post-meta">
+      <time datetime="2019-05-19" class="post-meta__date date">2019-05-19</time> 
+
+      <span class="post-meta__tags tags">
+
+          
+            <font class="categories">
+            &#8226; 分类:
+            <a class="categories-link" href="/categories/code/">code</a>
+            </font>
+          
+
+          
+
+      </span>
+    </div>
+    
+    
+
+  </header>
+
+  <section id="post-content" class="article-content post">
+    <h4 id="1-1-Class文件解析"><a href="#1-1-Class文件解析" class="headerlink" title="1.1 Class文件解析"></a>1.1 Class文件解析</h4><ol>
+<li>读取4个字节的<strong>magic</strong>值，CAFEBABE</li>
+<li>读取2个字节<strong>minorVersion</strong>,2个字节的<strong>majorVersion</strong></li>
+<li><strong>constantPool</strong>先读取2个字节的常量池大小，依次读取常量，先读1个字节的常量类型（常量类型共14种），根据不同类型再读取不同字节数。   <ol>
+<li><strong>Integer</strong>和<strong>Float</strong>类型读取4个字节，Long和<strong>Double</strong>类型读取8个字节。</li>
+<li><strong>Utf8</strong>类型读取2个字节的长度然后，然后再读取该长度的字节数。</li>
+<li><strong>String</strong>类型读取2个字节的stringIndex(指向Utf8类型)</li>
+<li><strong>Class</strong>类型读取2个字节的nameIndex(指向Utf8类型)</li>
+<li><strong>NameAndType</strong>类型读取2个字节的nameIndex,2个字节的descriptorIndex，都指向Utf8类型</li>
+<li><strong>Fieldref, Methodref</strong> 和 <strong>InterfaceMethodref</strong> 都读取2个字节的classIndex(指向Class类型)和2个字节的nameAndTypeIndex(指向NameAndType类型)</li>
+<li><strong>MethodHandle</strong>类型读取1个字节的referenceKind和2个字节的referenceIndex, MethodType类型读取2个字节的descriptorIndex。</li>
+<li><strong>InvokeDynamic</strong>类型读取2个字节的bootstrapMethodAttrIndex, 2个字节的nameAndTypeIndex(指向NameAndType类型)</li>
+</ol>
+</li>
+<li>读取2个字节的<strong>accessFlags</strong></li>
+<li>读取2个字节的<strong>thisClass</strong> (指向constantPool Class类型)</li>
+<li>读取2个字节的<strong>superClass</strong> (指向constantPool Class类型)</li>
+<li>读取2个字节的接口长度，然后根据长度读取<strong>interfaces</strong> (一个uint16数组，都指向constantPool Class类型)</li>
+<li><strong>fields</strong> 读取2个字节的field数量，依次读取每个filed, 每个field先读取2个字节accessFlags, 然后读取2个字节的nameIndex,2个字节的descriptorIndex(都指向Utf8类型)，然后读取attributes</li>
+<li><strong>methods</strong> 读取2个字节的method数量，依次读取每个method, 每个method先读取2个字节accessFlags, 然后读取2个字节的nameIndex,2个字节的descriptorIndex(都指向Utf8类型)，然后读取attributes</li>
+<li><strong>attributes</strong> 读取2个字节的attribute数量，依次读取每个attribute, 每个attribute先读取2个字节的attrNameIndex(指向Utf8类型)，获取utf8值attrName,然后读取4个字节的属性长度，根据attrName构建不同的attribute类型。++Java虚拟机规范预定义23种，这里先解析其中8种。23种分3组，1虚拟机必需，2Java类库必需，3提供给工具类。++<ol>
+<li><strong>ConstantValue类型</strong>，读取2个字节的index，指向常量池引用，具体指向什么常量由字段类型决定。++存在于field_info,1++</li>
+<li><strong>Deprecated</strong>类型，仅标记，不读取字节。 ++存在于ClassFile,field_info,method_info,3++</li>
+<li><strong>Synthetic</strong>类型，仅标记，不读取字节。 ++存在于ClassFile,field_info,method_info,2++</li>
+<li><strong>Code</strong>类型，先读取2个字节max_stack(操作数栈最大深度)，2个字节max_locals(局部变量表大小)，4个字节字节码长度，然后读取该长度的字节码code，接着读取异常表exceptionTable，attributes。++存在于method_info,1++<ol>
+<li>exceptionTable先读取2个字节的异常表大小，然后依次读取每个异常，每个异常读取2个字节的startPc，2个字节的endPc，2个字节的handlerPc，2个字节的catchType.</li>
+</ol>
+</li>
+<li><strong>Exceptions</strong>类型，记录方法抛出的记录表，读取uint16数组(先读取2个字节的数组大小，然后依次读取2个字节)。++存在于method_info,1++</li>
+<li><strong>LineNumberTable</strong>类型，存放方法的行号信息，先读取2个字节的行号表大小，然后每个行号表读取2个字节startPc,2个字节lineNumber。++存在于Code，3++</li>
+<li><strong>LocalVariableAttribute</strong>类型，存放方法的局部变量信息，先读取2个字节的局部变量表大小，然后每个局部表量读取2个字节的startPc，2个字节length，2个字节nameIndex，2个字节descriptorIndex，2个字节index。++存在于Code，3++</li>
+<li><strong>SourceFile</strong>类型，读取2个字节sourceFileIndex(指向utf8常量类型)。++存在于ClassFile,3++</li>
+</ol>
+</li>
+</ol>
+<h4 id="1-2-ClassFile类结构"><a href="#1-2-ClassFile类结构" class="headerlink" title="1.2 ClassFile类结构"></a>1.2 ClassFile类结构</h4><p>根据1.1中的解析规则可以定义相关类结构。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">type ClassFile struct &#123;</div><div class="line">	magic        uint32</div><div class="line">	minorVersion uint16</div><div class="line">	majorVersion uint16</div><div class="line">	constantPool ConstantPool</div><div class="line">	accessFlags  uint16</div><div class="line">	thisClass    uint16</div><div class="line">	superClass   uint16</div><div class="line">	interfaces   []uint16</div><div class="line">	fields       []*MemberInfo</div><div class="line">	methods      []*MemberInfo</div><div class="line">	attributes   []AttributeInfo</div><div class="line">&#125;</div><div class="line">/**</div><div class="line">    将二进制转化为ClassFile</div><div class="line">*/</div><div class="line">func Parse(classData []byte) (cf *ClassFile, err error) &#123;</div><div class="line">	defer func() &#123;</div><div class="line">		if r := recover(); r != nil &#123;</div><div class="line">			var ok bool</div><div class="line">			err, ok = r.(error)</div><div class="line">			if !ok &#123;</div><div class="line">				err = fmt.Errorf(&quot;%v&quot;, r)</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;()</div><div class="line">	cr := &amp;ClassReader&#123;classData&#125;</div><div class="line">	cf = &amp;ClassFile&#123;&#125;</div><div class="line">	cf.read(cr)</div><div class="line">	return</div><div class="line">&#125;</div><div class="line">/**</div><div class="line">    依次读取字节进行解析</div><div class="line">*/</div><div class="line">func (self *ClassFile) read(reader *ClassReader) &#123;</div><div class="line">	self.readAndCheckMagic(reader)</div><div class="line">	self.readAndCheckVersion(reader)</div><div class="line">	self.constantPool = readConstantPool(reader)</div><div class="line">	self.accessFlags = reader.readUint16()</div><div class="line">	self.thisClass = reader.readUint16()</div><div class="line">	self.superClass = reader.readUint16()</div><div class="line">	self.interfaces = reader.readUint16s()</div><div class="line">	self.fields = readMembers(reader, self.constantPool)</div><div class="line">	self.methods = readMembers(reader, self.constantPool)</div><div class="line">	self.attributes = readAttributes(reader, self.constantPool)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>校验magic值</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">func (self *ClassFile) readAndCheckMagic(reader *ClassReader) &#123;</div><div class="line">	magic := reader.readUint32()</div><div class="line">	if magic != 0xCAFEBABE &#123;</div><div class="line">		panic(&quot;java.lang.ClassFormatError: magic!&quot;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>校验minor和major的version</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func (self *ClassFile) readAndCheckVersion(reader *ClassReader) &#123;</div><div class="line">	self.minorVersion = reader.readUint16()</div><div class="line">	self.majorVersion = reader.readUint16()</div><div class="line">	switch self.majorVersion &#123;</div><div class="line">	case 45:</div><div class="line">		return</div><div class="line">	case 46, 47, 48, 49, 50, 51, 52:</div><div class="line">		if self.minorVersion == 0 &#123;</div><div class="line">			return</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	panic(&quot;java.lang.UnsupportedClassVersionError!&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-3-常量池结构"><a href="#1-3-常量池结构" class="headerlink" title="1.3 常量池结构"></a>1.3 常量池结构</h4><p>ClassFile中读取常量池，这里定义常量的相关类型和结构。   </p>
+<p>常量类型</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">const (</div><div class="line">	CONSTANT_Class              = 7</div><div class="line">	CONSTANT_Fieldref           = 9</div><div class="line">	CONSTANT_Methodref          = 10</div><div class="line">	CONSTANT_InterfaceMethodref = 11</div><div class="line">	CONSTANT_String             = 8</div><div class="line">	CONSTANT_Integer            = 3</div><div class="line">	CONSTANT_Float              = 4</div><div class="line">	CONSTANT_Long               = 5</div><div class="line">	CONSTANT_Double             = 6</div><div class="line">	CONSTANT_NameAndType        = 12</div><div class="line">	CONSTANT_Utf8               = 1</div><div class="line">	CONSTANT_MethodHandle       = 15</div><div class="line">	CONSTANT_MethodType         = 16</div><div class="line">	CONSTANT_InvokeDynamic      = 18</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>常量ConstantInfo结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">type ConstantInfo interface &#123;</div><div class="line">	readInfo(reader *ClassReader)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo &#123;</div><div class="line">	tag := reader.readUint8()</div><div class="line">	c := newConstantInfo(tag, cp)</div><div class="line">	c.readInfo(reader)</div><div class="line">	return c</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo &#123;</div><div class="line">	switch tag &#123;</div><div class="line">	case CONSTANT_Integer:</div><div class="line">		return &amp;ConstantIntegerInfo&#123;&#125;</div><div class="line">	case CONSTANT_Float:</div><div class="line">		return &amp;ConstantFloatInfo&#123;&#125;</div><div class="line">	case CONSTANT_Long:</div><div class="line">		return &amp;ConstantLongInfo&#123;&#125;</div><div class="line">	case CONSTANT_Double:</div><div class="line">		return &amp;ConstantDoubleInfo&#123;&#125;</div><div class="line">	case CONSTANT_Utf8:</div><div class="line">		return &amp;ConstantUtf8Info&#123;&#125;</div><div class="line">	case CONSTANT_String:</div><div class="line">		return &amp;ConstantStringInfo&#123;cp: cp&#125;</div><div class="line">	case CONSTANT_Class:</div><div class="line">		return &amp;ConstantClassInfo&#123;cp: cp&#125;</div><div class="line">	case CONSTANT_Fieldref:</div><div class="line">		return &amp;ConstantFieldrefInfo&#123;ConstantMemberrefInfo&#123;cp: cp&#125;&#125;</div><div class="line">	case CONSTANT_Methodref:</div><div class="line">		return &amp;ConstantMethodrefInfo&#123;ConstantMemberrefInfo&#123;cp: cp&#125;&#125;</div><div class="line">	case CONSTANT_InterfaceMethodref:</div><div class="line">		return &amp;ConstantInterfaceMethodrefInfo&#123;ConstantMemberrefInfo&#123;cp: cp&#125;&#125; // FieldRef,MethodRef和InterfaceMethodRef都由MemberRef实现</div><div class="line">	case CONSTANT_NameAndType:</div><div class="line">		return &amp;ConstantNameAndTypeInfo&#123;&#125;</div><div class="line">	case CONSTANT_MethodType:</div><div class="line">		return &amp;ConstantMethodTypeInfo&#123;&#125;</div><div class="line">	case CONSTANT_MethodHandle:</div><div class="line">		return &amp;ConstantMethodHandleInfo&#123;&#125;</div><div class="line">	case CONSTANT_InvokeDynamic:</div><div class="line">		return &amp;ConstantInvokeDynamicInfo&#123;&#125;</div><div class="line">	default:</div><div class="line">		panic(&quot;java.lang.ClassFormatError: constant pool tag!&quot;)</div><div class="line"></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>常量池ConstantPool</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">type ConstantPool []ConstantInfo</div><div class="line"></div><div class="line">func readConstantPool(reader *ClassReader) ConstantPool &#123;</div><div class="line">	cpCount := int(reader.readUint16())</div><div class="line">	cp := make([]ConstantInfo, cpCount)</div><div class="line"></div><div class="line">	for i := 1; i &lt; cpCount; i++ &#123;</div><div class="line">		cp[i] = readConstantInfo(reader, cp)</div><div class="line">		switch cp[i].(type) &#123;</div><div class="line">		case *ConstantLongInfo, *ConstantDoubleInfo:</div><div class="line">			i++ // long和double32位</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	return cp</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="1-4-域和方法"><a href="#1-4-域和方法" class="headerlink" title="1.4 域和方法"></a>1.4 域和方法</h4><p>因为域和方法的读取规则相同，其特殊在不同的attributes属性中，故统一用MemeberInfo结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">type MemberInfo struct &#123;</div><div class="line">	cp              ConstantPool</div><div class="line">	accessFlags     uint16</div><div class="line">	nameIndex       uint16</div><div class="line">	descriptorIndex uint16</div><div class="line">	attributes      []AttributeInfo</div><div class="line">&#125;</div><div class="line"></div><div class="line">func readMembers(reader *ClassReader, cp ConstantPool) []*MemberInfo &#123;</div><div class="line">	memberCount := reader.readUint16()</div><div class="line">	members := make([]*MemberInfo, memberCount)</div><div class="line">	for i := range members &#123;</div><div class="line">		members[i] = readMember(reader, cp)</div><div class="line">	&#125;</div><div class="line">	return members</div><div class="line">&#125;</div><div class="line"></div><div class="line">func readMember(reader *ClassReader, cp ConstantPool) *MemberInfo &#123;</div><div class="line">	return &amp;MemberInfo&#123;</div><div class="line">		cp:              cp,</div><div class="line">		accessFlags:     reader.readUint16(),</div><div class="line">		nameIndex:       reader.readUint16(),</div><div class="line">		descriptorIndex: reader.readUint16(),</div><div class="line">		attributes:      readAttributes(reader, cp),</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="1-5-属性"><a href="#1-5-属性" class="headerlink" title="1.5 属性"></a>1.5 属性</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">type AttributeInfo interface &#123;</div><div class="line">	readInfo(reader *ClassReader)</div><div class="line">&#125;</div><div class="line"></div><div class="line">func readAttributes(reader *ClassReader, cp ConstantPool) []AttributeInfo &#123;</div><div class="line">	attributesCount := reader.readUint16()</div><div class="line">	attributes := make([]AttributeInfo, attributesCount)</div><div class="line">	for i := range attributes &#123;</div><div class="line">		attributes[i] = readAttribute(reader, cp)</div><div class="line">	&#125;</div><div class="line">	return attributes</div><div class="line">&#125;</div><div class="line"></div><div class="line">func readAttribute(reader *ClassReader, cp ConstantPool) AttributeInfo &#123;</div><div class="line">	attrNameIndex := reader.readUint16()</div><div class="line">	attrName := cp.getUtf8(attrNameIndex)</div><div class="line">	attrLen := reader.readUint32()</div><div class="line">	attrInfo := newAttributeInfo(attrName, attrLen, cp)</div><div class="line">	attrInfo.readInfo(reader)</div><div class="line">	return attrInfo</div><div class="line">&#125;</div><div class="line"></div><div class="line">func newAttributeInfo(attrName string, attrLen uint32, cp ConstantPool) AttributeInfo &#123;</div><div class="line">	switch attrName &#123;</div><div class="line">	case &quot;Code&quot;:</div><div class="line">		return &amp;CodeAttribute&#123;cp: cp&#125;</div><div class="line">	case &quot;ConstantValue&quot;:</div><div class="line">		return &amp;ConstantValueAttribute&#123;&#125;</div><div class="line">	case &quot;Deprecated&quot;:</div><div class="line">		return &amp;DeprecatedAttribute&#123;&#125;</div><div class="line">	case &quot;Exceptions&quot;:</div><div class="line">		return &amp;ExceptionsAttribute&#123;&#125;</div><div class="line">	case &quot;LineNumberTable&quot;:</div><div class="line">		return &amp;LineNumberTableAttribute&#123;&#125;</div><div class="line">	case &quot;LocalVariableTable&quot;:</div><div class="line">		return &amp;LocalVariableTableAttribute&#123;&#125;</div><div class="line">	case &quot;SourceFile&quot;:</div><div class="line">		return &amp;SourceFileAttribute&#123;cp: cp&#125;</div><div class="line">	case &quot;Synthetic&quot;:</div><div class="line">		return &amp;SyntheticAttribute&#123;&#125;</div><div class="line">	... //篇幅有限，不具体展开</div><div class="line">	default:</div><div class="line">		return &amp;UnparsedAttribute&#123;name: attrName, length: attrLen&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这就是简单的Class文件解析，因为篇幅问题，setter/getter方法，已经ConstantInfo接口的实现类和AttributeInfo接口的实现类等不再给出。</p>
+
+  </section>
+
+  
+  
+</article>
+
+
+            <footer class="footer">
+
+    <span class="footer__copyright">&copy; 2014-2015. | 由<a href="https://hexo.io/">Hexo</a>强力驱动 | 主题<a href="https://github.com/someus/huno">Huno</a></span>
+    
+</footer>
+        </div>
+    </div>
+
+    <!-- js files -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/scale.fix.js"></script>
+    
+
+    
+
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript"> 
+        $(document).ready(function(){
+            MathJax.Hub.Config({ 
+                tex2jax: {inlineMath: [['[latex]','[/latex]'], ['\\(','\\)']]} 
+            });
+        });
+    </script>
+
+
+    
+
+    <script src="/js/awesome-toc.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.awesome_toc({
+                overlay: true,
+                contentId: "post-content",
+            });
+        });
+    </script>
+
+
+    
+    
+    <!--kill ie6 -->
+<!--[if IE 6]>
+  <script src="//letskillie6.googlecode.com/svn/trunk/2/zh_CN.js"></script>
+<![endif]-->
+
+</body>
+</html>

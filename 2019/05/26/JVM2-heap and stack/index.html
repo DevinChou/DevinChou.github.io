@@ -7,7 +7,7 @@
     
 
     <title>
-      JVMʵ��(��)-��ջ | Rousseau Chou&#39;s Blog 
+      JVM实现(二)-堆栈 | Rousseau Chou&#39;s Blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -16,16 +16,16 @@
     
     
 
-    <meta name="description" content="2.1 ����ʱ����������ʱ��������Ϊ���ࣺһ���Ƕ��̹߳���ģ���һ�������߳�˽�еġ����̹߳�����ڴ�������Ҫ����������ݣ������ݺ���ʵ��(Ҳ����java����)���������ݴ������(heap)�У������ݴ����������(Method Area)�С������ݰ����ֶκͷ�����Ϣ��">
+    <meta name="description" content="2.1 运行时数据区运行时数据区分为两类：一类是多线程共享的，另一类则是线程私有的。多线程共享的内存区域主要存放两类数据：类数据和类实例(也就是java对象)。对象数据存放在堆(heap)中，类数据存放在方法区(Method Area)中。类数据包括字段和方法信息，方法的字节码，运行时常量等。线程私有的运行时数据区用于辅助执行字节码。每个线程都有自己的pc寄存器(Program counter)和">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVMʵ��(��)-��ջ | Rousseau Chou's Blog">
+<meta property="og:title" content="JVM实现(二)-堆栈 | Rousseau Chou's Blog">
 <meta property="og:url" content="http://yoursite.com/2019/05/26/JVM2-heap and stack/index.html">
 <meta property="og:site_name" content="Rousseau Chou's Blog">
-<meta property="og:description" content="2.1 ����ʱ����������ʱ��������Ϊ���ࣺһ���Ƕ��̹߳���ģ���һ�������߳�˽�еġ����̹߳�����ڴ�������Ҫ����������ݣ������ݺ���ʵ��(Ҳ����java����)���������ݴ������(heap)�У������ݴ����������(Method Area)�С������ݰ����ֶκͷ�����Ϣ��">
-<meta property="og:updated_time" content="2019-07-21T18:32:11.257Z">
+<meta property="og:description" content="2.1 运行时数据区运行时数据区分为两类：一类是多线程共享的，另一类则是线程私有的。多线程共享的内存区域主要存放两类数据：类数据和类实例(也就是java对象)。对象数据存放在堆(heap)中，类数据存放在方法区(Method Area)中。类数据包括字段和方法信息，方法的字节码，运行时常量等。线程私有的运行时数据区用于辅助执行字节码。每个线程都有自己的pc寄存器(Program counter)和">
+<meta property="og:updated_time" content="2019-07-21T18:56:31.135Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVMʵ��(��)-��ջ | Rousseau Chou's Blog">
-<meta name="twitter:description" content="2.1 ����ʱ����������ʱ��������Ϊ���ࣺһ���Ƕ��̹߳���ģ���һ�������߳�˽�еġ����̹߳�����ڴ�������Ҫ����������ݣ������ݺ���ʵ��(Ҳ����java����)���������ݴ������(heap)�У������ݴ����������(Method Area)�С������ݰ����ֶκͷ�����Ϣ��">
+<meta name="twitter:title" content="JVM实现(二)-堆栈 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="2.1 运行时数据区运行时数据区分为两类：一类是多线程共享的，另一类则是线程私有的。多线程共享的内存区域主要存放两类数据：类数据和类实例(也就是java对象)。对象数据存放在堆(heap)中，类数据存放在方法区(Method Area)中。类数据包括字段和方法信息，方法的字节码，运行时常量等。线程私有的运行时数据区用于辅助执行字节码。每个线程都有自己的pc寄存器(Program counter)和">
     
     
     
@@ -157,7 +157,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">JVMʵ��(��)-��ջ</h1>
+    <h1 class="post-title">JVM实现(二)-堆栈</h1>
 
     
 
@@ -183,16 +183,16 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <h4 id="2-1-����ʱ������"><a href="#2-1-����ʱ������" class="headerlink" title="2.1 ����ʱ������"></a>2.1 ����ʱ������</h4><p>����ʱ��������Ϊ���ࣺһ���Ƕ��̹߳���ģ���һ�������߳�˽�еġ�<br>���̹߳�����ڴ�������Ҫ����������ݣ������ݺ���ʵ��(Ҳ����java����)���������ݴ����<strong>��</strong>(heap)�У������ݴ����<strong>������</strong>(Method Area)�С������ݰ����ֶκͷ�����Ϣ���������ֽ��룬����ʱ�����ȡ�<br>�߳�˽�е�����ʱ���������ڸ���ִ���ֽ��롣ÿ���̶߳����Լ���<strong>pc�Ĵ�</strong>��(Program counter)��<strong>�����ջ</strong>(JVM Stack)�������ջ����<strong>ջ֡</strong>(Stack Freame)��ɣ�֡�б��淽����ִ��״̬,����<strong>�ֲ�������</strong>(Local Variable)��<strong>������ջ</strong>(Operand Stack)������һʱ�̣��̱߳ض���ִ��ĳ��������</p>
-<h4 id="2-2-ʵ������ʱ������"><a href="#2-2-ʵ������ʱ������" class="headerlink" title="2.2 ʵ������ʱ������"></a>2.2 ʵ������ʱ������</h4><p>jvm�淶��java�����ջ��Լ���ܿ��ɡ������������Ŀռ䣬Ҳ�����ǲ������������ǹ̶���С��Ҳ�����Ƕ�̬��չ���̶���С���׳�StackOverflowError����̬��չ�ľ��ڴ���׳�OutOfMemoryError��<br>�߳�Thread�ṹ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type Thread struct &#123;</div><div class="line">	pc    int</div><div class="line">	stack *Stack</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Stack�ṹ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">type Stack struct &#123;</div><div class="line">	maxSize uint // ջ������</div><div class="line">	size    uint // ջ�Ĵ�С</div><div class="line">	_top    *Frame // ջ����ջ֡</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Frame�ṹ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type Frame struct &#123;</div><div class="line">	lower *Frame // ���ṹ</div><div class="line">	localVars LocalVars // �ֲ�������</div><div class="line">	operandStack *OperandStack // ������ջ</div><div class="line">	method *heap.Method // ��ǰ����</div><div class="line">	thread *Thread // �����߳�</div><div class="line">	nextPc int // �¸��Ĵ�����ַ</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>LocalVars�ṹ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">type LocalVars []Slot</div><div class="line"></div><div class="line">type Slot struct &#123;</div><div class="line">	num int32    // ��������</div><div class="line">	ref *heap.Object  // ��������</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>OperandStack�ṹ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type OperandStack struct &#123;</div><div class="line">	size uint // ����ջ��С</div><div class="line">	slots []Slot // ���ջ������</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+    <h4 id="2-1-运行时数据区"><a href="#2-1-运行时数据区" class="headerlink" title="2.1 运行时数据区"></a>2.1 运行时数据区</h4><p>运行时数据区分为两类：一类是多线程共享的，另一类则是线程私有的。<br>多线程共享的内存区域主要存放两类数据：类数据和类实例(也就是java对象)。对象数据存放在<strong>堆</strong>(heap)中，类数据存放在<strong>方法区</strong>(Method Area)中。类数据包括字段和方法信息，方法的字节码，运行时常量等。<br>线程私有的运行时数据区用于辅助执行字节码。每个线程都有自己的<strong>pc寄存</strong>器(Program counter)和<strong>虚拟机栈</strong>(JVM Stack)。虚拟机栈又由<strong>栈帧</strong>(Stack Freame)组成，帧中保存方法的执行状态,包括<strong>局部变量表</strong>(Local Variable)和<strong>操作数栈</strong>(Operand Stack)。在任一时刻，线程必定在执行某个方法。</p>
+<h4 id="2-2-实现运行时方法区"><a href="#2-2-实现运行时方法区" class="headerlink" title="2.2 实现运行时方法区"></a>2.2 实现运行时方法区</h4><p>jvm规范对java虚拟机栈的约束很宽松。可以是连续的空间，也可以是不连续，可以是固定大小，也可以是动态扩展。固定大小会抛出StackOverflowError，动态扩展耗尽内存会抛出OutOfMemoryError。<br>线程Thread结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type Thread struct &#123;</div><div class="line">	pc    int</div><div class="line">	stack *Stack</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Stack结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">type Stack struct &#123;</div><div class="line">	maxSize uint // 栈的容量</div><div class="line">	size    uint // 栈的大小</div><div class="line">	_top    *Frame // 栈顶的栈帧</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Frame结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type Frame struct &#123;</div><div class="line">	lower *Frame // 链结构</div><div class="line">	localVars LocalVars // 局部变量表</div><div class="line">	operandStack *OperandStack // 操作数栈</div><div class="line">	method *heap.Method // 当前方法</div><div class="line">	thread *Thread // 所属线程</div><div class="line">	nextPc int // 下个寄存器地址</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>LocalVars结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">type LocalVars []Slot</div><div class="line"></div><div class="line">type Slot struct &#123;</div><div class="line">	num int32    // 基本类型</div><div class="line">	ref *heap.Object  // 引用类型</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>OperandStack结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">type OperandStack struct &#123;</div><div class="line">	size uint // 操作栈大小</div><div class="line">	slots []Slot // 存放栈内数据</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
   </section>
 

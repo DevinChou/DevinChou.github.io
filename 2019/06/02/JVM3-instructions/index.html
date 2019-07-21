@@ -7,7 +7,7 @@
     
 
     <title>
-      JVMʵ��(��)-ָ� | Rousseau Chou&#39;s Blog 
+      JVM实现(三)-指令集 | Rousseau Chou&#39;s Blog 
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -16,16 +16,19 @@
     
     
 
-    <meta name="description" content="3.1 ָ�ÿ��ָ���һ�����ֽڵĲ�����(opcode)��ͷ��java��������֧��256��ָ���JDK1.8��Java������淶�Ѷ�����205��ָ��ֱ���0(0x00)��202(OxCA),204(0xFE)��255(0xFF)��Java�����ʹ�ñ䳤ָ������������Ը����ֽڻ���ֽڵĲ�����(operand">
+    <meta name="description" content="3.1 指令集每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。
+由于操作数栈和局部变量表只存放数据的值，并不记录数据类型，因此指令必须知">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JVMʵ��(��)-ָ� | Rousseau Chou's Blog">
+<meta property="og:title" content="JVM实现(三)-指令集 | Rousseau Chou's Blog">
 <meta property="og:url" content="http://yoursite.com/2019/06/02/JVM3-instructions/index.html">
 <meta property="og:site_name" content="Rousseau Chou's Blog">
-<meta property="og:description" content="3.1 ָ�ÿ��ָ���һ�����ֽڵĲ�����(opcode)��ͷ��java��������֧��256��ָ���JDK1.8��Java������淶�Ѷ�����205��ָ��ֱ���0(0x00)��202(OxCA),204(0xFE)��255(0xFF)��Java�����ʹ�ñ䳤ָ������������Ը����ֽڻ���ֽڵĲ�����(operand">
-<meta property="og:updated_time" content="2019-07-21T18:32:15.436Z">
+<meta property="og:description" content="3.1 指令集每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。
+由于操作数栈和局部变量表只存放数据的值，并不记录数据类型，因此指令必须知">
+<meta property="og:updated_time" content="2019-07-21T18:56:58.700Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JVMʵ��(��)-ָ� | Rousseau Chou's Blog">
-<meta name="twitter:description" content="3.1 ָ�ÿ��ָ���һ�����ֽڵĲ�����(opcode)��ͷ��java��������֧��256��ָ���JDK1.8��Java������淶�Ѷ�����205��ָ��ֱ���0(0x00)��202(OxCA),204(0xFE)��255(0xFF)��Java�����ʹ�ñ䳤ָ������������Ը����ֽڻ���ֽڵĲ�����(operand">
+<meta name="twitter:title" content="JVM实现(三)-指令集 | Rousseau Chou's Blog">
+<meta name="twitter:description" content="3.1 指令集每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。
+由于操作数栈和局部变量表只存放数据的值，并不记录数据类型，因此指令必须知">
     
     
     
@@ -157,7 +160,7 @@ classes that you can use:
 
   <header class="post-header">
     
-    <h1 class="post-title">JVMʵ��(��)-ָ�</h1>
+    <h1 class="post-title">JVM实现(三)-指令集</h1>
 
     
 
@@ -183,13 +186,13 @@ classes that you can use:
   </header>
 
   <section id="post-content" class="article-content post">
-    <h4 id="3-1-ָ�"><a href="#3-1-ָ�" class="headerlink" title="3.1 ָ�"></a>3.1 ָ�</h4><p>ÿ��ָ���һ�����ֽڵĲ�����(opcode)��ͷ��java��������֧��256��ָ���JDK1.8��Java������淶�Ѷ�����205��ָ��ֱ���0(0x00)��202(OxCA),204(0xFE)��255(0xFF)��<br>Java�����ʹ�ñ䳤ָ������������Ը����ֽڻ���ֽڵĲ�����(operand)��</p>
-<p>���ڲ�����ջ�;ֲ�������ֻ������ݵ�ֵ��������¼�������ͣ����ָ�����֪���Լ��ڲ���ʲô���͵����ݡ�����iaddָ����Ƕ�int���ͽ��мӷ�������dstoreָ��Ѳ�����ջ����double���͵������浽�ֲ�������</p>
+    <h4 id="3-1-指令集"><a href="#3-1-指令集" class="headerlink" title="3.1 指令集"></a>3.1 指令集</h4><p>每条指令都以一个单字节的操作码(opcode)开头，java虚拟机最多支持256条指令。至JDK1.8，Java虚拟机规范已定义了205条指令，分别是0(0x00)到202(OxCA),204(0xFE)和255(0xFF)。<br>Java虚拟机使用变长指令，操作码后面可以跟零字节或多字节的操作数(operand)。</p>
+<p>由于操作数栈和局部变量表只存放数据的值，并不记录数据类型，因此指令必须知道自己在操作什么类型的数据。例如iadd指令就是对int类型进行加法操作，dstore指令把操作数栈顶的double类型弹出储存到局部变量表。</p>
 <table>
 <thead>
 <tr>
-<th>���Ƿ�����ĸ</th>
-<th>��������</th>
+<th>助记符首字母</th>
+<th>数据类型</th>
 </tr>
 </thead>
 <tbody>
@@ -227,67 +230,67 @@ classes that you can use:
 </tr>
 </tbody>
 </table>
-<p>Java������淶���Ѷ����205��ָ���Ϊ11��<br>����(constants)������(loads)���洢(stores)��������ջ(stack)����ѧ(math)��ת��(conversions)���Ƚ�(comparisons)������(control)������(references)����չ(extended)�ͱ���(reserved)��</p>
-<h4 id="3-2-ָ�����ʵ��"><a href="#3-2-ָ�����ʵ��" class="headerlink" title="3.2 ָ�����ʵ��"></a>3.2 ָ�����ʵ��</h4><p>ָ��ӿ�</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type Instruction interface &#123;</div><div class="line"></div><div class="line">	/**</div><div class="line">	   ��ȡ������</div><div class="line">	 */</div><div class="line">	FetchOperands(reader *ByteCodeReader)</div><div class="line"></div><div class="line">	/**</div><div class="line">	   ִ��ָ���߼�</div><div class="line">	 */</div><div class="line">	Execute(frame *rtda.Frame)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>�޲�����ָ��</p>
+<p>Java虚拟机规范将已定义的205条指令分为11类<br>常量(constants)，加载(loads)，存储(stores)，操作数栈(stack)，数学(math)，转换(conversions)，比较(comparisons)，控制(control)，引用(references)，扩展(extended)和保留(reserved)。</p>
+<h4 id="3-2-指令基础实现"><a href="#3-2-指令基础实现" class="headerlink" title="3.2 指令基础实现"></a>3.2 指令基础实现</h4><p>指令接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type Instruction interface &#123;</div><div class="line"></div><div class="line">	/**</div><div class="line">	   提取操作数</div><div class="line">	 */</div><div class="line">	FetchOperands(reader *ByteCodeReader)</div><div class="line"></div><div class="line">	/**</div><div class="line">	   执行指令逻辑</div><div class="line">	 */</div><div class="line">	Execute(frame *rtda.Frame)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>无操作数指令</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type NoOperandsInstruction struct &#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *NoOperandsInstruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	// nothing to do</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>��תָ��</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type BranchInstruction struct &#123;</div><div class="line">	Offset int // ��תƫ����</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *BranchInstruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Offset = int(reader.ReadInt16())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>�洢�ͼ�����ָ����Ҫ����������ȡ�ֲ������������ɵ��ֽڲ���������<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type Index8Instruction struct &#123;</div><div class="line">	Index uint // �ֲ�����������</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Index8Instruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Index = uint(reader.ReadUint8())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>��һЩָ����Ҫ��������ʱ�����أ����������������ֽڲ���������<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type Index16Instruction struct &#123;</div><div class="line">	Index uint // �ֲ�����������</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Index16Instruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Index = uint(reader.ReadUint16())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h4 id="3-3-constantsָ��"><a href="#3-3-constantsָ��" class="headerlink" title="3.3 constantsָ��"></a>3.3 constantsָ��</h4><p>3.3.1 nopָ�<br>������ | ָ���� | ����<br>—|—|—<br>0x00 | nop | ʲôҲ����<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type NOP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *NOP) Execute(frame *rtda.Frame)  &#123;</div><div class="line">  // nothing to do</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3.3.2 constϵ��ָ����ڲ������еĳ���ֵ���������ջ������15��ָ�<br>������ | ָ���� | ����<br>—|—|—<br>0x01 | aconst_null | ��null��������ջ<br>0x02 | iconst_m1 | int�ͳ���ֵ-1��ջ<br>0x03 | iconst_0 | int�ͳ���ֵ0��ջ<br>0x04 | iconst_1 | int�ͳ���ֵ1��ջ<br>0x05 | iconst_2 | int�ͳ���ֵ2��ջ<br>0x06 | iconst_3 | int�ͳ���ֵ3��ջ<br>0x07 | iconst_4 | int�ͳ���ֵ4��ջ<br>0x08 | iconst_5 | int�ͳ���ֵ5��ջ<br>0x09 | lconst_0 | long�ͳ���ֵ0��ջ<br>0x0A | lconst_1 | long�ͳ���ֵ1��ջ<br>0x0B | fconst_0 | float�ͳ���ֵ0��ջ<br>0x0C | fconst_1 | float�ͳ���ֵ1��ջ<br>0x0D | fconst_2 | float�ͳ���ֵ2��ջ<br>0x0E | dconst_0 | double�ͳ���ֵ0��ջ<br>0x0F | dconst_1 | double�ͳ���ֵ1��ջ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type ACONST_NULL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ACONST_NULL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	frame.OperandStack().PushRef(nil)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3.3.3 ipushָ��Ӳ�������ȡһ��byte���ͻ�short���ͣ���չ��int���ͣ�����ջ����<br>������ | ָ���� | ����<br>—|—|—<br>0x10 | bipush | ��һ��byte�ͳ���ֵ������ջ��<br>0x11 | sipush | ��һ��short�ͳ���ֵ������ջ��</p>
+<p>跳转指令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type BranchInstruction struct &#123;</div><div class="line">	Offset int // 跳转偏移量</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *BranchInstruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Offset = int(reader.ReadInt16())</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>存储和加载类指令需要根据索引存取局部变量表，索引由单字节操作数给出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type Index8Instruction struct &#123;</div><div class="line">	Index uint // 局部变量表索引</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Index8Instruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Index = uint(reader.ReadUint8())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>有一些指令需要访问运行时常量池，常量池索引由两字节操作数给出<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type Index16Instruction struct &#123;</div><div class="line">	Index uint // 局部变量表索引</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *Index16Instruction) FetchOperands(reader *ByteCodeReader) &#123;</div><div class="line">	self.Index = uint(reader.ReadUint16())</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="3-3-constants指令"><a href="#3-3-constants指令" class="headerlink" title="3.3 constants指令"></a>3.3 constants指令</h4><p>3.3.1 nop指令。<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x00 | nop | 什么也不做<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type NOP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *NOP) Execute(frame *rtda.Frame)  &#123;</div><div class="line">  // nothing to do</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.3.2 const系列指令。把在操作码中的常量值推入操作数栈顶，共15条指令。<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x01 | aconst_null | 把null引用推入栈<br>0x02 | iconst_m1 | int型常量值-1进栈<br>0x03 | iconst_0 | int型常量值0进栈<br>0x04 | iconst_1 | int型常量值1进栈<br>0x05 | iconst_2 | int型常量值2进栈<br>0x06 | iconst_3 | int型常量值3进栈<br>0x07 | iconst_4 | int型常量值4进栈<br>0x08 | iconst_5 | int型常量值5进栈<br>0x09 | lconst_0 | long型常量值0进栈<br>0x0A | lconst_1 | long型常量值1进栈<br>0x0B | fconst_0 | float型常量值0进栈<br>0x0C | fconst_1 | float型常量值1进栈<br>0x0D | fconst_2 | float型常量值2进栈<br>0x0E | dconst_0 | double型常量值0进栈<br>0x0F | dconst_1 | double型常量值1进栈<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type ACONST_NULL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ACONST_NULL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	frame.OperandStack().PushRef(nil)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.3.3 ipush指令。从操作数获取一个byte类型或short类型，扩展成int类型，推入栈顶。<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x10 | bipush | 将一个byte型常量值推送至栈顶<br>0x11 | sipush | 将一个short型常量值推送至栈顶</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type BIPUSH struct &#123;</div><div class="line">	val int8</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *BIPUSH) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	self.val = reader.ReadInt8()</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *BIPUSH) Execute(frame *rtda.Frame) &#123;</div><div class="line">	frame.OperandStack().PushInt(int32(self.val))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.3.4 ldcָ���int,float��String,long��double�ͳ���ֵ�ӳ�������������ջ��.<br>������ | ָ���� | ����<br>—|—|—<br>0x12 | ldc | ��int��float��String�ͳ���ֵ�ӳ�������������ջ��<br>0x13 | ldc_w | ��int��float��String�ͳ���ֵ�ӳ�������������ջ������������<br>0x14 | ldc2_w | ��long��double�ͳ���ֵ�ӳ�������������ջ������������</p>
+<p>3.3.4 ldc指令。将int,float或String,long或double型常量值从常量池中推送至栈顶.<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x12 | ldc | 将int、float或String型常量值从常量池中推送至栈顶<br>0x13 | ldc_w | 将int、float或String型常量值从常量池中推送至栈顶（宽索引）<br>0x14 | ldc2_w | 将long或double型常量值从常量池中推送至栈顶（宽索引）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">type LDC_W struct &#123;</div><div class="line">	base.Index16Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *LDC_W) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	class := frame.Method().Class()</div><div class="line">	c := class.ConstantPool().GetConstant(index)</div><div class="line"></div><div class="line">	switch c.(type) &#123;</div><div class="line">	case int32:</div><div class="line">		stack.PushInt(c.(int32))</div><div class="line">	case float32:</div><div class="line">		stack.PushFloat(c.(float32))</div><div class="line">	case string:</div><div class="line">		internedStr := heap.JString(class.Loader(), c.(string))</div><div class="line">		stack.PushRef(internedStr)</div><div class="line">	case *heap.ClassRef:</div><div class="line">		classRef := c.(*heap.ClassRef)</div><div class="line">		classObj := classRef.ResolvedClass().JClass()</div><div class="line">		stack.PushRef(classObj)</div><div class="line">		// case MethodType, MethodHandle</div><div class="line">	default:</div><div class="line">		panic(&quot;todo: ldc!&quot;)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-5-����ָ��"><a href="#3-5-����ָ��" class="headerlink" title="3.5 ����ָ��"></a>3.5 ����ָ��</h4><p>����ָ��Ӿֲ��������ȡ������Ȼ�����������ջ����33����<br>3.5.1 loadϵ��<br>������ | ָ���� | ����<br>—|—|—<br>0x15 | iload | ָ����int�ֲ�������ջ<br>0x16 | lload | ָ����long�ֲ�������ջ<br>0x17 | fload | ָ����float�ֲ�������ջ<br>0x18 | dload | ָ����double�ֲ�������ջ<br>0x19 | aload | ָ�������þֲ�������ջ</p>
+<h4 id="3-5-加载指令"><a href="#3-5-加载指令" class="headerlink" title="3.5 加载指令"></a>3.5 加载指令</h4><p>加载指令从局部变量表获取变量，然后推入操作数栈，共33条。<br>3.5.1 load系列<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x15 | iload | 指定的int局部变量进栈<br>0x16 | lload | 指定的long局部变量进栈<br>0x17 | fload | 指定的float局部变量进栈<br>0x18 | dload | 指定的double局部变量进栈<br>0x19 | aload | 指定的引用局部变量进栈</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type ILOAD struct &#123;</div><div class="line">	base.Index8Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ILOAD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.LocalVars().GetInt(index)</div><div class="line">	frame.OperandStack().PushInt(val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.5.2 load_xϵ��<br>������ | ָ���� | ����<br>—|—|—<br>0x1A | iload_0 | ��һ��int�ֲ�������ջ<br>0x1B | iload_1 | �ڶ���int�ֲ�������ջ<br>0x1C | iload_2 | ������int�ֲ�������ջ<br>0x1D | iload_3 | ���ĸ�int�ֲ�������ջ<br>0x1E | lload_0 | ��һ��long�ֲ�������ջ<br>0x1F | lload_1 | �ڶ���long�ֲ�������ջ<br>0x20 | lload_2 | ������long�ֲ�������ջ<br>0x21 | lload_3 | ���ĸ�long�ֲ�������ջ<br>0x22 | fload_0 | ��һ��float�ֲ�������ջ<br>0x23 | fload_1 | �ڶ���float�ֲ�������ջ<br>0x24 | fload_2 | ������float�ֲ�������ջ<br>0x25 | fload_3 | ���ĸ�float�ֲ�������ջ<br>0x26 | dload_0 | ��һ��double�ֲ�������ջ<br>0x27 | dload_1 | �ڶ���double�ֲ�������ջ<br>0x28 | dload_2 | ������double�ֲ�������ջ<br>0x29 | dload_3 | ���ĸ�double�ֲ�������ջ<br>0x2A | aload_0 | ��һ�����þֲ�������ջ<br>0x2B | aload_1 | �ڶ������þֲ�������ջ<br>0x2C | aload_2 | ���������þֲ�������ջ<br>0x2D | aload_3 | ���ĸ����þֲ�������ջ<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type ILOAD_0 struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ILOAD_0) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.LocalVars().GetInt(0)</div><div class="line">	frame.OperandStack().PushInt(val)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>3.5.3 xaloadϵ�С���ָ����x���������ָ���±괦��ֵ���������ջ��<br>������ | ָ���� | ����<br>—|—|—<br>0x2E | iaload|ָ����int�������ָ���±괦��ֵ��ջ<br>0x2F | laload | ָ����long�������ָ���±괦��ֵ��ջ<br>0x30 | faload | ָ����float�������ָ���±괦��ֵ��ջ<br>0x31 | daload | ָ����double�������ָ���±괦��ֵ��ջ<br>0x32 |aaload | ָ���������������ָ���±괦��ֵ��ջ<br>0x33 | baload | ָ����boolean��byte�������ָ���±괦��ֵ��ջ<br>0x34 | caload | ָ����char�������ָ���±괦��ֵ��ջ<br>0x35 | saload | ָ����short�������ָ���±괦��ֵ��ջ</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">type AALOAD struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *AALOAD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	index := stack.PopInt()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line"></div><div class="line">	checkNotNil(arrRef) //���Ϊ���׳�NullPointerException</div><div class="line">	refs := arrRef.Refs()</div><div class="line">	checkIndex(len(refs), index) //����������鳤���׳�ArrayIndexOutOfBoundsException</div><div class="line">	stack.PushRef(refs[index])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-6-�洢ָ��"><a href="#3-6-�洢ָ��" class="headerlink" title="3.6 �洢ָ��"></a>3.6 �洢ָ��</h4><p>�ͼ���ָ���෴���洢ָ��ѱ����Ӳ�����ջ��������Ȼ�����ֲ�������<br>3.6.1 storeϵ��<br>������ | ָ���� | ����<br>—|—|—<br>0x36 | istore | ��ջ��int����ֵ����ָ�����ر���<br>0x37 | lstore | ��ջ��long����ֵ����ָ�����ر���<br>0x38 | fstore | ��ջ��float����ֵ����ָ�����ر���<br>0x39 | dstore | ��ջ��double����ֵ����ָ�����ر���<br>0x3a | astore | ��ջ����������ֵ����ָ�����ر���</p>
+<p>3.5.2 load_x系列<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x1A | iload_0 | 第一个int局部变量进栈<br>0x1B | iload_1 | 第二个int局部变量进栈<br>0x1C | iload_2 | 第三个int局部变量进栈<br>0x1D | iload_3 | 第四个int局部变量进栈<br>0x1E | lload_0 | 第一个long局部变量进栈<br>0x1F | lload_1 | 第二个long局部变量进栈<br>0x20 | lload_2 | 第三个long局部变量进栈<br>0x21 | lload_3 | 第四个long局部变量进栈<br>0x22 | fload_0 | 第一个float局部变量进栈<br>0x23 | fload_1 | 第二个float局部变量进栈<br>0x24 | fload_2 | 第三个float局部变量进栈<br>0x25 | fload_3 | 第四个float局部变量进栈<br>0x26 | dload_0 | 第一个double局部变量进栈<br>0x27 | dload_1 | 第二个double局部变量进栈<br>0x28 | dload_2 | 第三个double局部变量进栈<br>0x29 | dload_3 | 第四个double局部变量进栈<br>0x2A | aload_0 | 第一个引用局部变量进栈<br>0x2B | aload_1 | 第二个引用局部变量进栈<br>0x2C | aload_2 | 第三个引用局部变量进栈<br>0x2D | aload_3 | 第四个引用局部变量进栈<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type ILOAD_0 struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ILOAD_0) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.LocalVars().GetInt(0)</div><div class="line">	frame.OperandStack().PushInt(val)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>3.5.3 xaload系列。将指定的x类型数组的指定下标处的值推入操作数栈。<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x2E | iaload|指定的int型数组的指定下标处的值进栈<br>0x2F | laload | 指定的long型数组的指定下标处的值进栈<br>0x30 | faload | 指定的float型数组的指定下标处的值进栈<br>0x31 | daload | 指定的double型数组的指定下标处的值进栈<br>0x32 |aaload | 指定的引用型数组的指定下标处的值进栈<br>0x33 | baload | 指定的boolean或byte型数组的指定下标处的值进栈<br>0x34 | caload | 指定的char型数组的指定下标处的值进栈<br>0x35 | saload | 指定的short型数组的指定下标处的值进栈</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">type AALOAD struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *AALOAD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	index := stack.PopInt()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line"></div><div class="line">	checkNotNil(arrRef) //如果为空抛出NullPointerException</div><div class="line">	refs := arrRef.Refs()</div><div class="line">	checkIndex(len(refs), index) //如果超出数组长度抛出ArrayIndexOutOfBoundsException</div><div class="line">	stack.PushRef(refs[index])</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-6-存储指令"><a href="#3-6-存储指令" class="headerlink" title="3.6 存储指令"></a>3.6 存储指令</h4><p>和加载指令相反，存储指令把变量从操作数栈顶弹出，然后存入局部变量表。<br>3.6.1 store系列<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x36 | istore | 将栈顶int型数值存入指定本地变量<br>0x37 | lstore | 将栈顶long型数值存入指定本地变量<br>0x38 | fstore | 将栈顶float型数值存入指定本地变量<br>0x39 | dstore | 将栈顶double型数值存入指定本地变量<br>0x3a | astore | 将栈顶引用型数值存入指定本地变量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type ISTORE struct &#123;</div><div class="line">	base.Index8Instruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ISTORE) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.OperandStack().PopInt()</div><div class="line">	frame.LocalVars().SetInt(uint(self.index), val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.6.2 store_xϵ��<br>������ | ָ���� | ����<br>—|—|—<br>0x3b | istore_0 | ��ջ��int����ֵ�����һ�����ر���<br>0x3c | istore_1 | ��ջ��int����ֵ����ڶ������ر���<br>0x3d | istore_2 |  ��ջ��int����ֵ������������ر���<br>0x3e | istore_3 | ��ջ��int����ֵ������ĸ����ر���<br>0x3f | lstore_0 | ��ջ��long����ֵ�����һ�����ر���<br>0x40 | lstore_1 | ��ջ��long����ֵ����ڶ������ر���<br>0x41 | lstore_2 | ��ջ��long����ֵ������������ر���<br>0x42 | lstore_3 | ��ջ��long����ֵ������ĸ����ر���<br>0x43 | fstore_0 | ��ջ��float����ֵ�����һ�����ر���<br>0x44 | fstore_1 | ��ջ��float����ֵ����ڶ������ر���<br>0x45 | fstore_2 |  ��ջ��float����ֵ������������ر���<br>0x46 | fstore_3 | ��ջ��float����ֵ������ĸ����ر���<br>0x47 | dstore_0 | ��ջ��double����ֵ�����һ�����ر���<br>0x48 | dstore_1 | ��ջ��double����ֵ����ڶ������ر���<br>0x49 | dstore_2 | ��ջ��double����ֵ������������ر���<br>0x4a | dstore_3 | ��ջ��double����ֵ������ĸ����ر���<br>0x4b | astore_0 | ��ջ����������ֵ�����һ�����ر���<br>0x4c | astore_1 | ��ջ����������ֵ����ڶ������ر���<br>0x4d | astore_2 | ��ջ����������ֵ������������ر���<br>0x4e | astore_3 | ��ջ����������ֵ������ĸ����ر���</p>
+<p>3.6.2 store_x系列<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x3b | istore_0 | 将栈顶int型数值存入第一个本地变量<br>0x3c | istore_1 | 将栈顶int型数值存入第二个本地变量<br>0x3d | istore_2 |  将栈顶int型数值存入第三个本地变量<br>0x3e | istore_3 | 将栈顶int型数值存入第四个本地变量<br>0x3f | lstore_0 | 将栈顶long型数值存入第一个本地变量<br>0x40 | lstore_1 | 将栈顶long型数值存入第二个本地变量<br>0x41 | lstore_2 | 将栈顶long型数值存入第三个本地变量<br>0x42 | lstore_3 | 将栈顶long型数值存入第四个本地变量<br>0x43 | fstore_0 | 将栈顶float型数值存入第一个本地变量<br>0x44 | fstore_1 | 将栈顶float型数值存入第二个本地变量<br>0x45 | fstore_2 |  将栈顶float型数值存入第三个本地变量<br>0x46 | fstore_3 | 将栈顶float型数值存入第四个本地变量<br>0x47 | dstore_0 | 将栈顶double型数值存入第一个本地变量<br>0x48 | dstore_1 | 将栈顶double型数值存入第二个本地变量<br>0x49 | dstore_2 | 将栈顶double型数值存入第三个本地变量<br>0x4a | dstore_3 | 将栈顶double型数值存入第四个本地变量<br>0x4b | astore_0 | 将栈顶引用型数值存入第一个本地变量<br>0x4c | astore_1 | 将栈顶引用型数值存入第二个本地变量<br>0x4d | astore_2 | 将栈顶引用型数值存入第三个本地变量<br>0x4e | astore_3 | 将栈顶引用型数值存入第四个本地变量</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type ISTORE_0 struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ISTORE_0) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.OperandStack().PopInt()</div><div class="line">	frame.LocalVars().SetInt(0, val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.6.3 xastoreϵ��<br>������ | ָ���� | ����<br>—|—|—<br>0x4f | iastore | ��ջ��int����ֵ����ָ�������ָ������λ��<br>0x50 | lastore |     ��ջ��long����ֵ����ָ�������ָ������λ��<br>0x51 | fastore | ��ջ��float����ֵ����ָ�������ָ������λ��<br>0x52 | dastore | ��ջ��double����ֵ����ָ�������ָ������λ��<br>0x53 | aastore |   ��ջ����������ֵ����ָ�������ָ������λ��<br>0x54 | bastore |    ��ջ��boolean��byte����ֵ����ָ�������ָ������λ��<br>0x55 | castore |    ��ջ��char����ֵ����ָ�������ָ������λ��<br>0x56 | sastore |    ��ջ��short����ֵ����ָ�������ָ������λ��</p>
+<p>3.6.3 xastore系列<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x4f | iastore | 将栈顶int型数值存入指定数组的指定索引位置<br>0x50 | lastore |     将栈顶long型数值存入指定数组的指定索引位置<br>0x51 | fastore | 将栈顶float型数值存入指定数组的指定索引位置<br>0x52 | dastore | 将栈顶double型数值存入指定数组的指定索引位置<br>0x53 | aastore |   将栈顶引用型数值存入指定数组的指定索引位置<br>0x54 | bastore |    将栈顶boolean或byte型数值存入指定数组的指定索引位置<br>0x55 | castore |    将栈顶char型数值存入指定数组的指定索引位置<br>0x56 | sastore |    将栈顶short型数值存入指定数组的指定索引位置</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">type AASTORE struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *AASTORE) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref := stack.PopRef()</div><div class="line">	index := stack.PopInt()</div><div class="line">	arrRef := stack.PopRef()</div><div class="line"></div><div class="line">	checkNotNil(arrRef)</div><div class="line">	refs := arrRef.Refs()</div><div class="line">	checkIndex(len(refs), index)</div><div class="line">	refs[index] = ref</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-7-ջָ��"><a href="#3-7-ջָ��" class="headerlink" title="3.7 ջָ��"></a>3.7 ջָ��</h4><table>
+<h4 id="3-7-栈指令"><a href="#3-7-栈指令" class="headerlink" title="3.7 栈指令"></a>3.7 栈指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x57</td>
 <td>pop</td>
-<td>��ջ����ֵ���� (��ֵ������long��double���͵�)</td>
+<td>将栈顶数值弹出 (数值不能是long或double类型的)</td>
 </tr>
 <tr>
 <td>0x58</td>
 <td>pop2</td>
-<td>��ջ����һ����long��double���͵�)��������ֵ������������</td>
+<td>将栈顶的一个（long或double类型的)或两个数值弹出（其它）</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type POP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *POP) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	stack.PopSlot() // pop2����2��</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type POP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *POP) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	stack.PopSlot() // pop2弹出2次</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x59</td>
 <td>dup</td>
-<td>����ջ����ֵ��������ֵѹ��ջ��</td>
+<td>复制栈顶数值并将复制值压入栈顶</td>
 </tr>
 <tr>
 <td>0x5a</td>
@@ -320,50 +323,50 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x5f</td>
 <td>swap</td>
-<td>��ջ��˵�������ֵ����(��ֵ������long��double���͵�)</td>
+<td>将栈最顶端的两个数值互换(数值不能是long或double类型的)</td>
 </tr>
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type SWAP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *SWAP) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	slot1 := stack.PopSlot()</div><div class="line">	slot2 := stack.PopSlot()</div><div class="line">	stack.PushSlot(slot1)</div><div class="line">	stack.PushSlot(slot2)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-8-��ѧָ��"><a href="#3-8-��ѧָ��" class="headerlink" title="3.8 ��ѧָ��"></a>3.8 ��ѧָ��</h4><p>3.8.1 ����ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x60 | iadd  |   ��ջ����int����ֵ��Ӳ������ѹ��ջ��<br>0x61 | ladd   |  ��ջ����long����ֵ��Ӳ������ѹ��ջ��<br>0x62 | fadd  |   ��ջ����float����ֵ��Ӳ������ѹ��ջ��<br>0x63 | dadd   |  ��ջ����double����ֵ��Ӳ������ѹ��ջ��</p>
+<h4 id="3-8-数学指令"><a href="#3-8-数学指令" class="headerlink" title="3.8 数学指令"></a>3.8 数学指令</h4><p>3.8.1 算术指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x60 | iadd  |   将栈顶两int型数值相加并将结果压入栈顶<br>0x61 | ladd   |  将栈顶两long型数值相加并将结果压入栈顶<br>0x62 | fadd  |   将栈顶两float型数值相加并将结果压入栈顶<br>0x63 | dadd   |  将栈顶两double型数值相加并将结果压入栈顶</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">type IADD struct&#123; base.NoOperandsInstruction &#125;</div><div class="line"></div><div class="line">func (self *IADD) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	result := v1 + v2</div><div class="line">	stack.PushInt(result)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x64</td>
 <td>isub</td>
-<td>��ջ����int����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两int型数值相减并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x65</td>
 <td>lsub</td>
-<td>��ջ����long����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两long型数值相减并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x66</td>
 <td>fsub</td>
-<td>��ջ����float����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两float型数值相减并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x67</td>
 <td>dsub</td>
-<td>��ջ����double����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两double型数值相减并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
@@ -371,31 +374,31 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x68</td>
 <td>imul</td>
-<td>��ջ����int����ֵ��˲������ѹ��ջ��</td>
+<td>将栈顶两int型数值相乘并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x69</td>
 <td>lmul</td>
-<td>��ջ����long����ֵ��˲������ѹ��ջ��</td>
+<td>将栈顶两long型数值相乘并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x6a</td>
 <td>fmul</td>
-<td>��ջ����float����ֵ��˲������ѹ��ջ��</td>
+<td>将栈顶两float型数值相乘并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x6b</td>
 <td>dmul</td>
-<td>��ջ����double����ֵ��˲������ѹ��ջ��</td>
+<td>将栈顶两double型数值相乘并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
@@ -403,31 +406,31 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x6c</td>
 <td>idiv</td>
-<td>��ջ����int����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两int型数值相除并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x6d</td>
 <td>ldiv</td>
-<td>��ջ����long����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两long型数值相除并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x6e</td>
 <td>fdiv</td>
-<td>��ջ����float����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两float型数值相除并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x6f</td>
 <td>ddiv</td>
-<td>��ջ����double����ֵ����������ѹ��ջ��</td>
+<td>将栈顶两double型数值相除并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
@@ -435,31 +438,31 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x70</td>
 <td>irem</td>
-<td>��ջ����int����ֵ��ȡģ���㲢�����ѹ��ջ��</td>
+<td>将栈顶两int型数值作取模运算并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x71</td>
 <td>lrem</td>
-<td>��ջ����long����ֵ��ȡģ���㲢�����ѹ��ջ��</td>
+<td>将栈顶两long型数值作取模运算并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x72</td>
 <td>frem</td>
-<td>��ջ����float����ֵ��ȡģ���㲢�����ѹ��ջ��</td>
+<td>将栈顶两float型数值作取模运算并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x73</td>
 <td>drem</td>
-<td>��ջ����double����ֵ��ȡģ���㲢�����ѹ��ջ��</td>
+<td>将栈顶两double型数值作取模运算并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
@@ -467,161 +470,161 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x74</td>
 <td>ineg</td>
-<td>��ջ��int����ֵȡ���������ѹ��ջ��</td>
+<td>将栈顶int型数值取负并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x75</td>
 <td>lneg</td>
-<td>��ջ��long����ֵȡ���������ѹ��ջ��</td>
+<td>将栈顶long型数值取负并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x76</td>
 <td>fneg</td>
-<td>��ջ��float����ֵȡ���������ѹ��ջ��</td>
+<td>将栈顶float型数值取负并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x77</td>
 <td>dneg</td>
-<td>��ջ��double����ֵȡ���������ѹ��ջ��</td>
+<td>将栈顶double型数值取负并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">type INEG struct&#123; base.NoOperandsInstruction &#125;</div><div class="line"></div><div class="line">func (self *INEG) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	val := stack.PopInt()</div><div class="line">	stack.PushInt(-val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.8.2 λ��ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x78 | ishl    | ��int����ֵ����λָ��λ���������ѹ��ջ��<br>0x79 | lshl    | ��long����ֵ����λָ��λ���������ѹ��ջ��<br>0x7a | ishr    | ��int����ֵ�ң����ţ���λָ��λ���������ѹ��ջ��<br>0x7b | lshr    | ��long����ֵ�ң����ţ���λָ��λ���������ѹ��ջ��<br>0x7c | iushr   |  ��int����ֵ�ң��޷��ţ���λָ��λ���������ѹ��ջ��<br>0x7d | lushr   |  ��long����ֵ�ң��޷��ţ���λָ��λ���������ѹ��ջ��</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type ISHL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ISHL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	s := uint32(v2) &amp; 0x1f // int����ֻ��32λ��ȡĩ5λ����</div><div class="line">	stack.PushInt(v1 &lt;&lt; s)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.8.3 ��������ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x7e | iand    | ��ջ����int����ֵ������λ�롱�������ѹ��ջ��<br>0x7f | land    | ��ջ����long����ֵ������λ�롱�������ѹ��ջ��<br>0x80 | ior     | ��ջ����int����ֵ������λ�򡱲������ѹ��ջ��<br>0x81 | lor     | ��ջ����long����ֵ������λ�򡱲������ѹ��ջ��<br>0x82 | ixor    | ��ջ����int����ֵ������λ��򡱲������ѹ��ջ��<br>0x83 | lxor    | ��ջ����long����ֵ������λ��򡱲������ѹ��ջ��</p>
+<p>3.8.2 位移指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x78 | ishl    | 将int型数值左移位指定位数并将结果压入栈顶<br>0x79 | lshl    | 将long型数值左移位指定位数并将结果压入栈顶<br>0x7a | ishr    | 将int型数值右（符号）移位指定位数并将结果压入栈顶<br>0x7b | lshr    | 将long型数值右（符号）移位指定位数并将结果压入栈顶<br>0x7c | iushr   |  将int型数值右（无符号）移位指定位数并将结果压入栈顶<br>0x7d | lushr   |  将long型数值右（无符号）移位指定位数并将结果压入栈顶</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type ISHL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *ISHL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	s := uint32(v2) &amp; 0x1f // int变量只有32位，取末5位即可</div><div class="line">	stack.PushInt(v1 &lt;&lt; s)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>3.8.3 布尔运算指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x7e | iand    | 将栈顶两int型数值作“按位与”并将结果压入栈顶<br>0x7f | land    | 将栈顶两long型数值作“按位与”并将结果压入栈顶<br>0x80 | ior     | 将栈顶两int型数值作“按位或”并将结果压入栈顶<br>0x81 | lor     | 将栈顶两long型数值作“按位或”并将结果压入栈顶<br>0x82 | ixor    | 将栈顶两int型数值作“按位异或”并将结果压入栈顶<br>0x83 | lxor    | 将栈顶两long型数值作“按位异或”并将结果压入栈顶</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type IAND struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IAND) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	result := v1 &amp;v2</div><div class="line">	stack.PushInt(result)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.8.4 �����Լ�ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x84 | iinc | ��ָ��int�ͱ�������ָ��ֵ��i++, i–, i+=2��</p>
+<p>3.8.4 自增自减指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x84 | iinc | 将指定int型变量增加指定值（i++, i–, i+=2）</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">type IINC struct &#123;</div><div class="line">	Index uint</div><div class="line">	Const int32</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IINC) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	self.Index = uint(reader.ReadUint8())</div><div class="line">	self.Const = int32(reader.ReadInt8())</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IINC) Execute(frame *rtda.Frame) &#123;</div><div class="line">	localVars := frame.LocalVars()</div><div class="line">	val := localVars.GetInt(self.Index)</div><div class="line">	val += self.Const</div><div class="line">	localVars.SetInt(self.Index, val)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-9-����ת��ָ��"><a href="#3-9-����ת��ָ��" class="headerlink" title="3.9 ����ת��ָ��"></a>3.9 ����ת��ָ��</h4><table>
+<h4 id="3-9-类型转换指令"><a href="#3-9-类型转换指令" class="headerlink" title="3.9 类型转换指令"></a>3.9 类型转换指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0x85</td>
 <td>i2l</td>
-<td>��ջ��int����ֵǿ��ת����long����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成long型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x86</td>
 <td>i2f</td>
-<td>��ջ��int����ֵǿ��ת����float����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成float型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x87</td>
 <td>i2d</td>
-<td>��ջ��int����ֵǿ��ת����double����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成double型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x88</td>
 <td>l2i</td>
-<td>��ջ��long����ֵǿ��ת����int����ֵ�������ѹ��ջ��</td>
+<td>将栈顶long型数值强制转换成int型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x89</td>
 <td>l2f</td>
-<td>��ջ��long����ֵǿ��ת����float����ֵ�������ѹ��ջ��</td>
+<td>将栈顶long型数值强制转换成float型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8a</td>
 <td>l2d</td>
-<td>��ջ��long����ֵǿ��ת����double����ֵ�������ѹ��ջ��</td>
+<td>将栈顶long型数值强制转换成double型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8b</td>
 <td>f2i</td>
-<td>��ջ��float����ֵǿ��ת����int����ֵ�������ѹ��ջ��</td>
+<td>将栈顶float型数值强制转换成int型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8c</td>
 <td>f2l</td>
-<td>��ջ��float����ֵǿ��ת����long����ֵ�������ѹ��ջ��</td>
+<td>将栈顶float型数值强制转换成long型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8d</td>
 <td>f2d</td>
-<td>��ջ��float����ֵǿ��ת����double����ֵ�������ѹ��ջ��</td>
+<td>将栈顶float型数值强制转换成double型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8e</td>
 <td>d2i</td>
-<td>��ջ��double����ֵǿ��ת����int����ֵ�������ѹ��ջ��</td>
+<td>将栈顶double型数值强制转换成int型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x8f</td>
 <td>d2l</td>
-<td>��ջ��double����ֵǿ��ת����long����ֵ�������ѹ��ջ��</td>
+<td>将栈顶double型数值强制转换成long型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x90</td>
 <td>d2f</td>
-<td>��ջ��double����ֵǿ��ת����float����ֵ�������ѹ��ջ��</td>
+<td>将栈顶double型数值强制转换成float型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x91</td>
 <td>i2b</td>
-<td>��ջ��int����ֵǿ��ת����byte����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成byte型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x92</td>
 <td>i2c</td>
-<td>��ջ��int����ֵǿ��ת����char����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成char型数值并将结果压入栈顶</td>
 </tr>
 <tr>
 <td>0x93</td>
 <td>i2s</td>
-<td>��ջ��int����ֵǿ��ת����short����ֵ�������ѹ��ջ��</td>
+<td>将栈顶int型数值强制转换成short型数值并将结果压入栈顶</td>
 </tr>
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">type I2L struct&#123; base.NoOperandsInstruction &#125;</div><div class="line"></div><div class="line">func (self *I2L) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	i := stack.PopInt()</div><div class="line">	l := int64(i)</div><div class="line">	stack.PushLong(l)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-10-�L�ָ��"><a href="#3-10-�L�ָ��" class="headerlink" title="3.10 �Ƚ�ָ��"></a>3.10 �Ƚ�ָ��</h4><p>3.10.1 lcmpָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x94 | lcmp | �Ƚ�ջ����long����ֵ��С�����������1��0��-1��ѹ��ջ��</p>
+<h4 id="3-10-比较指令"><a href="#3-10-比较指令" class="headerlink" title="3.10 比较指令"></a>3.10 比较指令</h4><p>3.10.1 lcmp指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x94 | lcmp | 比较栈顶两long型数值大小，并将结果（1，0，-1）压入栈顶</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">type LCMP struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *LCMP) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopLong()</div><div class="line">	v1 := stack.PopLong()</div><div class="line">	if v1 &gt; v2 &#123;</div><div class="line">		stack.PushInt(1)</div><div class="line">	&#125; else if v1 == v2 &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">	&#125; else &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.2 fcmp<op>��dcmp<op>ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x95 | fcmpl  | �Ƚ�ջ����float����ֵ��С�����������1��0��-1��ѹ��ջ����������һ����ֵΪNaNʱ����-1ѹ��ջ��<br>0x96 | fcmpg | �Ƚ�ջ����float����ֵ��С�����������1��0��-1��ѹ��ջ����������һ����ֵΪNaNʱ����1ѹ��ջ��<br>0x97 | dcmpl  |   �Ƚ�ջ����double����ֵ��С�����������1��0��-1��ѹ��ջ����������һ����ֵΪNaNʱ����-1ѹ��ջ��<br>0x98 | dcmpg  |   �Ƚ�ջ����double����ֵ��С�����������1��0��-1��ѹ��ջ����������һ����ֵΪNaNʱ����1ѹ��ջ��</op></op></p>
+<p>3.10.2 fcmp<op>和dcmp<op>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x95 | fcmpl  | 比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶<br>0x96 | fcmpg | 比较栈顶两float型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶<br>0x97 | dcmpl  |   比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将-1压入栈顶<br>0x98 | dcmpg  |   比较栈顶两double型数值大小，并将结果（1，0，-1）压入栈顶；当其中一个数值为NaN时，将1压入栈顶</op></op></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">type FCMPL struct &#123;</div><div class="line">	base.NoOperandsInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *FCMPL) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopFloat()</div><div class="line">	v1 := stack.PopFloat()</div><div class="line">	if v1 &gt; v2 &#123;</div><div class="line">		stack.PushInt(1)</div><div class="line">	&#125; else if v1 == v2 &#123;</div><div class="line">		stack.PushInt(0)</div><div class="line">	&#125; else if v1 &lt; v2 &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125; else &#123;</div><div class="line">		stack.PushInt(-1)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.3 if<cond>ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x99 | ifeq   |  ��ջ��int����ֵ����0ʱ��ת<br>0x9a | ifne   |  ��ջ��int����ֵ������0ʱ��ת<br>0x9b | iflt   |  ��ջ��int����ֵС��0ʱ��ת<br>0x9c | ifge   |  ��ջ��int����ֵ���ڵ���0ʱ��ת<br>0x9d | ifgt   |  ��ջ��int����ֵ����0ʱ��ת<br>0x9e | ifle   |  ��ջ��int����ֵС�ڵ���0ʱ��ת</cond></p>
+<p>3.10.3 if<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x99 | ifeq   |  当栈顶int型数值等于0时跳转<br>0x9a | ifne   |  当栈顶int型数值不等于0时跳转<br>0x9b | iflt   |  当栈顶int型数值小于0时跳转<br>0x9c | ifge   |  当栈顶int型数值大于等于0时跳转<br>0x9d | ifgt   |  当栈顶int型数值大于0时跳转<br>0x9e | ifle   |  当栈顶int型数值小于等于0时跳转</cond></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">type IFEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IFEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	val := frame.OperandStack().PopInt()</div><div class="line">	if val == 0 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.4 if_icmp<cond>ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0x9f | if_icmpeq |  �Ƚ�ջ����int����ֵ��С�����������0ʱ��ת<br>0xa0 | if_icmpne |  �Ƚ�ջ����int����ֵ��С�������������0ʱ��ת<br>0xa1 | if_icmplt |  �Ƚ�ջ����int����ֵ��С�������С��0ʱ��ת<br>0xa2 | if_icmpge |  �Ƚ�ջ����int����ֵ��С����������ڵ���0ʱ��ת<br>0xa3 | if_icmpgt |  �Ƚ�ջ����int����ֵ��С�����������0ʱ��ת<br>0xa4 | if_icmple |  �Ƚ�ջ����int����ֵ��С�������С�ڵ���0ʱ��ת</cond></p>
+<p>3.10.4 if_icmp<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0x9f | if_icmpeq |  比较栈顶两int型数值大小，当结果等于0时跳转<br>0xa0 | if_icmpne |  比较栈顶两int型数值大小，当结果不等于0时跳转<br>0xa1 | if_icmplt |  比较栈顶两int型数值大小，当结果小于0时跳转<br>0xa2 | if_icmpge |  比较栈顶两int型数值大小，当结果大于等于0时跳转<br>0xa3 | if_icmpgt |  比较栈顶两int型数值大小，当结果大于0时跳转<br>0xa4 | if_icmple |  比较栈顶两int型数值大小，当结果小于等于0时跳转</cond></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type IF_ICMPEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IF_ICMPEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	v2 := stack.PopInt()</div><div class="line">	v1 := stack.PopInt()</div><div class="line">	if v1 == v2 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>3.10.5 if_acmp<cond>ָ��<br>������ | ָ���� | ����<br>—|—|—<br>0xa5 | if_acmpeq |  �Ƚ�ջ������������ֵ����������ʱ��ת<br>0xa6 | if_acmpne |  �Ƚ�ջ������������ֵ������������ʱ��ת</cond></p>
+<p>3.10.5 if_acmp<cond>指令<br>操作码 | 指令名 | 操作<br>—|—|—<br>0xa5 | if_acmpeq |  比较栈顶两引用型数值，当结果相等时跳转<br>0xa6 | if_acmpne |  比较栈顶两引用型数值，当结果不相等时跳转</cond></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">type IF_ACMPEQ struct &#123;</div><div class="line">	base.BranchInstruction</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *IF_ACMPEQ) Execute(frame *rtda.Frame) &#123;</div><div class="line">	stack := frame.OperandStack()</div><div class="line">	ref2 := stack.PopRef()</div><div class="line">	ref1 := stack.PopRef()</div><div class="line">	if ref1 == ref2 &#123;</div><div class="line">		base.Branch(frame, self.Offset)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-11-����ָ��"><a href="#3-11-����ָ��" class="headerlink" title="3.11 ����ָ��"></a>3.11 ����ָ��</h4><table>
+<h4 id="3-11-控制指令"><a href="#3-11-控制指令" class="headerlink" title="3.11 控制指令"></a>3.11 控制指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xa7</td>
 <td>goto</td>
-<td>��������ת</td>
+<td>无条件跳转</td>
 </tr>
 <tr>
 <td>0xa8</td>
 <td>jsr</td>
-<td>��jdk6��ʼ�Ѳ���ʹ��</td>
+<td>从jdk6开始已不再使用</td>
 </tr>
 <tr>
 <td>0xa9</td>
 <td>ret</td>
-<td>��jdk6��ʼ�Ѳ���ʹ��</td>
+<td>从jdk6开始已不再使用</td>
 </tr>
 </tbody>
 </table>
@@ -629,33 +632,33 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xaa</td>
 <td>tableswitch</td>
-<td>����switch������ת��caseֵ�������ɱ䳤��ָ�</td>
+<td>用于switch条件跳转，case值连续（可变长度指令）</td>
 </tr>
 </tbody>
 </table>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">type TABLE_SWITCH struct &#123;</div><div class="line">	defaultOffset int32</div><div class="line">	low           int32</div><div class="line">	high          int32</div><div class="line">	jumpOffsets   []int32</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *TABLE_SWITCH) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	reader.SkipPadding() // ������ָ��ĺ�����0-3�ֽڵ�padding��Ҫ����</div><div class="line">	self.defaultOffset = reader.ReadInt32()</div><div class="line">	self.low = reader.ReadInt32()</div><div class="line">	self.high = reader.ReadInt32()</div><div class="line">	jumpOffsetsCount := self.high - self.low + 1</div><div class="line">	self.jumpOffsets = reader.ReadInt32s(jumpOffsetsCount)</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *TABLE_SWITCH) Execute(frame *rtda.Frame) &#123;</div><div class="line">	index := frame.OperandStack().PopInt()</div><div class="line">	var offset int</div><div class="line">	if index &gt;= self.low &amp;&amp; index &lt;= self.high &#123;</div><div class="line">		offset = int(self.jumpOffsets[index-self.low])</div><div class="line">	&#125; else &#123;</div><div class="line">		offset = int(self.defaultOffset)</div><div class="line">	&#125;</div><div class="line">	base.Branch(frame, offset)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">type TABLE_SWITCH struct &#123;</div><div class="line">	defaultOffset int32</div><div class="line">	low           int32</div><div class="line">	high          int32</div><div class="line">	jumpOffsets   []int32</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *TABLE_SWITCH) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	reader.SkipPadding() // 操作码指令的后面有0-3字节的padding需要跳过</div><div class="line">	self.defaultOffset = reader.ReadInt32()</div><div class="line">	self.low = reader.ReadInt32()</div><div class="line">	self.high = reader.ReadInt32()</div><div class="line">	jumpOffsetsCount := self.high - self.low + 1</div><div class="line">	self.jumpOffsets = reader.ReadInt32s(jumpOffsetsCount)</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *TABLE_SWITCH) Execute(frame *rtda.Frame) &#123;</div><div class="line">	index := frame.OperandStack().PopInt()</div><div class="line">	var offset int</div><div class="line">	if index &gt;= self.low &amp;&amp; index &lt;= self.high &#123;</div><div class="line">		offset = int(self.jumpOffsets[index-self.low])</div><div class="line">	&#125; else &#123;</div><div class="line">		offset = int(self.defaultOffset)</div><div class="line">	&#125;</div><div class="line">	base.Branch(frame, offset)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xab</td>
 <td>lookupswitch</td>
-<td>����switch������ת��caseֵ���������ɱ䳤��ָ�</td>
+<td>用于switch条件跳转，case值不连续（可变长度指令）</td>
 </tr>
 </tbody>
 </table>
@@ -663,93 +666,93 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xac</td>
 <td>ireturn</td>
-<td>�ӵ�ǰ��������int</td>
+<td>从当前方法返回int</td>
 </tr>
 <tr>
 <td>0xad</td>
 <td>lreturn</td>
-<td>�ӵ�ǰ��������long</td>
+<td>从当前方法返回long</td>
 </tr>
 <tr>
 <td>0xae</td>
 <td>freturn</td>
-<td>�ӵ�ǰ��������float</td>
+<td>从当前方法返回float</td>
 </tr>
 <tr>
 <td>0xaf</td>
 <td>dreturn</td>
-<td>�ӵ�ǰ��������double</td>
+<td>从当前方法返回double</td>
 </tr>
 <tr>
 <td>0xb0</td>
 <td>areturn</td>
-<td>�ӵ�ǰ�������ض�������</td>
+<td>从当前方法返回对象引用</td>
 </tr>
 <tr>
 <td>0xb1</td>
 <td>return</td>
-<td>�ӵ�ǰ��������void</td>
+<td>从当前方法返回void</td>
 </tr>
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">type ARETURN struct&#123; base.NoOperandsInstruction &#125;</div><div class="line"></div><div class="line">func (self *ARETURN) Execute(frame *rtda.Frame) &#123;</div><div class="line">	thread := frame.Thread()</div><div class="line">	currentFrame := thread.PopFrame()</div><div class="line">	invokerFrame := thread.TopFrame()</div><div class="line">	ref := currentFrame.OperandStack().PopRef()</div><div class="line">	invokerFrame.OperandStack().PushRef(ref)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-12-����ָ��"><a href="#3-12-����ָ��" class="headerlink" title="3.12 ����ָ��"></a>3.12 ����ָ��</h4><table>
+<h4 id="3-12-引用指令"><a href="#3-12-引用指令" class="headerlink" title="3.12 引用指令"></a>3.12 引用指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xb2</td>
 <td>getstatic</td>
-<td>��ȡָ����ľ�̬�򣬲�����ֵѹ��ջ��</td>
+<td>获取指定类的静态域，并将其值压入栈顶</td>
 </tr>
 <tr>
 <td>0xb3</td>
 <td>putstatic</td>
-<td>Ϊָ������ľ�̬��ֵ</td>
+<td>为指定的类的静态域赋值</td>
 </tr>
 <tr>
 <td>0xb4</td>
 <td>getfield</td>
-<td>��ȡָ�����ʵ���򣬲�����ֵѹ��ջ��</td>
+<td>获取指定类的实例域，并将其值压入栈顶</td>
 </tr>
 <tr>
 <td>0xb5</td>
 <td>putfield</td>
-<td>Ϊָ�������ʵ����ֵ</td>
+<td>为指定的类的实例域赋值</td>
 </tr>
 <tr>
 <td>0xb6</td>
 <td>invokevirtual</td>
-<td>����ʵ������</td>
+<td>调用实例方法</td>
 </tr>
 <tr>
 <td>0xb7</td>
 <td>invokespecial</td>
-<td>���ó��๹�췽����ʵ����ʼ��������˽�з���</td>
+<td>调用超类构造方法，实例初始化方法，私有方法</td>
 </tr>
 <tr>
 <td>0xb8</td>
 <td>invokestatic</td>
-<td>���þ�̬����</td>
+<td>调用静态方法</td>
 </tr>
 <tr>
 <td>0xb9</td>
 <td>invokeinterface</td>
-<td>���ýӿڷ���</td>
+<td>调用接口方法</td>
 </tr>
 <tr>
 <td>0xba</td>
@@ -759,78 +762,78 @@ classes that you can use:
 <tr>
 <td>0xbb</td>
 <td>new</td>
-<td>����һ�����󣬲���������ֵѹ��ջ��</td>
+<td>创建一个对象，并将其引用值压入栈顶</td>
 </tr>
 <tr>
 <td>0xbc</td>
 <td>newarray</td>
-<td>����һ��ָ��ԭʼ���ͣ���int, float, char���������飬����������ֵѹ��ջ��</td>
+<td>创建一个指定原始类型（如int, float, char…）的数组，并将其引用值压入栈顶</td>
 </tr>
 <tr>
 <td>0xbd</td>
 <td>anewarray</td>
-<td>����һ�������ͣ����࣬�ӿڣ����飩�����飬����������ֵѹ��ջ��</td>
+<td>创建一个引用型（如类，接口，数组）的数组，并将其引用值压入栈顶</td>
 </tr>
 <tr>
 <td>0xbe</td>
 <td>arraylength</td>
-<td>�������ĳ���ֵ��ѹ��ջ��</td>
+<td>获得数组的长度值并压入栈顶</td>
 </tr>
 <tr>
 <td>0xbf</td>
 <td>athrow</td>
-<td>��ջ�����쳣�׳�</td>
+<td>将栈顶的异常抛出</td>
 </tr>
 <tr>
 <td>0xc0</td>
 <td>checkcast</td>
-<td>��������ת��������δͨ�����׳�ClassCastException</td>
+<td>检验类型转换，检验未通过将抛出ClassCastException</td>
 </tr>
 <tr>
 <td>0xc1</td>
 <td>instanceof</td>
-<td>��������Ƿ���ָ�������ʵ��������ǽ�1ѹ��ջ��������0ѹ��ջ��</td>
+<td>检验对象是否是指定的类的实例，如果是将1压入栈顶，否则将0压入栈顶</td>
 </tr>
 <tr>
 <td>0xc2</td>
 <td>monitorenter</td>
-<td>��ö������������ͬ��������ͬ����</td>
+<td>获得对象的锁，用于同步方法或同步块</td>
 </tr>
 <tr>
 <td>0xc3</td>
 <td>monitorexit</td>
-<td>�ͷŶ������������ͬ��������ͬ����</td>
+<td>释放对象的锁，用于同步方法或同步块</td>
 </tr>
 <tr>
 <td>0xc4</td>
 <td>wide</td>
-<td>��չָ��index</td>
+<td>扩展指令index</td>
 </tr>
 <tr>
 <td>0xc5</td>
 <td>multianewarray</td>
-<td>����ָ�����ͺ�ָ��ά�ȵĶ�ά���飨ִ�и�ָ��ʱ������ջ�б��������ά�ȵĳ���ֵ��������������ֵѹ��ջ��</td>
+<td>创建指定类型和指定维度的多维数组（执行该指令时，操作栈中必须包含各维度的长度值），并将其引用值压入栈顶</td>
 </tr>
 </tbody>
 </table>
-<h4 id="3-13-��չָ��"><a href="#3-13-��չָ��" class="headerlink" title="3.13 ��չָ��"></a>3.13 ��չָ��</h4><table>
+<h4 id="3-13-扩展指令"><a href="#3-13-扩展指令" class="headerlink" title="3.13 扩展指令"></a>3.13 扩展指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xc6</td>
 <td>ifnull</td>
-<td>Ϊnullʱ��ת</td>
+<td>为null时跳转</td>
 </tr>
 <tr>
 <td>0xc7</td>
 <td>ifnonnull</td>
-<td>��Ϊnullʱ��ת</td>
+<td>不为null时跳转</td>
 </tr>
 </tbody>
 </table>
@@ -838,38 +841,38 @@ classes that you can use:
 <table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xc8</td>
 <td>goto_w</td>
-<td>��������ת����������</td>
+<td>无条件跳转（宽索引）</td>
 </tr>
 <tr>
 <td>0xc9</td>
 <td>jsr_w</td>
-<td>��jdk6��ʼ�Ѿ�����ʹ��</td>
+<td>从jdk6开始已经不再使用</td>
 </tr>
 </tbody>
 </table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type GOTO_W struct &#123;</div><div class="line">	offset int</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *GOTO_W) FetchOperands(reader *base.ByteCodeReader) &#123;</div><div class="line">	self.offset = int(reader.ReadInt32())</div><div class="line">&#125;</div><div class="line"></div><div class="line">func (self *GOTO_W) Execute(frame *rtda.Frame) &#123;</div><div class="line">	base.Branch(frame, self.offset)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h4 id="3-14-����ָ��"><a href="#3-14-����ָ��" class="headerlink" title="3.14 ����ָ��"></a>3.14 ����ָ��</h4><table>
+<h4 id="3-14-保留指令"><a href="#3-14-保留指令" class="headerlink" title="3.14 保留指令"></a>3.14 保留指令</h4><table>
 <thead>
 <tr>
-<th>������</th>
-<th>ָ����</th>
-<th>����</th>
+<th>操作码</th>
+<th>指令名</th>
+<th>操作</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>0xfe</td>
 <td>invoke_native</td>
-<td>����native����</td>
+<td>调用native方法</td>
 </tr>
 </tbody>
 </table>
